@@ -6,17 +6,18 @@
 int main() {
 
 	const char* choices[] = {
-	  "Basic features",
-	  "UI features",
-	  "Exit",
+		"Basic features",
+		"UI features",
+		"Exit",
 	};
 	const cc_MenuColors colors = {
-	  CYAN,
-	  BLACK,
-	  WHITE,
-	  BLACK,
-	  CYAN,
-	  BLACK
+		BLACK,
+		CYAN,
+		BLACK,
+		WHITE,
+		BLACK,
+		CYAN,
+		BLACK
 	};
 	cc_Menu menu;
 	menu.title = "ConsoleControl Examples";

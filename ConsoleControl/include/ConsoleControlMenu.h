@@ -68,10 +68,11 @@ typedef struct {
  * @since      0.1
  */
 typedef struct {
+	cc_Color mainBackgroundColor; /**< Main background color **/
 	cc_Color titleBackgroundColor; /**< Title background color */
 	cc_Color titleForegroundColor; /**< Title foreground color */
-	cc_Color backgroundColor; /**< Choices background color */
-	cc_Color foregroundColor; /**< Choices foreground color */
+	cc_Color choicesBackgroundColor; /**< Choices background color */
+	cc_Color choicesForegroundColor; /**< Choices foreground color */
 	cc_Color selectionBackgroundColor;  /**< Selection background color */
 	cc_Color selectionForegroundColor;  /**< Selection foreground color */
 } cc_MenuColors;

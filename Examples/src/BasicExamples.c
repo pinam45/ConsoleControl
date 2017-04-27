@@ -28,40 +28,40 @@
 
 void printColorTable() {
 	cc_Color colors[] = {
-	  BLACK,
-	  BLUE,
-	  GREEN,
-	  CYAN,
-	  RED,
-	  MAGENTA,
-	  YELLOW,
-	  WHITE,
-	  LIGHT_BLACK,
-	  LIGHT_BLUE,
-	  LIGHT_GREEN,
-	  LIGHT_CYAN,
-	  LIGHT_RED,
-	  LIGHT_MAGENTA,
-	  LIGHT_YELLOW,
-	  LIGHT_WHITE
+		BLACK,
+		BLUE,
+		GREEN,
+		CYAN,
+		RED,
+		MAGENTA,
+		YELLOW,
+		WHITE,
+		LIGHT_BLACK,
+		LIGHT_BLUE,
+		LIGHT_GREEN,
+		LIGHT_CYAN,
+		LIGHT_RED,
+		LIGHT_MAGENTA,
+		LIGHT_YELLOW,
+		LIGHT_WHITE
 	};
 	char colorNames[][20] = {
-	  "BLACK         ",
-	  "BLUE          ",
-	  "GREEN         ",
-	  "CYAN          ",
-	  "RED           ",
-	  "MAGENTA       ",
-	  "YELLOW        ",
-	  "WHITE         ",
-	  "LIGHT_BLACK   ",
-	  "LIGHT_BLUE    ",
-	  "LIGHT_GREEN   ",
-	  "LIGHT_CYAN    ",
-	  "LIGHT_RED     ",
-	  "LIGHT_MAGENTA ",
-	  "LIGHT_YELLOW  ",
-	  "LIGHT_WHITE   "
+		"BLACK         ",
+		"BLUE          ",
+		"GREEN         ",
+		"CYAN          ",
+		"RED           ",
+		"MAGENTA       ",
+		"YELLOW        ",
+		"WHITE         ",
+		"LIGHT_BLACK   ",
+		"LIGHT_BLUE    ",
+		"LIGHT_GREEN   ",
+		"LIGHT_CYAN    ",
+		"LIGHT_RED     ",
+		"LIGHT_MAGENTA ",
+		"LIGHT_YELLOW  ",
+		"LIGHT_WHITE   "
 	};
 	cc_setColors(BLACK, WHITE);
 	printf("+");
@@ -296,7 +296,7 @@ void printCircle() {
 	cc_clean();
 	cc_Input input = cc_getInput();
 	while(input.key != ESC_KEY) {
-		cc_drawCircle(center,radius,' ');
+		cc_drawCircle(center, radius, ' ');
 		switch(input.key) {
 			case UP_ARROW_KEY:
 			case RIGHT_ARROW_KEY:
@@ -304,7 +304,7 @@ void printCircle() {
 				break;
 			case DOWN_ARROW_KEY:
 			case LEFT_ARROW_KEY:
-				if(radius){
+				if(radius) {
 					--radius;
 				}
 				break;
@@ -335,7 +335,7 @@ void printCircle() {
 			case OTHER_KEY:break;
 		}
 		cc_setForegroundColor(RED);
-		cc_drawCircle(center,radius,'#');
+		cc_drawCircle(center, radius, '#');
 		input = cc_getInput();
 	}
 }
@@ -343,19 +343,20 @@ void printCircle() {
 void basicExamples() {
 
 	const char* choices[] = {
-	  "Print color table",
-	  "Print inputs",
-	  "Print line and rectangle",
-	  "Print circle",
-	  "Exit",
+		"Print color table",
+		"Print inputs",
+		"Print line and rectangle",
+		"Print circle",
+		"Exit",
 	};
 	const cc_MenuColors colors = {
-	  CYAN,
-	  BLACK,
-	  WHITE,
-	  BLACK,
-	  CYAN,
-	  BLACK
+		BLACK,
+		CYAN,
+		BLACK,
+		WHITE,
+		BLACK,
+		CYAN,
+		BLACK
 	};
 	cc_Menu menu;
 	menu.title = "ConsoleControl tests";
@@ -365,10 +366,10 @@ void basicExamples() {
 	menu.currentChoice = 0;
 
 	bool loop = true;
-	while(loop){
+	while(loop) {
 		cc_displayColorMenu(&menu, &colors);
 		cc_setColors(BLACK, WHITE);
-		switch(menu.currentChoice){
+		switch(menu.currentChoice) {
 			case 0:
 				cc_clean();
 				printColorTable();
@@ -389,7 +390,8 @@ void basicExamples() {
 			case 4:
 				loop = false;
 				break;
-			default:break;
+			default:
+				break;
 		}
 	}
 }
