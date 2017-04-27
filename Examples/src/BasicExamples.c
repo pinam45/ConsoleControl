@@ -25,7 +25,6 @@
  *****************************************************************************************/
 
 #include <BasicExamples.h>
-#include <ConsoleControlMenu.h>
 
 void printColorTable() {
 	cc_Color colors[] = {

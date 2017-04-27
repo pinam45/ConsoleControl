@@ -1,5 +1,6 @@
 #include <ConsoleControl.h>
 #include <ConsoleControlUtility.h>
+#include <ConsoleControlUI.h>
 #include <BasicExamples.h>
 
 int main() {

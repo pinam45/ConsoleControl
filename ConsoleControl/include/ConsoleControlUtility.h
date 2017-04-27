@@ -138,42 +138,6 @@ void cc_drawPatternLine(cc_Vector2 from, cc_Vector2 to, const char* pattern);
  */
 void cc_drawCircle(cc_Vector2 center, unsigned int radius, char ch);
 
-/*-------------------------------------------------------------------------*//**
- * @brief      Display the menu with the table style ('-' for horizontal lines,
- *             '|' for vertical lines, '+' for angles and intersections).
- *
- * @details    Allow the user to see and select a choice from the menu using the
- *             control keys, the user choice is the @c currentChoice field of
- *             the menu struct. This is a blocking function, return when the
- *             user press enter (or escape if the @c choiceOnEscape field of the
- *             menu struct is a valid choice).
- *
- *             Note: turn off the input display
- *
- * @param      menu  The menu description struct
- *
- * @since      0.1
- */
-void cc_displayTableMenu(cc_Menu* menu);
-
-/*-------------------------------------------------------------------------*//**
- * @brief      Display the menu with the specified color style.
- *
- * @details    Allow the user to see and select a choice from the menu using the
- *             control keys, the user choice is the @c currentChoice field of
- *             the menu struct. This is a blocking function, return when the
- *             user press enter (or escape if the @c choiceOnEscape field of the
- *             menu struct is a valid choice).
- *
- *             Note: turn off the input display
- *
- * @param      menu    The menu description struct
- * @param[in]  colors  The color style definition
- *
- * @since      0.1
- */
-void cc_displayColorMenu(cc_Menu* menu, const cc_MenuColors* colors);
-
 #ifdef __cplusplus
 }
 #endif

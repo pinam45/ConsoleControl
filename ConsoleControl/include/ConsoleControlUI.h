@@ -2,7 +2,7 @@
  *                                                                                       *
  * MIT License                                                                           *
  *                                                                                       *
- * Copyright (c) 2016 Maxime Pinard                                                      *
+ * Copyright (c) 2017 Maxime Pinard                                                      *
  *                                                                                       *
  * Permission is hereby granted, free of charge, to any person obtaining a copy          *
  * of this software and associated documentation files (the "Software"), to deal         *
@@ -24,24 +24,69 @@
  *                                                                                       *
  *****************************************************************************************/
 
-#ifndef CONSOLECONTROL_CONSOLECONTROLTEST_H
-#define CONSOLECONTROL_CONSOLECONTROLTEST_H
+/**
+ * @file ConsoleControlUI.h
+ * @brief      Definition of ConsoleControl UI related functions.
+ * @author     Maxime Pinard
+ *
+ * @since      0.1
+ */
 
+#ifndef CONSOLECONTROL_CONSOLECONTROLUI_H
+#define CONSOLECONTROL_CONSOLECONTROLUI_H
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include <stdio.h>
+
+#include <log.h>
 #include <ConsoleControl.h>
 #include <ConsoleControlUtility.h>
-#include <ConsoleControlUI.h>
+#include <ConsoleControlMenu.h>
+#include <ConsoleControlInput.h>
 
-void printColorTable();
+/*-------------------------------------------------------------------------*//**
+ * @brief      Display the menu with the table style ('-' for horizontal lines,
+ *             '|' for vertical lines, '+' for angles and intersections).
+ *
+ * @details    Allow the user to see and select a choice from the menu using the
+ *             control keys, the user choice is the @c currentChoice field of
+ *             the menu struct. This is a blocking function, return when the
+ *             user press enter (or escape if the @c choiceOnEscape field of the
+ *             menu struct is a valid choice).
+ *
+ *             Note: turn off the input display
+ *
+ * @param      menu  The menu description struct
+ *
+ * @since      0.1
+ */
+void cc_displayTableMenu(cc_Menu* menu);
 
-void printInputs();
+/*-------------------------------------------------------------------------*//**
+ * @brief      Display the menu with the specified color style.
+ *
+ * @details    Allow the user to see and select a choice from the menu using the
+ *             control keys, the user choice is the @c currentChoice field of
+ *             the menu struct. This is a blocking function, return when the
+ *             user press enter (or escape if the @c choiceOnEscape field of the
+ *             menu struct is a valid choice).
+ *
+ *             Note: turn off the input display
+ *
+ * @param      menu    The menu description struct
+ * @param[in]  colors  The color style definition
+ *
+ * @since      0.1
+ */
+void cc_displayColorMenu(cc_Menu* menu, const cc_MenuColors* colors);
 
-void printLineAndRectangle();
-
-void printCircle();
-
-void basicExamples();
+#ifdef __cplusplus
+}
+#endif
 
 
-#endif //CONSOLECONTROL_CONSOLECONTROLTEST_H
+#endif //CONSOLECONTROL_CONSOLECONTROLUI_H
