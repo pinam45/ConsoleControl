@@ -37,7 +37,9 @@ void printColorTable();
 
 void printInputs();
 
-void printLineAndRectangle();
+void printLines();
+
+void printRectangles();
 
 void printCircle();
 

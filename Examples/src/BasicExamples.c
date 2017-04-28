@@ -27,6 +27,10 @@
 #include <BasicExamples.h>
 
 void printColorTable() {
+	cc_displayInputs(false);
+	cc_setBackgroundColor(BLACK);
+	cc_clean();
+
 	cc_Color colors[] = {
 		BLACK,
 		BLUE,
@@ -121,8 +125,11 @@ void printColorTable() {
 }
 
 void printInputs() {
-	bool running = true;
 	cc_displayInputs(false);
+	cc_setBackgroundColor(BLACK);
+	cc_clean();
+
+	bool running = true;
 	while(running) {
 		cc_Input input = cc_getInput();
 		switch(input.key) {
@@ -218,22 +225,129 @@ void printInputs() {
 	}
 }
 
-void printLineAndRectangle() {
+void printLines() {
+	cc_Vector2 topLeft = {0, 0};
+	cc_Vector2 topRight = {cc_getWidth() - 2, 0};
+	cc_Vector2 downLeft = {0, cc_getHeight() - 1};
+	cc_Vector2 downRight = {topRight.x, downLeft.y};
+	cc_Vector2 pos = {cc_getWidth() / 2, cc_getHeight() / 2};
+	cc_displayInputs(false);
+	cc_setBackgroundColor(BLACK);
+	cc_clean();
+
+	cc_setForegroundColor(GREEN);
+	cc_drawLine(topLeft, pos, '*');
+	cc_setForegroundColor(CYAN);
+	cc_drawLine(topRight, pos, '*');
+	cc_setForegroundColor(MAGENTA);
+	cc_drawLine(downLeft, pos, '*');
+	cc_setForegroundColor(YELLOW);
+	cc_drawLine(downRight, pos, '*');
+	cc_setForegroundColor(WHITE);
+	cc_setCursorPosition(pos);
+	cc_printInPlace('#');
+	cc_Input input = cc_getInput();
+	while(input.key != ESC_KEY) {
+		cc_drawLine(topLeft, pos, ' ');
+		cc_drawLine(topRight, pos, ' ');
+		cc_drawLine(downLeft, pos, ' ');
+		cc_drawLine(downRight, pos, ' ');
+
+		switch(input.key) {
+			case UP_ARROW_KEY:
+				--pos.y;
+				break;
+			case DOWN_ARROW_KEY:
+				++pos.y;
+				break;
+			case LEFT_ARROW_KEY:
+				--pos.x;
+				break;
+			case RIGHT_ARROW_KEY:
+				if(pos.x < cc_getWidth() - 2)
+					++pos.x;
+				break;
+			case HOME_KEY:
+				pos.x = 0;
+				break;
+			case END_KEY:
+				pos.x = cc_getWidth() - 2;
+				break;
+			case PAGE_UP_KEY:
+				pos.y = 0;
+				break;
+			case PAGE_DOWN_KEY:
+				pos.y = cc_getHeight() - 1;
+				break;
+			case BACKSPACE_KEY:
+			case TAB_KEY:
+			case ENTER_KEY:
+			case ESC_KEY:
+			case SPACE_KEY:
+			case INS_KEY:
+			case DEL_KEY:
+			case F1_KEY:
+			case F2_KEY:
+			case F3_KEY:
+			case F4_KEY:
+			case F5_KEY:
+			case F6_KEY:
+			case F7_KEY:
+			case F8_KEY:
+			case F9_KEY:
+			case F10_KEY:
+			case F11_KEY:
+			case F12_KEY:
+			case OTHER_KEY:
+			default:
+				break;
+		}
+		topRight.x = cc_getWidth() - 2;
+		downLeft.y = cc_getHeight() - 1;
+		downRight.x = topRight.x;
+		downRight.y = downLeft.y;
+		pos = cc_clamp(pos);
+
+		cc_setForegroundColor(GREEN);
+		cc_drawLine(topLeft, pos, '*');
+		cc_setForegroundColor(CYAN);
+		cc_drawLine(topRight, pos, '*');
+		cc_setForegroundColor(MAGENTA);
+		cc_drawLine(downLeft, pos, '*');
+		cc_setForegroundColor(YELLOW);
+		cc_drawLine(downRight, pos, '*');
+		cc_setForegroundColor(WHITE);
+		cc_setCursorPosition(pos);
+		cc_printInPlace('#');
+
+		input = cc_getInput();
+	}
+}
+
+void printRectangles() {
 	cc_Vector2 topLeft = {20, 5};
 	cc_Vector2 downRight = {30, 20};
 	cc_displayInputs(false);
+	cc_setBackgroundColor(BLACK);
 	cc_clean();
+
+	cc_setForegroundColor(CYAN);
+	cc_drawFullRectangle(topLeft, downRight, '*');
+	cc_setForegroundColor(GREEN);
+	cc_drawRectangle(topLeft, downRight, '+');
+	cc_setForegroundColor(WHITE);
+	cc_setCursorPosition(downRight);
+	cc_printInPlace('#');
+
 	cc_Input input = cc_getInput();
 	while(input.key != ESC_KEY) {
-		//cc_drawLine(topLeft, downRight, ' ');
 		cc_drawFullRectangle(topLeft, downRight, ' ');
 		switch(input.key) {
 			case UP_ARROW_KEY:
 				--downRight.y;
 				break;
 			case DOWN_ARROW_KEY:
-				if(downRight.y < cc_getHeight() - 1)
-					++downRight.y;
+				++downRight.y;
 				break;
 			case LEFT_ARROW_KEY:
 				--downRight.x;
@@ -254,53 +368,70 @@ void printLineAndRectangle() {
 			case PAGE_DOWN_KEY:
 				downRight.y = cc_getHeight() - 1;
 				break;
-			case BACKSPACE_KEY:break;
-			case TAB_KEY:break;
-			case ENTER_KEY:break;
-			case ESC_KEY:break;
-			case SPACE_KEY:break;
-			case INS_KEY:break;
-			case DEL_KEY:break;
-			case F1_KEY:break;
-			case F2_KEY:break;
-			case F3_KEY:break;
-			case F4_KEY:break;
-			case F5_KEY:break;
-			case F6_KEY:break;
-			case F7_KEY:break;
-			case F8_KEY:break;
-			case F9_KEY:break;
-			case F10_KEY:break;
-			case F11_KEY:break;
-			case F12_KEY:break;
-			case OTHER_KEY:break;
-			default:break;
+			case BACKSPACE_KEY:
+			case TAB_KEY:
+			case ENTER_KEY:
+			case ESC_KEY:
+			case SPACE_KEY:
+			case INS_KEY:
+			case DEL_KEY:
+			case F1_KEY:
+			case F2_KEY:
+			case F3_KEY:
+			case F4_KEY:
+			case F5_KEY:
+			case F6_KEY:
+			case F7_KEY:
+			case F8_KEY:
+			case F9_KEY:
+			case F10_KEY:
+			case F11_KEY:
+			case F12_KEY:
+			case OTHER_KEY:
+			default:
+				break;
 		}
+
 		downRight = cc_clamp(downRight);
-		//cc_drawPatternLine(topLeft, downRight, "@#");
 		cc_setForegroundColor(CYAN);
 		cc_drawFullRectangle(topLeft, downRight, '*');
-		cc_setForegroundColor(RED);
-		cc_drawLine(topLeft, downRight, '*');
+		cc_setForegroundColor(GREEN);
+		cc_drawRectangle(topLeft, downRight, '+');
+		cc_setForegroundColor(WHITE);
 		cc_setCursorPosition(downRight);
 		cc_printInPlace('#');
 		input = cc_getInput();
 	}
-	cc_displayInputs(true);
 }
 
 void printCircle() {
-	cc_Vector2 center = {60, 15};
-	unsigned int radius = 0;
 	cc_displayInputs(false);
+	cc_setBackgroundColor(BLACK);
 	cc_clean();
+
+	cc_Vector2 center = {cc_getWidth() / 2, cc_getHeight() / 2};
+	unsigned int radius = 5;
+
+	cc_setForegroundColor(GREEN);
+	cc_drawCircle(center, radius, '#');
+	cc_setForegroundColor(WHITE);
+	cc_setCursorPosition(center);
+	putchar('#');
+
 	cc_Input input = cc_getInput();
 	while(input.key != ESC_KEY) {
 		cc_drawCircle(center, radius, ' ');
+		cc_setCursorPosition(center);
+		putchar(' ');
+		center.x = cc_getWidth() / 2;
+		center.y = cc_getHeight() / 2;
 		switch(input.key) {
 			case UP_ARROW_KEY:
 			case RIGHT_ARROW_KEY:
-				++radius;
+				if((unsigned int) (center.x) + radius < (unsigned int) (cc_getWidth() - 1)
+				   && (unsigned int) (center.y) + radius < (unsigned int) (cc_getHeight() - 1)) {
+					++radius;
+				}
 				break;
 			case DOWN_ARROW_KEY:
 			case LEFT_ARROW_KEY:
@@ -308,34 +439,39 @@ void printCircle() {
 					--radius;
 				}
 				break;
-			default:break;
-			case HOME_KEY:break;
-			case END_KEY:break;
-			case PAGE_UP_KEY:break;
-			case PAGE_DOWN_KEY:break;
-			case BACKSPACE_KEY:break;
-			case TAB_KEY:break;
-			case ENTER_KEY:break;
-			case ESC_KEY:break;
-			case SPACE_KEY:break;
-			case INS_KEY:break;
-			case DEL_KEY:break;
-			case F1_KEY:break;
-			case F2_KEY:break;
-			case F3_KEY:break;
-			case F4_KEY:break;
-			case F5_KEY:break;
-			case F6_KEY:break;
-			case F7_KEY:break;
-			case F8_KEY:break;
-			case F9_KEY:break;
-			case F10_KEY:break;
-			case F11_KEY:break;
-			case F12_KEY:break;
-			case OTHER_KEY:break;
+			case HOME_KEY:
+			case END_KEY:
+			case PAGE_UP_KEY:
+			case PAGE_DOWN_KEY:
+			case BACKSPACE_KEY:
+			case TAB_KEY:
+			case ENTER_KEY:
+			case ESC_KEY:
+			case SPACE_KEY:
+			case INS_KEY:
+			case DEL_KEY:
+			case F1_KEY:
+			case F2_KEY:
+			case F3_KEY:
+			case F4_KEY:
+			case F5_KEY:
+			case F6_KEY:
+			case F7_KEY:
+			case F8_KEY:
+			case F9_KEY:
+			case F10_KEY:
+			case F11_KEY:
+			case F12_KEY:
+			case OTHER_KEY:
+			default:
+				break;
 		}
-		cc_setForegroundColor(RED);
+
+		cc_setForegroundColor(GREEN);
 		cc_drawCircle(center, radius, '#');
+		cc_setForegroundColor(WHITE);
+		cc_setCursorPosition(center);
+		putchar('#');
 		input = cc_getInput();
 	}
 }
@@ -345,7 +481,8 @@ void basicExamples() {
 	const char* choices[] = {
 		"Print color table",
 		"Print inputs",
-		"Print line and rectangle",
+		"Print lines",
+		"Print rectangles",
 		"Print circle",
 		"Exit",
 	};
@@ -359,10 +496,10 @@ void basicExamples() {
 		BLACK
 	};
 	cc_Menu menu;
-	menu.title = "ConsoleControl tests";
+	menu.title = "Basic examples";
 	menu.choices = choices;
-	menu.choicesNumber = 5;
-	menu.choiceOnEscape = 4;
+	menu.choicesNumber = 6;
+	menu.choiceOnEscape = 5;
 	menu.currentChoice = 0;
 
 	bool loop = true;
@@ -381,13 +518,17 @@ void basicExamples() {
 				break;
 			case 2:
 				cc_clean();
-				printLineAndRectangle();
+				printLines();
 				break;
 			case 3:
 				cc_clean();
-				printCircle();
+				printRectangles();
 				break;
 			case 4:
+				cc_clean();
+				printCircle();
+				break;
+			case 5:
 				loop = false;
 				break;
 			default:
