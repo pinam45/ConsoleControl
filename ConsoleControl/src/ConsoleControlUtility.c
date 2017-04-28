@@ -81,10 +81,12 @@ void cc_drawRectangle(cc_Vector2 topLeft, cc_Vector2 downRight, const char ch) {
 	}
 
 	//bottom line
-	pos.x = topLeft.x;
-	cc_setCursorPosition(pos);
-	for(cc_type i = topLeft.x; i <= downRight.x; ++i) {
-		putchar(ch);
+	if(topLeft.y != downRight.y){
+		pos.x = topLeft.x;
+		cc_setCursorPosition(pos);
+		for(cc_type i = topLeft.x; i <= downRight.x; ++i) {
+			putchar(ch);
+		}
 	}
 }
 
