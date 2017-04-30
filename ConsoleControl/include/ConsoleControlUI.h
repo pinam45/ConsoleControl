@@ -47,6 +47,7 @@ extern "C" {
 #include <ConsoleControlUtility.h>
 #include <ConsoleControlMenu.h>
 #include <ConsoleControlInput.h>
+#include <ConsoleControlMessage.h>
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Display the menu with the table style ('-' for horizontal lines,
@@ -83,6 +84,48 @@ void cc_displayTableMenu(cc_Menu* menu);
  * @since      0.1
  */
 void cc_displayColorMenu(cc_Menu* menu, const cc_MenuColors* colors);
+
+/*-------------------------------------------------------------------------*//**
+ * @brief      Display the message with the table style ('-' for horizontal
+ *             lines, '|' for vertical lines, '+' for angles and intersections).
+ *
+ * @details    Allow the user to see the message and, if there is choices in the
+ *             struct, select a choice using the control keys, the user choice
+ *             is the @c currentChoice field of the message struct. This is a
+ *             blocking function, return when the user press enter or escape if
+ *             the @c canEscape field of the message struct is set to true. If
+ *             there is no choices, or the user quit the message with escape, @c
+ *             currentChoice fields of the message struct is set to @c
+ *             NO_CHOICE.
+ *
+ *             Note: turn off the input display
+ *
+ * @param      message  The message description struct
+ *
+ * @since      0.2
+ */
+void cc_displayTableMessage(cc_Message* message);
+
+/*-------------------------------------------------------------------------*//**
+ * @brief      Display the message with the specified color style.
+ *
+ * @details    Allow the user to see the message and, if there is choices in the
+ *             struct, select a choice using the control keys, the user choice
+ *             is the @c currentChoice field of the message struct. This is a
+ *             blocking function, return when the user press enter or escape if
+ *             the @c canEscape field of the message struct is set to true. If
+ *             there is no choices, or the user quit the message with escape, @c
+ *             currentChoice fields of the message struct is set to @c
+ *             NO_CHOICE.
+ *
+ *             Note: turn off the input display
+ *
+ * @param      message  The message description struct
+ * @param[in]  colors   The color style definition
+ *
+ * @since      0.2
+ */
+void cc_displayColorMessage(cc_Message* message, const cc_MessageColors* colors);
 
 #ifdef __cplusplus
 }
