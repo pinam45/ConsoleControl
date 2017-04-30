@@ -212,6 +212,22 @@ static void drawColorMenu(const MenuDrawInfo* info, const cc_Menu* menu, const c
 
 void cc_displayTableMenu(cc_Menu* menu) {
 
+	if(menu->title == NULL) {
+		SLOG_ERR("Menu title field is NULL");
+		return;
+	}
+	if(menu->choices == NULL) {
+		SLOG_ERR("Menu choices field is NULL");
+		return;
+	}
+	if(menu->choicesNumber == 0) {
+		SLOG_ERR("Menu choicesNumber field is 0");
+		return;
+	}
+	if(menu->currentChoice > menu->choicesNumber - 1) {
+		menu->currentChoice = menu->choicesNumber - 1;
+	}
+
 	cc_type consoleWidth = cc_getWidth();
 	cc_type consoleHeight = cc_getHeight();
 	cc_type usedWidth = consoleWidth;
@@ -256,29 +272,30 @@ void cc_displayTableMenu(cc_Menu* menu) {
 					exit = true;
 				}
 				break;
-			case HOME_KEY:break;
-			case END_KEY:break;
-			case LEFT_ARROW_KEY:break;
-			case RIGHT_ARROW_KEY:break;
-			case BACKSPACE_KEY:break;
-			case TAB_KEY:break;
-			case SPACE_KEY:break;
-			case INS_KEY:break;
-			case DEL_KEY:break;
-			case F1_KEY:break;
-			case F2_KEY:break;
-			case F3_KEY:break;
-			case F4_KEY:break;
-			case F5_KEY:break;
-			case F6_KEY:break;
-			case F7_KEY:break;
-			case F8_KEY:break;
-			case F9_KEY:break;
-			case F10_KEY:break;
-			case F11_KEY:break;
-			case F12_KEY:break;
-			case OTHER_KEY:break;
-			default:break;
+			case HOME_KEY:
+			case END_KEY:
+			case LEFT_ARROW_KEY:
+			case RIGHT_ARROW_KEY:
+			case BACKSPACE_KEY:
+			case TAB_KEY:
+			case SPACE_KEY:
+			case INS_KEY:
+			case DEL_KEY:
+			case F1_KEY:
+			case F2_KEY:
+			case F3_KEY:
+			case F4_KEY:
+			case F5_KEY:
+			case F6_KEY:
+			case F7_KEY:
+			case F8_KEY:
+			case F9_KEY:
+			case F10_KEY:
+			case F11_KEY:
+			case F12_KEY:
+			case OTHER_KEY:
+			default:
+				break;
 		}
 
 		consoleWidth = cc_getWidth();
@@ -297,6 +314,22 @@ void cc_displayTableMenu(cc_Menu* menu) {
 }
 
 void cc_displayColorMenu(cc_Menu* menu, const cc_MenuColors* colors) {
+
+	if(menu->title == NULL) {
+		SLOG_ERR("Menu title field is NULL");
+		return;
+	}
+	if(menu->choices == NULL) {
+		SLOG_ERR("Menu choices field is NULL");
+		return;
+	}
+	if(menu->choicesNumber == 0) {
+		SLOG_ERR("Menu choicesNumber field is 0");
+		return;
+	}
+	if(menu->currentChoice > menu->choicesNumber - 1) {
+		menu->currentChoice = menu->choicesNumber - 1;
+	}
 
 	cc_type consoleWidth = cc_getWidth();
 	cc_type consoleHeight = cc_getHeight();
@@ -342,29 +375,30 @@ void cc_displayColorMenu(cc_Menu* menu, const cc_MenuColors* colors) {
 					exit = true;
 				}
 				break;
-			case HOME_KEY:break;
-			case END_KEY:break;
-			case LEFT_ARROW_KEY:break;
-			case RIGHT_ARROW_KEY:break;
-			case BACKSPACE_KEY:break;
-			case TAB_KEY:break;
-			case SPACE_KEY:break;
-			case INS_KEY:break;
-			case DEL_KEY:break;
-			case F1_KEY:break;
-			case F2_KEY:break;
-			case F3_KEY:break;
-			case F4_KEY:break;
-			case F5_KEY:break;
-			case F6_KEY:break;
-			case F7_KEY:break;
-			case F8_KEY:break;
-			case F9_KEY:break;
-			case F10_KEY:break;
-			case F11_KEY:break;
-			case F12_KEY:break;
-			case OTHER_KEY:break;
-			default:break;
+			case HOME_KEY:
+			case END_KEY:
+			case LEFT_ARROW_KEY:
+			case RIGHT_ARROW_KEY:
+			case BACKSPACE_KEY:
+			case TAB_KEY:
+			case SPACE_KEY:
+			case INS_KEY:
+			case DEL_KEY:
+			case F1_KEY:
+			case F2_KEY:
+			case F3_KEY:
+			case F4_KEY:
+			case F5_KEY:
+			case F6_KEY:
+			case F7_KEY:
+			case F8_KEY:
+			case F9_KEY:
+			case F10_KEY:
+			case F11_KEY:
+			case F12_KEY:
+			case OTHER_KEY:
+			default:
+				break;
 		}
 
 		consoleWidth = cc_getWidth();
