@@ -52,8 +52,8 @@ extern "C" {
  * @since      0.1
  */
 typedef struct {
-	const char* title; /**< Title */
-	const char** choices; /**< Possible choices (without '\n' or '\r') */
+	const char* title; /**< Title (without '\\n' or '\\r') */
+	const char** choices; /**< Possible choices (without '\\n' or '\\r') */
 	unsigned int choicesNumber; /**< Number of choices */
 	unsigned int currentChoice; /**< Current choice number */
 	int choiceOnEscape;  /**< Choice to select when the escape key is pressed (do nothing:
