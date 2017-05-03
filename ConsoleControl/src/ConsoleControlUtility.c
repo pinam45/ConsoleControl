@@ -38,8 +38,8 @@ cc_type lerp(cc_type x0, cc_type x1, double t) {
 
 cc_Vector2 vectlerp(cc_Vector2 v0, cc_Vector2 v1, double t) {
 	cc_Vector2 result = {
-	  lerp(v0.x, v1.x, t),
-	  lerp(v0.y, v1.y, t)
+		lerp(v0.x, v1.x, t),
+		lerp(v0.y, v1.y, t)
 	};
 	return result;
 }
@@ -81,7 +81,7 @@ void cc_drawRectangle(cc_Vector2 topLeft, cc_Vector2 downRight, const char ch) {
 	}
 
 	//bottom line
-	if(topLeft.y != downRight.y){
+	if(topLeft.y != downRight.y) {
 		pos.x = topLeft.x;
 		cc_setCursorPosition(pos);
 		for(cc_type i = topLeft.x; i <= downRight.x; ++i) {

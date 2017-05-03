@@ -149,10 +149,10 @@ typedef int cc_type;
  *
  * @since      0.1
  */
-typedef struct{
+typedef struct {
 	cc_type x; /**< x coordinate of the vector */
 	cc_type y; /**< y coordinate of the vector */
-}cc_Vector2;
+} cc_Vector2;
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Set the console output foreground color.

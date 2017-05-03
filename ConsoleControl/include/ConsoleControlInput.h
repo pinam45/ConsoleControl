@@ -47,7 +47,7 @@ extern "C" {
  *
  * @since      0.1
  */
-typedef enum{
+typedef enum {
 	HOME_KEY, /**< Home key */
 	END_KEY, /**< End key */
 	PAGE_UP_KEY, /**< Page up key */
@@ -76,7 +76,7 @@ typedef enum{
 	F11_KEY, /**< F11 key */
 	F12_KEY, /**< F12 key */
 	OTHER_KEY, /**< Other key */
-}cc_Key;
+} cc_Key;
 
 /*-------------------------------------------------------------------------*//**
  * @struct cc_Input
@@ -85,10 +85,10 @@ typedef enum{
  *
  * @since      0.1
  */
-typedef struct{
+typedef struct {
 	cc_Key key; /**< The key pressed */
 	char ch; /**< The character that correspond to the key pressed */
-}cc_Input;
+} cc_Input;
 
 #ifdef __cplusplus
 }

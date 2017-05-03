@@ -47,7 +47,7 @@ extern "C" {
  *
  * @since      0.1
  */
-typedef enum{
+typedef enum {
 	BLACK, /**< Black color */
 	BLUE, /**< Blue color */
 	GREEN, /**< Green color */
@@ -64,7 +64,7 @@ typedef enum{
 	LIGHT_MAGENTA, /**< Light magenta color */
 	LIGHT_YELLOW, /**< Light yellow color */
 	LIGHT_WHITE /**< Light white color */
-}cc_Color;
+} cc_Color;
 
 #ifdef __cplusplus
 }
