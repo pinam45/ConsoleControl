@@ -600,11 +600,12 @@ void cc_displayTableMenu(cc_Menu* menu) {
 
 	MenuDrawInfo info = computeTableMenuDrawInfo(menu);
 
+	/* Display menu */
 	drawTableMenu(&info, menu);
-	cc_setCursorPosition(nullpos);
 
 	/* Main loop */
 	cc_displayInputs(false);
+	cc_setCursorVisibility(false);
 	cc_Input input;
 	bool exit = false;
 	while(!exit) {
@@ -674,8 +675,9 @@ void cc_displayTableMenu(cc_Menu* menu) {
 			info = computeTableMenuDrawInfo(menu);
 			drawTableMenu(&info, menu);
 		}
-		cc_setCursorPosition(nullpos);
 	}
+
+	cc_setCursorPosition(nullpos);
 }
 
 void cc_displayColorMenu(cc_Menu* menu, const cc_MenuColors* colors) {
@@ -703,11 +705,12 @@ void cc_displayColorMenu(cc_Menu* menu, const cc_MenuColors* colors) {
 
 	MenuDrawInfo info = computeColorMenuDrawInfo(menu);
 
+	/* Display menu */
 	drawColorMenu(&info, menu, colors);
-	cc_setCursorPosition(nullpos);
 
 	/* Main loop */
 	cc_displayInputs(false);
+	cc_setCursorVisibility(false);
 	cc_Input input;
 	bool exit = false;
 	while(!exit) {
@@ -777,8 +780,9 @@ void cc_displayColorMenu(cc_Menu* menu, const cc_MenuColors* colors) {
 			info = computeColorMenuDrawInfo(menu);
 			drawColorMenu(&info, menu, colors);
 		}
-		cc_setCursorPosition(nullpos);
 	}
+
+	cc_setCursorPosition(nullpos);
 }
 
 void cc_displayTableMessage(cc_Message* message) {
@@ -850,10 +854,10 @@ void cc_displayTableMessage(cc_Message* message) {
 
 	/* Display message */
 	drawTableMessage(&info, message, messageLines);
-	cc_setCursorPosition(nullpos);
 
 	/* Main loop */
 	cc_displayInputs(false);
+	cc_setCursorVisibility(false);
 	cc_Input input;
 	bool exit = false;
 	while(!exit) {
@@ -936,7 +940,6 @@ void cc_displayTableMessage(cc_Message* message) {
 			info = computeTableMessageDrawInfo(message, messageLines, linesNumber);
 			drawTableMessage(&info, message, messageLines);
 		}
-		cc_setCursorPosition(nullpos);
 	}
 
 	while(--linesNumber) {
@@ -944,6 +947,8 @@ void cc_displayTableMessage(cc_Message* message) {
 	}
 	free(messageLines[0]);
 	free(messageLines);
+
+	cc_setCursorPosition(nullpos);
 }
 
 void cc_displayColorMessage(cc_Message* message, const cc_MessageColors* colors) {
@@ -1015,10 +1020,10 @@ void cc_displayColorMessage(cc_Message* message, const cc_MessageColors* colors)
 
 	/* Display message */
 	drawColorMessage(&info, message, messageLines, colors);
-	cc_setCursorPosition(nullpos);
 
 	/* Main loop */
 	cc_displayInputs(false);
+	cc_setCursorVisibility(false);
 	cc_Input input;
 	bool exit = false;
 	while(!exit) {
@@ -1101,7 +1106,6 @@ void cc_displayColorMessage(cc_Message* message, const cc_MessageColors* colors)
 			info = computeColorMessageDrawInfo(message, messageLines, linesNumber);
 			drawColorMessage(&info, message, messageLines, colors);
 		}
-		cc_setCursorPosition(nullpos);
 	}
 
 	while(--linesNumber) {
@@ -1109,4 +1113,6 @@ void cc_displayColorMessage(cc_Message* message, const cc_MessageColors* colors)
 	}
 	free(messageLines[0]);
 	free(messageLines);
+
+	cc_setCursorPosition(nullpos);
 }

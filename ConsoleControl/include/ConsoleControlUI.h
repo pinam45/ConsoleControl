@@ -59,7 +59,7 @@ extern "C" {
  *             user press enter (or escape if the @c choiceOnEscape field of the
  *             menu struct is a valid choice).
  *
- *             Note: turn off the input display
+ *             Note: turn off the inputs display and the cursor visibility
  *
  * @param      menu  The menu description struct
  *
@@ -76,7 +76,7 @@ void cc_displayTableMenu(cc_Menu* menu);
  *             user press enter (or escape if the @c choiceOnEscape field of the
  *             menu struct is a valid choice).
  *
- *             Note: turn off the input display
+ *             Note: turn off the inputs display and the cursor visibility
  *
  * @param      menu    The menu description struct
  * @param[in]  colors  The color style definition
@@ -98,7 +98,7 @@ void cc_displayColorMenu(cc_Menu* menu, const cc_MenuColors* colors);
  *             currentChoice fields of the message struct is set to @c
  *             NO_CHOICE.
  *
- *             Note: turn off the input display
+ *             Note: turn off the inputs display and the cursor visibility
  *
  * @param      message  The message description struct
  *
@@ -118,7 +118,7 @@ void cc_displayTableMessage(cc_Message* message);
  *             currentChoice fields of the message struct is set to @c
  *             NO_CHOICE.
  *
- *             Note: turn off the input display
+ *             Note: turn off the inputs display and the cursor visibility
  *
  * @param      message  The message description struct
  * @param[in]  colors   The color style definition
