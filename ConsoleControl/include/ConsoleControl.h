@@ -287,6 +287,15 @@ void cc_saveCursorPosition();
 void cc_restoreCursorPosition();
 
 /*-------------------------------------------------------------------------*//**
+ * @brief      Set the cursor visibility.
+ *
+ * @param[in]  visibility  True for visible, false for not visible
+ *
+ * @since      0.2
+ */
+void cc_setCursorVisibility(bool visibility);
+
+/*-------------------------------------------------------------------------*//**
  * @brief      Clamp down the position in the console window.
  *
  * @param[in]  position  The position

@@ -471,6 +471,32 @@ void cc_restoreCursorPosition() {
 	}
 }
 
+void cc_setCursorVisibility(bool visibility) {
+	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	if(hStdOut == INVALID_HANDLE_VALUE) {
+		LOG_ERR("GetStdHandle failed (error %lu)", GetLastError());
+		return;
+	}
+
+	CONSOLE_CURSOR_INFO cci;
+	if(!GetConsoleCursorInfo(hStdOut, &cci)) {
+		LOG_ERR("GetConsoleCursorInfo failed (error %lu)", GetLastError());
+		return;
+	}
+
+	if(visibility) {
+		cci.bVisible = TRUE;
+	}
+	else {
+		cci.bVisible = FALSE;
+	}
+
+	if(!SetConsoleCursorInfo(hStdOut, &cci)) {
+		LOG_ERR("SetConsoleCursorInfo failed (error %lu)", GetLastError());
+		return;
+	}
+}
+
 cc_Vector2 cc_clamp(const cc_Vector2 position) {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
@@ -1154,6 +1180,14 @@ void cc_restoreCursorPosition() {
 	printf(CSI RCP_CODE);
 }
 
+void cc_setCursorVisibility(bool visibility) {
+	if(visibility) {
+		printf(CSI DECTCEM_S_CODE);
+	}
+	else {
+		printf(CSI DECTCEM_H_CODE);
+	}
+}
 
 cc_Vector2 cc_clamp(cc_Vector2 position) {
 	struct winsize w;
