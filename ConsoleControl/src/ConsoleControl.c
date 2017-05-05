@@ -919,7 +919,9 @@ cc_Input cc_getInput() {
 
 #define KEYS_DEFINITIONS_TABLE(ENTRY)         \
         ENTRY(HOME_KEY, 27, 91, 72)           \
+        ENTRY(HOME_KEY, 27, 91, 49, 126)      \
         ENTRY(END_KEY, 27, 91, 70)            \
+        ENTRY(END_KEY, 27, 91, 52, 126)       \
         ENTRY(PAGE_UP_KEY, 27, 91, 53, 126)   \
         ENTRY(PAGE_DOWN_KEY, 27, 91, 54, 126) \
         ENTRY(UP_ARROW_KEY, 27, 91, 65)       \
