@@ -127,6 +127,42 @@ void cc_displayTableMessage(cc_Message* message);
  */
 void cc_displayColorMessage(cc_Message* message, const cc_MessageColors* colors);
 
+/*-------------------------------------------------------------------------*//**
+ * @brief      Display the option menu with the table style ('-' for horizontal
+ *             lines, '|' for vertical lines, '+' for angles and intersections).
+ *
+ * @details    Allow the user to see and select options from the menu using the
+ *             control keys, the selected option number is the @c selectedOption
+ *             field of the option menu struct. This is a blocking function,
+ *             return when the user select exit (which text is the @c exitText
+ *             field of the struct) and press enter or press escape. If the user
+ *             exited with the escape key the @c hasEscaped field of the struct
+ *             is set to @c true.
+ *
+ * @param      optionsMenu  The options menu description struct
+ *
+ * @since      0.2
+ */
+void cc_displayTableOptionMenu(cc_OptionsMenu* optionsMenu);
+
+/*-------------------------------------------------------------------------*//**
+ * @brief      Display the option menu with the specified color style.
+ *
+ * @details    Allow the user to see and select options from the menu using the
+ *             control keys, the selected option number is the @c selectedOption
+ *             field of the option menu struct. This is a blocking function,
+ *             return when the user select exit (which text is the @c exitText
+ *             field of the struct) and press enter or press escape. If the user
+ *             exited with the escape key the @c hasEscaped field of the struct
+ *             is set to @c true.
+ *
+ * @param      optionsMenu  The options menu description struct
+ * @param[in]  colors       The color style definition
+ *
+ * @since      0.2
+ */
+void cc_displayColorOptionMenu(cc_OptionsMenu* optionsMenu, const cc_MenuColors* colors);
+
 #ifdef __cplusplus
 }
 #endif

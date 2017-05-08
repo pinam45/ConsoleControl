@@ -61,6 +61,92 @@ typedef struct {
 } cc_Menu;
 
 /*-------------------------------------------------------------------------*//**
+ * @struct cc_ChoicesOption
+ *
+ * @brief      Definition of a choices option.
+ *
+ * @since      0.2
+ */
+typedef struct {
+	const char** choices; /**< Possible choices (without '\\n' or '\\r') */
+	unsigned int choicesNumber; /**< Number of choices */
+	unsigned int currentChoice; /**< Current choice number */
+} cc_ChoicesOption;
+
+/*-------------------------------------------------------------------------*//**
+ * @struct cc_IntegerOption
+ *
+ * @brief      Definition of a integer option.
+ *
+ * @since      0.2
+ */
+typedef struct {
+	int value; /**< Value of the option */
+	int minValue; /**< Minimal value */
+	int maxValue; /**< Maximal value */
+	int step; /**< Value change step */
+} cc_IntegerOption;
+
+/*-------------------------------------------------------------------------*//**
+ * @struct cc_CharacterOption
+ *
+ * @brief      Definition of a character option.
+ *
+ * @since      0.2
+ */
+typedef struct {
+	char value; /**< Value of the option */
+	char minValue; /**< Minimal value */
+	char maxValue; /**< Maximal value */
+} cc_CharacterOption;
+
+/*-------------------------------------------------------------------------*//**
+ * @struct cc_OptionType
+ *
+ * @brief      Definition of an option type.
+ *
+ * @since      0.2
+ */
+typedef enum {
+	CHOICES_OPTION, /**< Choices option (@c cc_ChoicesOption) */
+	INTEGER_OPTION, /**< Integer option (@c cc_IntegerOption) */
+	CHARACTER_OPTION /**< Character option (@c cc_CharacterOption) */
+} cc_OptionType;
+
+/*-------------------------------------------------------------------------*//**
+ * @struct cc_Option
+ *
+ * @brief      Definition of an option.
+ *
+ * @since      0.2
+ */
+typedef struct {
+	const char* name; /**< Name (without '\\n' or '\\r') */
+	cc_OptionType optionType; /**< Type */
+	union {
+		cc_ChoicesOption choicesOption; /**< Choices option */
+		cc_IntegerOption integerOption; /**< Integer option */
+		cc_CharacterOption characterOption; /**< Character option */
+	};
+} cc_Option;
+
+/*-------------------------------------------------------------------------*//**
+ * @struct cc_OptionsMenu
+ *
+ * @brief      Definition of an options menu.
+ *
+ * @since      0.2
+ */
+typedef struct {
+	const char* title; /**< Title (without '\\n' or '\\r') */
+	cc_Option* options; /**< Options */
+	unsigned int optionsNumber; /**< Number of options */
+	unsigned int selectedOption; /**< Selected option number (@c optionsNumber for exit) */
+	const char* exitText; /**< Exit text */
+	bool hasEscaped; /**< True if the user exited with the escape key */
+} cc_OptionsMenu;
+
+/*-------------------------------------------------------------------------*//**
  * @struct cc_MenuColors
  *
  * @brief      Definition of a menu color style.

@@ -44,6 +44,19 @@ typedef struct {
 	unsigned int rightChoicePosX;
 } MessageDrawInfo;
 
+typedef struct {
+	unsigned int width;
+	unsigned int height;
+	cc_Vector2 topLeft;
+} OptionMenuDrawInfo;
+
+typedef enum {
+	NEXT,
+	PREV,
+	FIRST,
+	LAST
+} ChangeType;
+
 static const cc_Vector2 nullpos = {0, 0};
 
 // For cc_displayTableMenu
@@ -88,6 +101,41 @@ static void drawColorMessageChoices(const MessageDrawInfo* info, const cc_Messag
 // For cc_displayColorMessage
 static void drawColorMessage(const MessageDrawInfo* info, const cc_Message* message,
                              char** messageLines, const cc_MessageColors* colors);
+
+// For changeOption
+static void changeChoicesOption(cc_ChoicesOption* choicesOption, ChangeType changeType);
+
+// For changeOption
+static void changeIntegerOption(cc_IntegerOption* integerOption, ChangeType changeType);
+
+// For changeOption
+static void changeCharacterOption(cc_CharacterOption* characterOption, ChangeType changeType);
+
+// For cc_displayTableOptionMenu and cc_displayColorOptionMenu
+static void changeOption(cc_Option* option, ChangeType changeType);
+
+// For computeTableOptionMenuDrawInfo, computeColorOptionMenuDrawInfo, drawTableOptionMenuOptions and drawColorOptionMenuOptions
+static unsigned int intLen(int value);
+
+// For cc_displayTableOptionMenu
+static OptionMenuDrawInfo computeTableOptionMenuDrawInfo(const cc_OptionsMenu* optionsMenu);
+
+// For cc_displayTableOptionMenu
+static void drawTableOptionMenuOptions(const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu);
+
+// For cc_displayTableOptionMenu
+static void drawTableOptionMenu(const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu);
+
+// For cc_displayColorOptionMenu
+static OptionMenuDrawInfo computeColorOptionMenuDrawInfo(const cc_OptionsMenu* optionsMenu);
+
+// For cc_displayColorOptionMenu
+static void drawColorOptionMenuOptions(const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu,
+                                       const cc_MenuColors* colors);
+
+// For cc_displayColorOptionMenu
+static void drawColorOptionMenu(const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu,
+                                const cc_MenuColors* colors);
 
 MenuDrawInfo computeTableMenuDrawInfo(const cc_Menu* menu) {
 
@@ -182,6 +230,7 @@ void drawColorMenuChoices(const MenuDrawInfo* info, const cc_Menu* menu, const c
 	cc_Vector2 pos;
 	pos.x = info->topLeft.x + 1;
 
+	cc_setColors(colors->choicesBackgroundColor, colors->choicesForegroundColor);
 	for(unsigned int i = menu->choicesNumber; i--;) {
 		pos.y = info->topLeft.y + (cc_type) (4 + (2 * i));
 		cc_setCursorPosition(pos);
@@ -573,6 +622,513 @@ void drawColorMessage(const MessageDrawInfo* info, const cc_Message* message,
 	if(info->hasChoices) {
 		drawColorMessageChoices(info, message, colors);
 	}
+}
+
+void changeChoicesOption(cc_ChoicesOption* choicesOption, ChangeType changeType) {
+	switch(changeType) {
+		case NEXT:
+			if(choicesOption->currentChoice < choicesOption->choicesNumber - 1) {
+				++choicesOption->currentChoice;
+			}
+			break;
+		case PREV:
+			if(choicesOption->currentChoice > 0) {
+				--choicesOption->currentChoice;
+			}
+			break;
+		case FIRST:
+			choicesOption->currentChoice = 0;
+			break;
+		case LAST:
+			choicesOption->currentChoice = choicesOption->choicesNumber - 1;
+			break;
+		default:
+			break;
+	}
+}
+
+void changeIntegerOption(cc_IntegerOption* integerOption, ChangeType changeType) {
+	switch(changeType) {
+		case NEXT:
+			integerOption->value += integerOption->step;
+			if(integerOption->value > integerOption->maxValue) {
+				integerOption->value = integerOption->maxValue;
+			}
+			break;
+		case PREV:
+			integerOption->value -= integerOption->step;
+			if(integerOption->value < integerOption->minValue) {
+				integerOption->value = integerOption->minValue;
+			}
+			break;
+		case FIRST:
+			integerOption->value = integerOption->minValue;
+			break;
+		case LAST:
+			integerOption->value = integerOption->maxValue;
+			break;
+		default:
+			break;
+	}
+}
+
+void changeCharacterOption(cc_CharacterOption* characterOption, ChangeType changeType) {
+	switch(changeType) {
+		case NEXT:
+			if(characterOption->value < characterOption->maxValue) {
+				++characterOption->value;
+			}
+			break;
+		case PREV:
+			if(characterOption->value > characterOption->minValue) {
+				--characterOption->value;
+			}
+			break;
+		case FIRST:
+			characterOption->value = characterOption->minValue;
+			break;
+		case LAST:
+			characterOption->value = characterOption->maxValue;
+			break;
+		default:
+			break;
+	}
+}
+
+void changeOption(cc_Option* option, ChangeType changeType) {
+	switch(option->optionType) {
+		case CHOICES_OPTION:
+			changeChoicesOption(&(option->choicesOption), changeType);
+			break;
+		case INTEGER_OPTION:
+			changeIntegerOption(&(option->integerOption), changeType);
+			break;
+		case CHARACTER_OPTION:
+			changeCharacterOption(&(option->characterOption), changeType);
+			break;
+		default:
+			break;
+	}
+}
+
+unsigned int intLen(int value) {
+	unsigned int l = (unsigned int) (value < 1);
+	while(value) {
+		l++;
+		value /= 10;
+	}
+	return l;
+}
+
+OptionMenuDrawInfo computeTableOptionMenuDrawInfo(const cc_OptionsMenu* optionsMenu) {
+	unsigned int maxLength = (unsigned int) strlen(optionsMenu->title);
+	unsigned int len;
+
+	/* Compute maxLength */
+	for(unsigned int i = optionsMenu->optionsNumber; i--;) {
+		len = (unsigned int) strlen(optionsMenu->options[i].name);
+		if(len > maxLength) {
+			maxLength = len;
+		}
+		switch(optionsMenu->options[i].optionType) {
+			case CHOICES_OPTION: {
+				for(unsigned int j = optionsMenu->options[i].choicesOption.choicesNumber; j--;) {
+					len = (unsigned int) strlen(optionsMenu->options[i].choicesOption.choices[j]) + 4;
+					if(len > maxLength) {
+						maxLength = len;
+					}
+				}
+			}
+				break;
+			case INTEGER_OPTION: {
+				len = intLen(optionsMenu->options[i].integerOption.minValue) + 4;
+				if(len > maxLength) {
+					maxLength = len;
+				}
+				len = intLen(optionsMenu->options[i].integerOption.maxValue) + 4;
+				if(len > maxLength) {
+					maxLength = len;
+				}
+			}
+				break;
+			case CHARACTER_OPTION: {
+				if(5 > maxLength) {
+					maxLength = 5;
+				}
+			}
+				break;
+			default:
+				break;
+		}
+	}
+	len = (unsigned int) strlen(optionsMenu->exitText);
+	if(len > maxLength) {
+		maxLength = len;
+	}
+
+	OptionMenuDrawInfo info;
+	info.width = maxLength + 7;
+	info.height = optionsMenu->optionsNumber * 3 + 8;
+	info.topLeft.x = (cc_getWidth() - (cc_type) info.width) / 2;
+	info.topLeft.y = (cc_getHeight() - (cc_type) info.height) / 2;
+
+	return info;
+}
+
+void drawTableOptionMenuOptions(const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu) {
+	cc_Vector2 pos;
+	pos.x = info->topLeft.x + 1;
+	pos.y = info->topLeft.y + (cc_type) (6 + 3 * optionsMenu->optionsNumber);
+	cc_setCursorPosition(pos);
+
+	unsigned int len = (unsigned int) strlen(optionsMenu->exitText);
+	unsigned int j = 0;
+
+	if(optionsMenu->selectedOption == optionsMenu->optionsNumber) {
+		len += 4;
+		for(; j < (info->width - len) / 2; ++j) {
+			putchar(' ');
+		}
+		printf("> %s <", optionsMenu->exitText);
+		j += len;
+		for(; j < info->width - 1; ++j) {
+			putchar(' ');
+		}
+	}
+	else {
+		for(; j < (info->width - len) / 2; ++j) {
+			putchar(' ');
+		}
+		printf("%s", optionsMenu->exitText);
+		j += len;
+		for(; j < info->width - 1; ++j) {
+			putchar(' ');
+		}
+	}
+
+	for(unsigned int i = optionsMenu->optionsNumber; i--;) {
+		pos.y = info->topLeft.y + (cc_type) (6 + 3 * i);
+		cc_setCursorPosition(pos);
+
+		if(optionsMenu->selectedOption == i) {
+			len = (unsigned int) strlen(optionsMenu->options[i].name) + 4;
+			j = 0;
+			for(; j < (info->width - len) / 2; ++j) {
+				putchar(' ');
+			}
+			printf("> %s <", optionsMenu->options[i].name);
+			j += len;
+			for(; j < info->width - 1; ++j) {
+				putchar(' ');
+			}
+		}
+		else {
+			len = (unsigned int) strlen(optionsMenu->options[i].name);
+			j = 0;
+			for(; j < (info->width - len) / 2; ++j) {
+				putchar(' ');
+			}
+			printf("%s", optionsMenu->options[i].name);
+			j += len;
+			for(; j < info->width - 1; ++j) {
+				putchar(' ');
+			}
+		}
+
+		++pos.y;
+		cc_setCursorPosition(pos);
+
+		switch(optionsMenu->options[i].optionType) {
+			case CHOICES_OPTION: {
+				len = (unsigned int) strlen(optionsMenu->options[i].choicesOption
+					                            .choices[optionsMenu->options[i].choicesOption.currentChoice]) + 4;
+				j = 0;
+				for(; j < (info->width - len) / 2; ++j) {
+					putchar(' ');
+				}
+				printf("{ %s }", optionsMenu->options[i].choicesOption
+					.choices[optionsMenu->options[i].choicesOption.currentChoice]);
+				j += len;
+				for(; j < info->width - 1; ++j) {
+					putchar(' ');
+				}
+			}
+				break;
+			case INTEGER_OPTION: {
+				len = intLen(optionsMenu->options[i].integerOption.value) + 4;
+				j = 0;
+				for(; j < (info->width - len) / 2; ++j) {
+					putchar(' ');
+				}
+				printf("{ %d }", optionsMenu->options[i].integerOption.value);
+				j += len;
+				for(; j < info->width - 1; ++j) {
+					putchar(' ');
+				}
+			}
+				break;
+			case CHARACTER_OPTION: {
+				len = 5;
+				j = 0;
+				for(; j < (info->width - len) / 2; ++j) {
+					putchar(' ');
+				}
+				printf("{ %c }", optionsMenu->options[i].characterOption.value);
+				j += len;
+				for(; j < info->width - 1; ++j) {
+					putchar(' ');
+				}
+			}
+				break;
+			default:
+				break;
+		}
+	}
+}
+
+void drawTableOptionMenu(const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu) {
+
+	cc_Vector2 topLeft = info->topLeft;
+	cc_Vector2 downRight = {
+		topLeft.x + (cc_type) info->width,
+		topLeft.y + (cc_type) info->height
+	};
+
+	cc_clean();
+
+	/* Print table and title */
+	cc_drawTableRectangle(topLeft, downRight);
+	topLeft.y += 2;
+	cc_Vector2 pos = {
+		topLeft.x + (cc_type) (info->width - (unsigned int) strlen(optionsMenu->title)) / 2 + 1,
+		topLeft.y
+	};
+	cc_setCursorPosition(pos);
+	printf("%s", optionsMenu->title);
+	topLeft.y += 2;
+	cc_Vector2 topright = {
+		downRight.x,
+		topLeft.y
+	};
+	cc_drawTableHorizontalLine(topLeft, topright);
+
+	/* Print the choices */
+	drawTableOptionMenuOptions(info, optionsMenu);
+}
+
+static OptionMenuDrawInfo computeColorOptionMenuDrawInfo(const cc_OptionsMenu* optionsMenu) {
+	unsigned int maxLength = (unsigned int) strlen(optionsMenu->title);
+	unsigned int len;
+
+	/* Compute maxLength */
+	for(unsigned int i = optionsMenu->optionsNumber; i--;) {
+		len = (unsigned int) strlen(optionsMenu->options[i].name);
+		if(len > maxLength) {
+			maxLength = len;
+		}
+		switch(optionsMenu->options[i].optionType) {
+			case CHOICES_OPTION: {
+				for(unsigned int j = optionsMenu->options[i].choicesOption.choicesNumber; j--;) {
+					len = (unsigned int) strlen(optionsMenu->options[i].choicesOption.choices[j]) + 4;
+					if(len > maxLength) {
+						maxLength = len;
+					}
+				}
+			}
+				break;
+			case INTEGER_OPTION: {
+				len = intLen(optionsMenu->options[i].integerOption.minValue) + 4;
+				if(len > maxLength) {
+					maxLength = len;
+				}
+				len = intLen(optionsMenu->options[i].integerOption.maxValue) + 4;
+				if(len > maxLength) {
+					maxLength = len;
+				}
+			}
+				break;
+			case CHARACTER_OPTION: {
+				if(5 > maxLength) {
+					maxLength = 5;
+				}
+			}
+				break;
+			default:
+				break;
+		}
+	}
+	len = (unsigned int) strlen(optionsMenu->exitText);
+	if(len > maxLength) {
+		maxLength = len;
+	}
+
+	OptionMenuDrawInfo info;
+	info.width = maxLength + 5;
+	info.height = optionsMenu->optionsNumber * 3 + 5;
+	info.topLeft.x = (cc_getWidth() - (cc_type) info.width) / 2;
+	info.topLeft.y = (cc_getHeight() - (cc_type) info.height) / 2;
+
+	return info;
+}
+
+static void drawColorOptionMenuOptions(const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu,
+                                       const cc_MenuColors* colors) {
+	cc_Vector2 pos;
+	pos.x = info->topLeft.x + 1;
+	pos.y = info->topLeft.y + (cc_type) (4 + 3 * optionsMenu->optionsNumber);
+	cc_setCursorPosition(pos);
+
+	if(optionsMenu->selectedOption == optionsMenu->optionsNumber) {
+		cc_setColors(colors->selectionBackgroundColor, colors->selectionForegroundColor);
+	}
+	else {
+		cc_setColors(colors->choicesBackgroundColor, colors->choicesForegroundColor);
+	}
+
+	unsigned int len = (unsigned int) strlen(optionsMenu->exitText);
+	unsigned int j = 0;
+
+	for(; j < (info->width - len) / 2; ++j) {
+		putchar(' ');
+	}
+	printf("%s", optionsMenu->exitText);
+	j += len;
+	for(; j < info->width - 1; ++j) {
+		putchar(' ');
+	}
+
+	if(optionsMenu->selectedOption == optionsMenu->optionsNumber) {
+		cc_setColors(colors->choicesBackgroundColor, colors->choicesForegroundColor);
+	}
+
+	for(unsigned int i = optionsMenu->optionsNumber; i--;) {
+		pos.y = info->topLeft.y + (cc_type) (4 + 3 * i);
+		cc_setCursorPosition(pos);
+
+		if(optionsMenu->selectedOption == i) {
+			cc_setColors(colors->selectionBackgroundColor, colors->selectionForegroundColor);
+		}
+
+		len = (unsigned int) strlen(optionsMenu->options[i].name);
+		j = 0;
+		for(; j < (info->width - len) / 2; ++j) {
+			putchar(' ');
+		}
+		printf("%s", optionsMenu->options[i].name);
+		j += len;
+		for(; j < info->width - 1; ++j) {
+			putchar(' ');
+		}
+
+		++pos.y;
+		cc_setCursorPosition(pos);
+
+		switch(optionsMenu->options[i].optionType) {
+			case CHOICES_OPTION: {
+				len = (unsigned int) strlen(optionsMenu->options[i].choicesOption
+					                            .choices[optionsMenu->options[i].choicesOption.currentChoice]);
+				putchar(' ');
+				putchar('<');
+				j = 2;
+				for(; j < (info->width - len) / 2; ++j) {
+					putchar(' ');
+				}
+				printf("%s", optionsMenu->options[i].choicesOption
+					.choices[optionsMenu->options[i].choicesOption.currentChoice]);
+				j += len;
+				for(; j < info->width - 3; ++j) {
+					putchar(' ');
+				}
+				putchar('>');
+				putchar(' ');
+			}
+				break;
+			case INTEGER_OPTION: {
+				len = intLen(optionsMenu->options[i].integerOption.value);
+				putchar(' ');
+				putchar('<');
+				j = 2;
+				for(; j < (info->width - len) / 2; ++j) {
+					putchar(' ');
+				}
+				printf("%d", optionsMenu->options[i].integerOption.value);
+				j += len;
+				for(; j < info->width - 3; ++j) {
+					putchar(' ');
+				}
+				putchar('>');
+				putchar(' ');
+			}
+				break;
+			case CHARACTER_OPTION: {
+				len = 1;
+				putchar(' ');
+				putchar('<');
+				j = 2;
+				for(; j < (info->width - len) / 2; ++j) {
+					putchar(' ');
+				}
+				printf("%c", optionsMenu->options[i].characterOption.value);
+				j += len;
+				for(; j < info->width - 3; ++j) {
+					putchar(' ');
+				}
+				putchar('>');
+				putchar(' ');
+			}
+				break;
+			default:
+				break;
+		}
+
+		if(optionsMenu->selectedOption == i) {
+			cc_setColors(colors->choicesBackgroundColor, colors->choicesForegroundColor);
+		}
+	}
+}
+
+static void drawColorOptionMenu(const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu,
+                                const cc_MenuColors* colors) {
+
+	cc_Vector2 topLeft = info->topLeft;
+	cc_Vector2 downRight = { // downRight for the title
+		topLeft.x + (cc_type) info->width,
+		topLeft.y + 3
+	};
+
+	cc_setBackgroundColor(colors->mainBackgroundColor);
+	cc_clean();
+
+	/* Print the title background and text */
+	cc_setColors(colors->titleBackgroundColor, colors->titleForegroundColor);
+	cc_drawFullRectangle(topLeft, downRight, ' ');
+	++topLeft.y;
+	cc_Vector2 pos = {
+		topLeft.x + (cc_type) (info->width - (unsigned int) strlen(optionsMenu->title)) / 2 + 1,
+		topLeft.y
+	};
+	cc_setCursorPosition(pos);
+	printf("%s", optionsMenu->title);
+
+	/* If same background color for title and choices, draw a line */
+	if(colors->titleBackgroundColor == colors->choicesBackgroundColor) {
+		++topLeft.y;
+		--downRight.y;
+		cc_drawLine(topLeft, downRight, '_');
+		++topLeft.y;
+	}
+	else {
+		topLeft.y += 2;
+	}
+	// topLeft is now for the choices background
+
+	/* Print the choices background */
+	downRight.y = topLeft.y + (cc_type) info->height - 3; // downRight for the choices
+	cc_setColors(colors->choicesBackgroundColor, colors->choicesForegroundColor);
+	cc_drawFullRectangle(topLeft, downRight, ' ');
+
+	/* Print the choices */
+	drawColorOptionMenuOptions(info, optionsMenu, colors);
 }
 
 void cc_displayTableMenu(cc_Menu* menu) {
@@ -1113,6 +1669,388 @@ void cc_displayColorMessage(cc_Message* message, const cc_MessageColors* colors)
 	}
 	free(messageLines[0]);
 	free(messageLines);
+
+	cc_setCursorPosition(nullpos);
+}
+
+void cc_displayTableOptionMenu(cc_OptionsMenu* optionsMenu) {
+	if(optionsMenu->title == NULL) {
+		SLOG_ERR("Option menu title field is NULL");
+		return;
+	}
+	if(optionsMenu->options == NULL) {
+		SLOG_ERR("Option menu options field is NULL");
+		return;
+	}
+	if(optionsMenu->optionsNumber == 0) {
+		SLOG_ERR("Option menu optionsNumber field is 0");
+		return;
+	}
+	if(optionsMenu->selectedOption > optionsMenu->optionsNumber) {
+		optionsMenu->selectedOption = optionsMenu->optionsNumber;
+	}
+	if(optionsMenu->exitText == NULL) {
+		optionsMenu->exitText = "Exit";
+	}
+	for(unsigned int i = optionsMenu->optionsNumber; i--;) {
+		if(optionsMenu->options[i].name == NULL) {
+			LOG_ERR("Option %d name field is NULL", i);
+			return;
+		}
+		switch(optionsMenu->options[i].optionType) {
+			case CHOICES_OPTION: {
+				if(optionsMenu->options[i].choicesOption.choices == NULL) {
+					LOG_ERR("Option %d (ChoicesOption) choices field is NULL", i);
+					return;
+				}
+				if(optionsMenu->options[i].choicesOption.choicesNumber == 0) {
+					LOG_ERR("Option %d (ChoicesOption) optionsNumber field is 0", i);
+					return;
+				}
+				if(optionsMenu->options[i].choicesOption.currentChoice >
+				   optionsMenu->options[i].choicesOption.choicesNumber - 1) {
+					optionsMenu->options[i].choicesOption.currentChoice =
+						optionsMenu->options[i].choicesOption.choicesNumber - 1;
+				}
+			}
+				break;
+			case INTEGER_OPTION: {
+				if(optionsMenu->options[i].integerOption.minValue >
+				   optionsMenu->options[i].integerOption.maxValue) {
+					LOG_ERR("Option %d (IntegerOption) minValue > maxValue", i);
+					return;
+				}
+				if(optionsMenu->options[i].integerOption.step <= 0) {
+					LOG_ERR("Option %d (IntegerOption) step field is lower or equal to 0", i);
+					return;
+				}
+				if(optionsMenu->options[i].integerOption.value >
+				   optionsMenu->options[i].integerOption.maxValue) {
+					optionsMenu->options[i].integerOption.value =
+						optionsMenu->options[i].integerOption.maxValue;
+				}
+				if(optionsMenu->options[i].integerOption.value <
+				   optionsMenu->options[i].integerOption.minValue) {
+					optionsMenu->options[i].integerOption.value =
+						optionsMenu->options[i].integerOption.minValue;
+				}
+			}
+				break;
+			case CHARACTER_OPTION: {
+				if(optionsMenu->options[i].characterOption.minValue >
+				   optionsMenu->options[i].characterOption.maxValue) {
+					LOG_ERR("Option %d (CharacterOption) minValue > maxValue", i);
+					return;
+				}
+				if(optionsMenu->options[i].characterOption.value >
+				   optionsMenu->options[i].characterOption.maxValue) {
+					optionsMenu->options[i].characterOption.value =
+						optionsMenu->options[i].characterOption.maxValue;
+				}
+				if(optionsMenu->options[i].characterOption.value <
+				   optionsMenu->options[i].characterOption.minValue) {
+					optionsMenu->options[i].characterOption.value =
+						optionsMenu->options[i].characterOption.minValue;
+				}
+			}
+				break;
+			default:
+				LOG_ERR("Option %d has invalid type", i);
+				return;
+		}
+	}
+	optionsMenu->hasEscaped = false;
+
+	cc_type consoleWidth = cc_getWidth();
+	cc_type consoleHeight = cc_getHeight();
+	cc_type usedWidth = consoleWidth;
+	cc_type usedHeight = consoleHeight;
+
+	OptionMenuDrawInfo info = computeTableOptionMenuDrawInfo(optionsMenu);
+
+	/* Display menu */
+	drawTableOptionMenu(&info, optionsMenu);
+
+	/* Main loop */
+	cc_displayInputs(false);
+	cc_setCursorVisibility(false);
+	cc_Input input;
+	bool exit = false;
+	while(!exit) {
+		input = cc_getInput();
+		switch(input.key) {
+			case PAGE_UP_KEY:
+				optionsMenu->selectedOption = 0;
+				break;
+			case PAGE_DOWN_KEY:
+				optionsMenu->selectedOption = optionsMenu->optionsNumber;
+				break;
+			case UP_ARROW_KEY:
+				if(optionsMenu->selectedOption) {
+					--optionsMenu->selectedOption;
+				}
+				else {
+					optionsMenu->selectedOption = optionsMenu->optionsNumber;
+				}
+				break;
+			case DOWN_ARROW_KEY:
+				++optionsMenu->selectedOption;
+				optionsMenu->selectedOption %= (optionsMenu->optionsNumber + 1);
+				break;
+			case HOME_KEY:
+				if(optionsMenu->selectedOption < optionsMenu->optionsNumber) {
+					changeOption(&(optionsMenu->options[optionsMenu->selectedOption]), FIRST);
+				}
+				break;
+			case END_KEY:
+				if(optionsMenu->selectedOption < optionsMenu->optionsNumber) {
+					changeOption(&(optionsMenu->options[optionsMenu->selectedOption]), LAST);
+				}
+				break;
+			case LEFT_ARROW_KEY:
+				if(optionsMenu->selectedOption < optionsMenu->optionsNumber) {
+					changeOption(&(optionsMenu->options[optionsMenu->selectedOption]), PREV);
+				}
+				break;
+			case RIGHT_ARROW_KEY:
+				if(optionsMenu->selectedOption < optionsMenu->optionsNumber) {
+					changeOption(&(optionsMenu->options[optionsMenu->selectedOption]), NEXT);
+				}
+				break;
+			case ENTER_KEY:
+				if(optionsMenu->selectedOption == optionsMenu->optionsNumber) {
+					exit = true;
+				}
+				break;
+			case ESC_KEY:
+				optionsMenu->hasEscaped = true;
+				exit = true;
+				break;
+			case BACKSPACE_KEY:
+			case TAB_KEY:
+			case SPACE_KEY:
+			case INS_KEY:
+			case DEL_KEY:
+			case F1_KEY:
+			case F2_KEY:
+			case F3_KEY:
+			case F4_KEY:
+			case F5_KEY:
+			case F6_KEY:
+			case F7_KEY:
+			case F8_KEY:
+			case F9_KEY:
+			case F10_KEY:
+			case F11_KEY:
+			case F12_KEY:
+			case OTHER_KEY:
+			default:
+				break;
+		}
+
+		consoleWidth = cc_getWidth();
+		consoleHeight = cc_getHeight();
+		if(usedWidth == consoleWidth && usedHeight == consoleHeight) {
+			drawTableOptionMenuOptions(&info, optionsMenu);
+		}
+		else {
+			usedWidth = consoleWidth;
+			usedHeight = consoleHeight;
+			info = computeTableOptionMenuDrawInfo(optionsMenu);
+			drawTableOptionMenu(&info, optionsMenu);
+		}
+	}
+
+	cc_setCursorPosition(nullpos);
+}
+
+void cc_displayColorOptionMenu(cc_OptionsMenu* optionsMenu, const cc_MenuColors* colors) {
+	if(optionsMenu->title == NULL) {
+		SLOG_ERR("Option menu title field is NULL");
+		return;
+	}
+	if(optionsMenu->options == NULL) {
+		SLOG_ERR("Option menu options field is NULL");
+		return;
+	}
+	if(optionsMenu->optionsNumber == 0) {
+		SLOG_ERR("Option menu optionsNumber field is 0");
+		return;
+	}
+	if(optionsMenu->selectedOption > optionsMenu->optionsNumber) {
+		optionsMenu->selectedOption = optionsMenu->optionsNumber;
+	}
+	if(optionsMenu->exitText == NULL) {
+		optionsMenu->exitText = "Exit";
+	}
+	for(unsigned int i = optionsMenu->optionsNumber; i--;) {
+		if(optionsMenu->options[i].name == NULL) {
+			LOG_ERR("Option %d name field is NULL", i);
+			return;
+		}
+		switch(optionsMenu->options[i].optionType) {
+			case CHOICES_OPTION: {
+				if(optionsMenu->options[i].choicesOption.choices == NULL) {
+					LOG_ERR("Option %d (ChoicesOption) choices field is NULL", i);
+					return;
+				}
+				if(optionsMenu->options[i].choicesOption.choicesNumber == 0) {
+					LOG_ERR("Option %d (ChoicesOption) optionsNumber field is 0", i);
+					return;
+				}
+				if(optionsMenu->options[i].choicesOption.currentChoice >
+				   optionsMenu->options[i].choicesOption.choicesNumber - 1) {
+					optionsMenu->options[i].choicesOption.currentChoice =
+						optionsMenu->options[i].choicesOption.choicesNumber - 1;
+				}
+			}
+				break;
+			case INTEGER_OPTION: {
+				if(optionsMenu->options[i].integerOption.minValue >
+				   optionsMenu->options[i].integerOption.maxValue) {
+					LOG_ERR("Option %d (IntegerOption) minValue > maxValue", i);
+					return;
+				}
+				if(optionsMenu->options[i].integerOption.step <= 0) {
+					LOG_ERR("Option %d (IntegerOption) step field is lower or equal to 0", i);
+					return;
+				}
+				if(optionsMenu->options[i].integerOption.value >
+				   optionsMenu->options[i].integerOption.maxValue) {
+					optionsMenu->options[i].integerOption.value =
+						optionsMenu->options[i].integerOption.maxValue;
+				}
+				if(optionsMenu->options[i].integerOption.value <
+				   optionsMenu->options[i].integerOption.minValue) {
+					optionsMenu->options[i].integerOption.value =
+						optionsMenu->options[i].integerOption.minValue;
+				}
+			}
+				break;
+			case CHARACTER_OPTION: {
+				if(optionsMenu->options[i].characterOption.minValue >
+				   optionsMenu->options[i].characterOption.maxValue) {
+					LOG_ERR("Option %d (CharacterOption) minValue > maxValue", i);
+					return;
+				}
+				if(optionsMenu->options[i].characterOption.value >
+				   optionsMenu->options[i].characterOption.maxValue) {
+					optionsMenu->options[i].characterOption.value =
+						optionsMenu->options[i].characterOption.maxValue;
+				}
+				if(optionsMenu->options[i].characterOption.value <
+				   optionsMenu->options[i].characterOption.minValue) {
+					optionsMenu->options[i].characterOption.value =
+						optionsMenu->options[i].characterOption.minValue;
+				}
+			}
+				break;
+			default:
+				LOG_ERR("Option %d has invalid type", i);
+				return;
+		}
+	}
+	optionsMenu->hasEscaped = false;
+
+	cc_type consoleWidth = cc_getWidth();
+	cc_type consoleHeight = cc_getHeight();
+	cc_type usedWidth = consoleWidth;
+	cc_type usedHeight = consoleHeight;
+
+	OptionMenuDrawInfo info = computeColorOptionMenuDrawInfo(optionsMenu);
+
+	/* Display menu */
+	drawColorOptionMenu(&info, optionsMenu, colors);
+
+	/* Main loop */
+	cc_displayInputs(false);
+	cc_setCursorVisibility(false);
+	cc_Input input;
+	bool exit = false;
+	while(!exit) {
+		input = cc_getInput();
+		switch(input.key) {
+			case PAGE_UP_KEY:
+				optionsMenu->selectedOption = 0;
+				break;
+			case PAGE_DOWN_KEY:
+				optionsMenu->selectedOption = optionsMenu->optionsNumber;
+				break;
+			case UP_ARROW_KEY:
+				if(optionsMenu->selectedOption) {
+					--optionsMenu->selectedOption;
+				}
+				else {
+					optionsMenu->selectedOption = optionsMenu->optionsNumber;
+				}
+				break;
+			case DOWN_ARROW_KEY:
+				++optionsMenu->selectedOption;
+				optionsMenu->selectedOption %= (optionsMenu->optionsNumber + 1);
+				break;
+			case HOME_KEY:
+				if(optionsMenu->selectedOption < optionsMenu->optionsNumber) {
+					changeOption(&(optionsMenu->options[optionsMenu->selectedOption]), FIRST);
+				}
+				break;
+			case END_KEY:
+				if(optionsMenu->selectedOption < optionsMenu->optionsNumber) {
+					changeOption(&(optionsMenu->options[optionsMenu->selectedOption]), LAST);
+				}
+				break;
+			case LEFT_ARROW_KEY:
+				if(optionsMenu->selectedOption < optionsMenu->optionsNumber) {
+					changeOption(&(optionsMenu->options[optionsMenu->selectedOption]), PREV);
+				}
+				break;
+			case RIGHT_ARROW_KEY:
+				if(optionsMenu->selectedOption < optionsMenu->optionsNumber) {
+					changeOption(&(optionsMenu->options[optionsMenu->selectedOption]), NEXT);
+				}
+				break;
+			case ENTER_KEY:
+				if(optionsMenu->selectedOption == optionsMenu->optionsNumber) {
+					exit = true;
+				}
+				break;
+			case ESC_KEY:
+				optionsMenu->hasEscaped = true;
+				exit = true;
+				break;
+			case BACKSPACE_KEY:
+			case TAB_KEY:
+			case SPACE_KEY:
+			case INS_KEY:
+			case DEL_KEY:
+			case F1_KEY:
+			case F2_KEY:
+			case F3_KEY:
+			case F4_KEY:
+			case F5_KEY:
+			case F6_KEY:
+			case F7_KEY:
+			case F8_KEY:
+			case F9_KEY:
+			case F10_KEY:
+			case F11_KEY:
+			case F12_KEY:
+			case OTHER_KEY:
+			default:
+				break;
+		}
+
+		consoleWidth = cc_getWidth();
+		consoleHeight = cc_getHeight();
+		if(usedWidth == consoleWidth && usedHeight == consoleHeight) {
+			drawColorOptionMenuOptions(&info, optionsMenu, colors);
+		}
+		else {
+			usedWidth = consoleWidth;
+			usedHeight = consoleHeight;
+			info = computeColorOptionMenuDrawInfo(optionsMenu);
+			drawColorOptionMenu(&info, optionsMenu, colors);
+		}
+	}
 
 	cc_setCursorPosition(nullpos);
 }
