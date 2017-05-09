@@ -698,13 +698,13 @@ void changeCharacterOption(cc_CharacterOption* characterOption, ChangeType chang
 void changeOption(cc_Option* option, ChangeType changeType) {
 	switch(option->optionType) {
 		case CHOICES_OPTION:
-			changeChoicesOption(&(option->choicesOption), changeType);
+			changeChoicesOption(option->choicesOption, changeType);
 			break;
 		case INTEGER_OPTION:
-			changeIntegerOption(&(option->integerOption), changeType);
+			changeIntegerOption(option->integerOption, changeType);
 			break;
 		case CHARACTER_OPTION:
-			changeCharacterOption(&(option->characterOption), changeType);
+			changeCharacterOption(option->characterOption, changeType);
 			break;
 		default:
 			break;
@@ -726,14 +726,14 @@ OptionMenuDrawInfo computeTableOptionMenuDrawInfo(const cc_OptionsMenu* optionsM
 
 	/* Compute maxLength */
 	for(unsigned int i = optionsMenu->optionsNumber; i--;) {
-		len = (unsigned int) strlen(optionsMenu->options[i].name);
+		len = (unsigned int) strlen(optionsMenu->options[i]->name);
 		if(len > maxLength) {
 			maxLength = len;
 		}
-		switch(optionsMenu->options[i].optionType) {
+		switch(optionsMenu->options[i]->optionType) {
 			case CHOICES_OPTION: {
-				for(unsigned int j = optionsMenu->options[i].choicesOption.choicesNumber; j--;) {
-					len = (unsigned int) strlen(optionsMenu->options[i].choicesOption.choices[j]) + 4;
+				for(unsigned int j = optionsMenu->options[i]->choicesOption->choicesNumber; j--;) {
+					len = (unsigned int) strlen(optionsMenu->options[i]->choicesOption->choices[j]) + 4;
 					if(len > maxLength) {
 						maxLength = len;
 					}
@@ -741,11 +741,11 @@ OptionMenuDrawInfo computeTableOptionMenuDrawInfo(const cc_OptionsMenu* optionsM
 			}
 				break;
 			case INTEGER_OPTION: {
-				len = intLen(optionsMenu->options[i].integerOption.minValue) + 4;
+				len = intLen(optionsMenu->options[i]->integerOption->minValue) + 4;
 				if(len > maxLength) {
 					maxLength = len;
 				}
-				len = intLen(optionsMenu->options[i].integerOption.maxValue) + 4;
+				len = intLen(optionsMenu->options[i]->integerOption->maxValue) + 4;
 				if(len > maxLength) {
 					maxLength = len;
 				}
@@ -811,24 +811,24 @@ void drawTableOptionMenuOptions(const OptionMenuDrawInfo* info, const cc_Options
 		cc_setCursorPosition(pos);
 
 		if(optionsMenu->selectedOption == i) {
-			len = (unsigned int) strlen(optionsMenu->options[i].name) + 4;
+			len = (unsigned int) strlen(optionsMenu->options[i]->name) + 4;
 			j = 0;
 			for(; j < (info->width - len) / 2; ++j) {
 				putchar(' ');
 			}
-			printf("> %s <", optionsMenu->options[i].name);
+			printf("> %s <", optionsMenu->options[i]->name);
 			j += len;
 			for(; j < info->width - 1; ++j) {
 				putchar(' ');
 			}
 		}
 		else {
-			len = (unsigned int) strlen(optionsMenu->options[i].name);
+			len = (unsigned int) strlen(optionsMenu->options[i]->name);
 			j = 0;
 			for(; j < (info->width - len) / 2; ++j) {
 				putchar(' ');
 			}
-			printf("%s", optionsMenu->options[i].name);
+			printf("%s", optionsMenu->options[i]->name);
 			j += len;
 			for(; j < info->width - 1; ++j) {
 				putchar(' ');
@@ -838,16 +838,16 @@ void drawTableOptionMenuOptions(const OptionMenuDrawInfo* info, const cc_Options
 		++pos.y;
 		cc_setCursorPosition(pos);
 
-		switch(optionsMenu->options[i].optionType) {
+		switch(optionsMenu->options[i]->optionType) {
 			case CHOICES_OPTION: {
-				len = (unsigned int) strlen(optionsMenu->options[i].choicesOption
-					                            .choices[optionsMenu->options[i].choicesOption.currentChoice]) + 4;
+				len = (unsigned int) strlen(optionsMenu->options[i]->choicesOption
+					                            ->choices[optionsMenu->options[i]->choicesOption->currentChoice]) + 4;
 				j = 0;
 				for(; j < (info->width - len) / 2; ++j) {
 					putchar(' ');
 				}
-				printf("{ %s }", optionsMenu->options[i].choicesOption
-					.choices[optionsMenu->options[i].choicesOption.currentChoice]);
+				printf("{ %s }", optionsMenu->options[i]->choicesOption
+					->choices[optionsMenu->options[i]->choicesOption->currentChoice]);
 				j += len;
 				for(; j < info->width - 1; ++j) {
 					putchar(' ');
@@ -855,12 +855,12 @@ void drawTableOptionMenuOptions(const OptionMenuDrawInfo* info, const cc_Options
 			}
 				break;
 			case INTEGER_OPTION: {
-				len = intLen(optionsMenu->options[i].integerOption.value) + 4;
+				len = intLen(optionsMenu->options[i]->integerOption->value) + 4;
 				j = 0;
 				for(; j < (info->width - len) / 2; ++j) {
 					putchar(' ');
 				}
-				printf("{ %d }", optionsMenu->options[i].integerOption.value);
+				printf("{ %d }", optionsMenu->options[i]->integerOption->value);
 				j += len;
 				for(; j < info->width - 1; ++j) {
 					putchar(' ');
@@ -873,7 +873,7 @@ void drawTableOptionMenuOptions(const OptionMenuDrawInfo* info, const cc_Options
 				for(; j < (info->width - len) / 2; ++j) {
 					putchar(' ');
 				}
-				printf("{ %c }", optionsMenu->options[i].characterOption.value);
+				printf("{ %c }", optionsMenu->options[i]->characterOption->value);
 				j += len;
 				for(; j < info->width - 1; ++j) {
 					putchar(' ');
@@ -922,14 +922,14 @@ static OptionMenuDrawInfo computeColorOptionMenuDrawInfo(const cc_OptionsMenu* o
 
 	/* Compute maxLength */
 	for(unsigned int i = optionsMenu->optionsNumber; i--;) {
-		len = (unsigned int) strlen(optionsMenu->options[i].name);
+		len = (unsigned int) strlen(optionsMenu->options[i]->name);
 		if(len > maxLength) {
 			maxLength = len;
 		}
-		switch(optionsMenu->options[i].optionType) {
+		switch(optionsMenu->options[i]->optionType) {
 			case CHOICES_OPTION: {
-				for(unsigned int j = optionsMenu->options[i].choicesOption.choicesNumber; j--;) {
-					len = (unsigned int) strlen(optionsMenu->options[i].choicesOption.choices[j]) + 4;
+				for(unsigned int j = optionsMenu->options[i]->choicesOption->choicesNumber; j--;) {
+					len = (unsigned int) strlen(optionsMenu->options[i]->choicesOption->choices[j]) + 4;
 					if(len > maxLength) {
 						maxLength = len;
 					}
@@ -937,11 +937,11 @@ static OptionMenuDrawInfo computeColorOptionMenuDrawInfo(const cc_OptionsMenu* o
 			}
 				break;
 			case INTEGER_OPTION: {
-				len = intLen(optionsMenu->options[i].integerOption.minValue) + 4;
+				len = intLen(optionsMenu->options[i]->integerOption->minValue) + 4;
 				if(len > maxLength) {
 					maxLength = len;
 				}
-				len = intLen(optionsMenu->options[i].integerOption.maxValue) + 4;
+				len = intLen(optionsMenu->options[i]->integerOption->maxValue) + 4;
 				if(len > maxLength) {
 					maxLength = len;
 				}
@@ -1009,12 +1009,12 @@ static void drawColorOptionMenuOptions(const OptionMenuDrawInfo* info, const cc_
 			cc_setColors(colors->selectionBackgroundColor, colors->selectionForegroundColor);
 		}
 
-		len = (unsigned int) strlen(optionsMenu->options[i].name);
+		len = (unsigned int) strlen(optionsMenu->options[i]->name);
 		j = 0;
 		for(; j < (info->width - len) / 2; ++j) {
 			putchar(' ');
 		}
-		printf("%s", optionsMenu->options[i].name);
+		printf("%s", optionsMenu->options[i]->name);
 		j += len;
 		for(; j < info->width - 1; ++j) {
 			putchar(' ');
@@ -1023,18 +1023,18 @@ static void drawColorOptionMenuOptions(const OptionMenuDrawInfo* info, const cc_
 		++pos.y;
 		cc_setCursorPosition(pos);
 
-		switch(optionsMenu->options[i].optionType) {
+		switch(optionsMenu->options[i]->optionType) {
 			case CHOICES_OPTION: {
-				len = (unsigned int) strlen(optionsMenu->options[i].choicesOption
-					                            .choices[optionsMenu->options[i].choicesOption.currentChoice]);
+				len = (unsigned int) strlen(optionsMenu->options[i]->choicesOption
+					                            ->choices[optionsMenu->options[i]->choicesOption->currentChoice]);
 				putchar(' ');
 				putchar('<');
 				j = 2;
 				for(; j < (info->width - len) / 2; ++j) {
 					putchar(' ');
 				}
-				printf("%s", optionsMenu->options[i].choicesOption
-					.choices[optionsMenu->options[i].choicesOption.currentChoice]);
+				printf("%s", optionsMenu->options[i]->choicesOption
+					->choices[optionsMenu->options[i]->choicesOption->currentChoice]);
 				j += len;
 				for(; j < info->width - 3; ++j) {
 					putchar(' ');
@@ -1044,14 +1044,14 @@ static void drawColorOptionMenuOptions(const OptionMenuDrawInfo* info, const cc_
 			}
 				break;
 			case INTEGER_OPTION: {
-				len = intLen(optionsMenu->options[i].integerOption.value);
+				len = intLen(optionsMenu->options[i]->integerOption->value);
 				putchar(' ');
 				putchar('<');
 				j = 2;
 				for(; j < (info->width - len) / 2; ++j) {
 					putchar(' ');
 				}
-				printf("%d", optionsMenu->options[i].integerOption.value);
+				printf("%d", optionsMenu->options[i]->integerOption->value);
 				j += len;
 				for(; j < info->width - 3; ++j) {
 					putchar(' ');
@@ -1068,7 +1068,7 @@ static void drawColorOptionMenuOptions(const OptionMenuDrawInfo* info, const cc_
 				for(; j < (info->width - len) / 2; ++j) {
 					putchar(' ');
 				}
-				printf("%c", optionsMenu->options[i].characterOption.value);
+				printf("%c", optionsMenu->options[i]->characterOption->value);
 				j += len;
 				for(; j < info->width - 3; ++j) {
 					putchar(' ');
@@ -1693,64 +1693,64 @@ void cc_displayTableOptionMenu(cc_OptionsMenu* optionsMenu) {
 		optionsMenu->exitText = "Exit";
 	}
 	for(unsigned int i = optionsMenu->optionsNumber; i--;) {
-		if(optionsMenu->options[i].name == NULL) {
+		if(optionsMenu->options[i]->name == NULL) {
 			LOG_ERR("Option %d name field is NULL", i);
 			return;
 		}
-		switch(optionsMenu->options[i].optionType) {
+		switch(optionsMenu->options[i]->optionType) {
 			case CHOICES_OPTION: {
-				if(optionsMenu->options[i].choicesOption.choices == NULL) {
+				if(optionsMenu->options[i]->choicesOption->choices == NULL) {
 					LOG_ERR("Option %d (ChoicesOption) choices field is NULL", i);
 					return;
 				}
-				if(optionsMenu->options[i].choicesOption.choicesNumber == 0) {
+				if(optionsMenu->options[i]->choicesOption->choicesNumber == 0) {
 					LOG_ERR("Option %d (ChoicesOption) optionsNumber field is 0", i);
 					return;
 				}
-				if(optionsMenu->options[i].choicesOption.currentChoice >
-				   optionsMenu->options[i].choicesOption.choicesNumber - 1) {
-					optionsMenu->options[i].choicesOption.currentChoice =
-						optionsMenu->options[i].choicesOption.choicesNumber - 1;
+				if(optionsMenu->options[i]->choicesOption->currentChoice >
+				   optionsMenu->options[i]->choicesOption->choicesNumber - 1) {
+					optionsMenu->options[i]->choicesOption->currentChoice =
+						optionsMenu->options[i]->choicesOption->choicesNumber - 1;
 				}
 			}
 				break;
 			case INTEGER_OPTION: {
-				if(optionsMenu->options[i].integerOption.minValue >
-				   optionsMenu->options[i].integerOption.maxValue) {
+				if(optionsMenu->options[i]->integerOption->minValue >
+				   optionsMenu->options[i]->integerOption->maxValue) {
 					LOG_ERR("Option %d (IntegerOption) minValue > maxValue", i);
 					return;
 				}
-				if(optionsMenu->options[i].integerOption.step <= 0) {
+				if(optionsMenu->options[i]->integerOption->step <= 0) {
 					LOG_ERR("Option %d (IntegerOption) step field is lower or equal to 0", i);
 					return;
 				}
-				if(optionsMenu->options[i].integerOption.value >
-				   optionsMenu->options[i].integerOption.maxValue) {
-					optionsMenu->options[i].integerOption.value =
-						optionsMenu->options[i].integerOption.maxValue;
+				if(optionsMenu->options[i]->integerOption->value >
+				   optionsMenu->options[i]->integerOption->maxValue) {
+					optionsMenu->options[i]->integerOption->value =
+						optionsMenu->options[i]->integerOption->maxValue;
 				}
-				if(optionsMenu->options[i].integerOption.value <
-				   optionsMenu->options[i].integerOption.minValue) {
-					optionsMenu->options[i].integerOption.value =
-						optionsMenu->options[i].integerOption.minValue;
+				if(optionsMenu->options[i]->integerOption->value <
+				   optionsMenu->options[i]->integerOption->minValue) {
+					optionsMenu->options[i]->integerOption->value =
+						optionsMenu->options[i]->integerOption->minValue;
 				}
 			}
 				break;
 			case CHARACTER_OPTION: {
-				if(optionsMenu->options[i].characterOption.minValue >
-				   optionsMenu->options[i].characterOption.maxValue) {
+				if(optionsMenu->options[i]->characterOption->minValue >
+				   optionsMenu->options[i]->characterOption->maxValue) {
 					LOG_ERR("Option %d (CharacterOption) minValue > maxValue", i);
 					return;
 				}
-				if(optionsMenu->options[i].characterOption.value >
-				   optionsMenu->options[i].characterOption.maxValue) {
-					optionsMenu->options[i].characterOption.value =
-						optionsMenu->options[i].characterOption.maxValue;
+				if(optionsMenu->options[i]->characterOption->value >
+				   optionsMenu->options[i]->characterOption->maxValue) {
+					optionsMenu->options[i]->characterOption->value =
+						optionsMenu->options[i]->characterOption->maxValue;
 				}
-				if(optionsMenu->options[i].characterOption.value <
-				   optionsMenu->options[i].characterOption.minValue) {
-					optionsMenu->options[i].characterOption.value =
-						optionsMenu->options[i].characterOption.minValue;
+				if(optionsMenu->options[i]->characterOption->value <
+				   optionsMenu->options[i]->characterOption->minValue) {
+					optionsMenu->options[i]->characterOption->value =
+						optionsMenu->options[i]->characterOption->minValue;
 				}
 			}
 				break;
@@ -1799,22 +1799,22 @@ void cc_displayTableOptionMenu(cc_OptionsMenu* optionsMenu) {
 				break;
 			case HOME_KEY:
 				if(optionsMenu->selectedOption < optionsMenu->optionsNumber) {
-					changeOption(&(optionsMenu->options[optionsMenu->selectedOption]), FIRST);
+					changeOption(optionsMenu->options[optionsMenu->selectedOption], FIRST);
 				}
 				break;
 			case END_KEY:
 				if(optionsMenu->selectedOption < optionsMenu->optionsNumber) {
-					changeOption(&(optionsMenu->options[optionsMenu->selectedOption]), LAST);
+					changeOption(optionsMenu->options[optionsMenu->selectedOption], LAST);
 				}
 				break;
 			case LEFT_ARROW_KEY:
 				if(optionsMenu->selectedOption < optionsMenu->optionsNumber) {
-					changeOption(&(optionsMenu->options[optionsMenu->selectedOption]), PREV);
+					changeOption(optionsMenu->options[optionsMenu->selectedOption], PREV);
 				}
 				break;
 			case RIGHT_ARROW_KEY:
 				if(optionsMenu->selectedOption < optionsMenu->optionsNumber) {
-					changeOption(&(optionsMenu->options[optionsMenu->selectedOption]), NEXT);
+					changeOption(optionsMenu->options[optionsMenu->selectedOption], NEXT);
 				}
 				break;
 			case ENTER_KEY:
@@ -1884,64 +1884,64 @@ void cc_displayColorOptionMenu(cc_OptionsMenu* optionsMenu, const cc_MenuColors*
 		optionsMenu->exitText = "Exit";
 	}
 	for(unsigned int i = optionsMenu->optionsNumber; i--;) {
-		if(optionsMenu->options[i].name == NULL) {
+		if(optionsMenu->options[i]->name == NULL) {
 			LOG_ERR("Option %d name field is NULL", i);
 			return;
 		}
-		switch(optionsMenu->options[i].optionType) {
+		switch(optionsMenu->options[i]->optionType) {
 			case CHOICES_OPTION: {
-				if(optionsMenu->options[i].choicesOption.choices == NULL) {
+				if(optionsMenu->options[i]->choicesOption->choices == NULL) {
 					LOG_ERR("Option %d (ChoicesOption) choices field is NULL", i);
 					return;
 				}
-				if(optionsMenu->options[i].choicesOption.choicesNumber == 0) {
+				if(optionsMenu->options[i]->choicesOption->choicesNumber == 0) {
 					LOG_ERR("Option %d (ChoicesOption) optionsNumber field is 0", i);
 					return;
 				}
-				if(optionsMenu->options[i].choicesOption.currentChoice >
-				   optionsMenu->options[i].choicesOption.choicesNumber - 1) {
-					optionsMenu->options[i].choicesOption.currentChoice =
-						optionsMenu->options[i].choicesOption.choicesNumber - 1;
+				if(optionsMenu->options[i]->choicesOption->currentChoice >
+				   optionsMenu->options[i]->choicesOption->choicesNumber - 1) {
+					optionsMenu->options[i]->choicesOption->currentChoice =
+						optionsMenu->options[i]->choicesOption->choicesNumber - 1;
 				}
 			}
 				break;
 			case INTEGER_OPTION: {
-				if(optionsMenu->options[i].integerOption.minValue >
-				   optionsMenu->options[i].integerOption.maxValue) {
+				if(optionsMenu->options[i]->integerOption->minValue >
+				   optionsMenu->options[i]->integerOption->maxValue) {
 					LOG_ERR("Option %d (IntegerOption) minValue > maxValue", i);
 					return;
 				}
-				if(optionsMenu->options[i].integerOption.step <= 0) {
+				if(optionsMenu->options[i]->integerOption->step <= 0) {
 					LOG_ERR("Option %d (IntegerOption) step field is lower or equal to 0", i);
 					return;
 				}
-				if(optionsMenu->options[i].integerOption.value >
-				   optionsMenu->options[i].integerOption.maxValue) {
-					optionsMenu->options[i].integerOption.value =
-						optionsMenu->options[i].integerOption.maxValue;
+				if(optionsMenu->options[i]->integerOption->value >
+				   optionsMenu->options[i]->integerOption->maxValue) {
+					optionsMenu->options[i]->integerOption->value =
+						optionsMenu->options[i]->integerOption->maxValue;
 				}
-				if(optionsMenu->options[i].integerOption.value <
-				   optionsMenu->options[i].integerOption.minValue) {
-					optionsMenu->options[i].integerOption.value =
-						optionsMenu->options[i].integerOption.minValue;
+				if(optionsMenu->options[i]->integerOption->value <
+				   optionsMenu->options[i]->integerOption->minValue) {
+					optionsMenu->options[i]->integerOption->value =
+						optionsMenu->options[i]->integerOption->minValue;
 				}
 			}
 				break;
 			case CHARACTER_OPTION: {
-				if(optionsMenu->options[i].characterOption.minValue >
-				   optionsMenu->options[i].characterOption.maxValue) {
+				if(optionsMenu->options[i]->characterOption->minValue >
+				   optionsMenu->options[i]->characterOption->maxValue) {
 					LOG_ERR("Option %d (CharacterOption) minValue > maxValue", i);
 					return;
 				}
-				if(optionsMenu->options[i].characterOption.value >
-				   optionsMenu->options[i].characterOption.maxValue) {
-					optionsMenu->options[i].characterOption.value =
-						optionsMenu->options[i].characterOption.maxValue;
+				if(optionsMenu->options[i]->characterOption->value >
+				   optionsMenu->options[i]->characterOption->maxValue) {
+					optionsMenu->options[i]->characterOption->value =
+						optionsMenu->options[i]->characterOption->maxValue;
 				}
-				if(optionsMenu->options[i].characterOption.value <
-				   optionsMenu->options[i].characterOption.minValue) {
-					optionsMenu->options[i].characterOption.value =
-						optionsMenu->options[i].characterOption.minValue;
+				if(optionsMenu->options[i]->characterOption->value <
+				   optionsMenu->options[i]->characterOption->minValue) {
+					optionsMenu->options[i]->characterOption->value =
+						optionsMenu->options[i]->characterOption->minValue;
 				}
 			}
 				break;
@@ -1990,22 +1990,22 @@ void cc_displayColorOptionMenu(cc_OptionsMenu* optionsMenu, const cc_MenuColors*
 				break;
 			case HOME_KEY:
 				if(optionsMenu->selectedOption < optionsMenu->optionsNumber) {
-					changeOption(&(optionsMenu->options[optionsMenu->selectedOption]), FIRST);
+					changeOption(optionsMenu->options[optionsMenu->selectedOption], FIRST);
 				}
 				break;
 			case END_KEY:
 				if(optionsMenu->selectedOption < optionsMenu->optionsNumber) {
-					changeOption(&(optionsMenu->options[optionsMenu->selectedOption]), LAST);
+					changeOption(optionsMenu->options[optionsMenu->selectedOption], LAST);
 				}
 				break;
 			case LEFT_ARROW_KEY:
 				if(optionsMenu->selectedOption < optionsMenu->optionsNumber) {
-					changeOption(&(optionsMenu->options[optionsMenu->selectedOption]), PREV);
+					changeOption(optionsMenu->options[optionsMenu->selectedOption], PREV);
 				}
 				break;
 			case RIGHT_ARROW_KEY:
 				if(optionsMenu->selectedOption < optionsMenu->optionsNumber) {
-					changeOption(&(optionsMenu->options[optionsMenu->selectedOption]), NEXT);
+					changeOption(optionsMenu->options[optionsMenu->selectedOption], NEXT);
 				}
 				break;
 			case ENTER_KEY:

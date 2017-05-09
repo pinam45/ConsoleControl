@@ -124,9 +124,9 @@ typedef struct {
 	const char* name; /**< Name (without '\\n' or '\\r') */
 	cc_OptionType optionType; /**< Type */
 	union {
-		cc_ChoicesOption choicesOption; /**< Choices option */
-		cc_IntegerOption integerOption; /**< Integer option */
-		cc_CharacterOption characterOption; /**< Character option */
+		cc_ChoicesOption* choicesOption; /**< Choices option */
+		cc_IntegerOption* integerOption; /**< Integer option */
+		cc_CharacterOption* characterOption; /**< Character option */
 	};
 } cc_Option;
 
@@ -139,7 +139,7 @@ typedef struct {
  */
 typedef struct {
 	const char* title; /**< Title (without '\\n' or '\\r') */
-	cc_Option* options; /**< Options */
+	cc_Option** options; /**< Options */
 	unsigned int optionsNumber; /**< Number of options */
 	unsigned int selectedOption; /**< Selected option number (@c optionsNumber for exit) */
 	const char* exitText; /**< Exit text */
