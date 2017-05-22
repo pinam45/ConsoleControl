@@ -1,7 +1,19 @@
 #include <ConsoleControl.h>
 #include <ConsoleControlUtility.h>
 #include <ConsoleControlUI.h>
+
 #include <BasicExamples.h>
+#include <UIExamples.h>
+
+static const cc_MenuColors colors = {
+	BLACK,
+	CYAN,
+	BLACK,
+	WHITE,
+	BLACK,
+	CYAN,
+	BLACK
+};
 
 int main() {
 
@@ -10,15 +22,7 @@ int main() {
 		"UI features",
 		"Exit",
 	};
-	const cc_MenuColors colors = {
-		BLACK,
-		CYAN,
-		BLACK,
-		WHITE,
-		BLACK,
-		CYAN,
-		BLACK
-	};
+
 	cc_Menu menu;
 	menu.title = "ConsoleControl Examples";
 	menu.choices = choices;
@@ -35,7 +39,7 @@ int main() {
 				basicExamples();
 				break;
 			case 1:
-				//TODO
+				UIExamples();
 				break;
 			case 2:
 				loop = false;

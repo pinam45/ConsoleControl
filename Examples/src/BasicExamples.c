@@ -484,7 +484,7 @@ void basicExamples() {
 		"Print lines",
 		"Print rectangles",
 		"Print circle",
-		"Exit",
+		"Back",
 	};
 	const cc_MenuColors colors = {
 		BLACK,
@@ -499,8 +499,8 @@ void basicExamples() {
 	menu.title = "Basic examples";
 	menu.choices = choices;
 	menu.choicesNumber = 6;
-	menu.choiceOnEscape = 5;
 	menu.currentChoice = 0;
+	menu.choiceOnEscape = 5;
 
 	bool loop = true;
 	while(loop) {
