@@ -14,10 +14,12 @@ For a complete library to make complex console UI using terminfo/termcap go chec
 
 ### Basic features
 
-- set background / foreground color
-- set and move the cursor position
-- get console width / height
+- move the cursor / set the position
+- set the cursor visibility
 - save / restore cursor position
+- enable / disable inputs display
+- set background / foreground color
+- get console width / height
 - position check functions
 - clean the screen / the complete console
 - non-blocking *getchar*
@@ -29,7 +31,7 @@ For a complete library to make complex console UI using terminfo/termcap go chec
 The library recognize the following keys:
 Home, End, Page up, Page down, Up arrow, Down arrow, Left arrow, Right arrow, Backspace, Tab, Enter / Carriage return, Escape, Space / Space bar, Insert, Delete, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12
 
-When a key is recognized, it is given with the associated **char**, if the key is not recognized, only the **char** is given (same behaviour as *getchar*)
+When a key is recognized, it is given with the associated **char**, if the key is not recognized, only the **char** is given (same behavior as *getchar*)
 
 ### Shapes
 
@@ -48,9 +50,33 @@ The lines and rectangles have special functions to print tables using
 
 Each element is available in a *table* style and with colors:
 - Multiple choices menu
+	- With title
 	- Allow to choose an option from a string array
 	- Default choice
 	- Configurable behavior on *escape* key input
+- Options menu
+	- With title
+	- Allow to set values of different options
+		- Multiple choices options
+		- Integer options (within a min and a max value)
+		- Character options (within a min and a max value)
+	- Default values
+	- Configurable exit / validate text
+	- Store if *escape* key was used to exit (can be used to save only on user validation)
+- Messages
+	- With or without title
+	- Display a message (multiple lines support)
+	- 3 possible choices for the user to choose between can be set
+		- left
+		- middle
+		- right
+	- Configurable behavior on *escape* key input
+		- No effect
+		- Exit without choosing
+
+### Examples
+
+Examples for basic and UI features are provided with the library, to build them see the **build** section.
 
 ## Dependencies
 
