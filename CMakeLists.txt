@@ -1,4 +1,4 @@
-project(ConsoleControl)
+project(ConsoleControl C)
 cmake_minimum_required(VERSION 3.5)
 
 #set(CMAKE_VERBOSE_MAKEFILE TRUE)
@@ -28,7 +28,7 @@ if( NOT CMAKE_BUILD_TYPE )
 	set(CMAKE_BUILD_TYPE "Release")
 endif()
 
-if(CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_COMPILER_IS_GNUCC)
 	include(cmake/gcc-settings.cmake)
 endif()
 
