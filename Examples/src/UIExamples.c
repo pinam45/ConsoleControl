@@ -74,7 +74,7 @@ void menuExamples() {
 	menu.choices = choices;
 	menu.choicesNumber = 3;
 	menu.choiceOnEscape = 0;
-	menu.currentChoice = 3;
+	menu.currentChoice = 2;
 
 	cc_Message choiceMessage;
 	choiceMessage.title = "Choice selected";
@@ -202,18 +202,18 @@ void messageExamples() {
 	styleOption.currentChoice = 0;
 
 	cc_Option option1;
-	option1.name = "Choices option";
+	option1.name = "Style";
 	option1.optionType = CHOICES_OPTION;
 	option1.choicesOption = &styleOption;
 
-	const char* titleChoices[] = {"title", "no title"};
+	const char* titleChoices[] = {"with", "without"};
 	cc_ChoicesOption titleOption;
 	titleOption.choices = titleChoices;
 	titleOption.choicesNumber = 2;
 	titleOption.currentChoice = 0;
 
 	cc_Option option2;
-	option2.name = "Choices option";
+	option2.name = "Title";
 	option2.optionType = CHOICES_OPTION;
 	option2.choicesOption = &titleOption;
 
@@ -224,7 +224,7 @@ void messageExamples() {
 	leftOption.currentChoice = 0;
 
 	cc_Option option3;
-	option3.name = "Choices option";
+	option3.name = "Left option";
 	option3.optionType = CHOICES_OPTION;
 	option3.choicesOption = &leftOption;
 
@@ -235,7 +235,7 @@ void messageExamples() {
 	middleOption.currentChoice = 0;
 
 	cc_Option option4;
-	option4.name = "Choices option";
+	option4.name = "Middle option";
 	option4.optionType = CHOICES_OPTION;
 	option4.choicesOption = &middleOption;
 
@@ -246,7 +246,7 @@ void messageExamples() {
 	rightOption.currentChoice = 0;
 
 	cc_Option option5;
-	option5.name = "Choices option";
+	option5.name = "Right option";
 	option5.optionType = CHOICES_OPTION;
 	option5.choicesOption = &rightOption;
 
