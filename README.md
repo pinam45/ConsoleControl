@@ -4,7 +4,7 @@
 ![platform](https://img.shields.io/badge/platform-UNIX%20%7C%20Windows-lightgrey.svg)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/MIT)
 
-ConsoleControl is a C, easy to use, library to control your console. 
+ConsoleControl is a C, easy to use, library to control your console.
 
 This library, without any dependencies, supply useful functions to quickly made user interfaces and simple shapes drawings providing basic features (moving the cursor, colors...) and function to print shapes (line, rectangle, circle...) and UI elements (menu, messages...).
 
@@ -104,15 +104,15 @@ If you use **GCC** you can also use the *Makefile*:
 
 To build the lib:
 
-``$ make lib``
+    $ make lib
 
 To build the lib and the examples:
 
-``$ make all``
+    $ make all
 
 or just:
 
-``$ make``
+    $ make
 
 ## Copyright
 
