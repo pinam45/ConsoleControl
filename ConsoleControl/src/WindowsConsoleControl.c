@@ -181,4 +181,30 @@ bool cc_globalContains(const cc_Vector2 position) {
 	       && position.y < csbi.dwSize.Y;
 }
 
+void cc_setCursorSize(unsigned int size) {
+	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	if(hStdOut == INVALID_HANDLE_VALUE) {
+		LOG_ERR("GetStdHandle failed (error %lu)", GetLastError());
+		return;
+	}
+
+	CONSOLE_CURSOR_INFO cci;
+	if(!GetConsoleCursorInfo(hStdOut, &cci)) {
+		LOG_ERR("GetConsoleCursorInfo failed (error %lu)", GetLastError());
+		return;
+	}
+
+	if(size < 100) {
+		cci.dwSize = size;
+	}
+	else {
+		cci.dwSize = 100;
+	}
+
+	if(!SetConsoleCursorInfo(hStdOut, &cci)) {
+		LOG_ERR("SetConsoleCursorInfo failed (error %lu)", GetLastError());
+		return;
+	}
+}
+
 #endif //OS_WINDOWS

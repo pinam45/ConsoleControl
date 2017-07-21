@@ -128,7 +128,7 @@ void cc_setCursorGlobalPosition(cc_Vector2 position);
 cc_Vector2 cc_globalClamp(cc_Vector2 position);
 
 /*-------------------------------------------------------------------------*//**
- * @brief      Determine if the global console contains the position
+ * @brief      Determine if the global console contains the position.
  *
  * @details    Global mean not only the part visible in the window but the
  *             complete buffer.
@@ -140,6 +140,19 @@ cc_Vector2 cc_globalClamp(cc_Vector2 position);
  * @since      0.3
  */
 bool cc_globalContains(cc_Vector2 position);
+
+/*-------------------------------------------------------------------------*//**
+ * @brief      Set the cursor size.
+ *
+ * @details    The size is the percentage of the character cell that is filled
+ *             by the cursor. This value is between 1 and 100. The cursor
+ *             appearance varies, ranging from completely filling the cell to
+ *             showing up as a horizontal line at the bottom of the cell.
+ *             (https://msdn.microsoft.com/en-us/library/windows/desktop/ms682068(v=vs.85).aspx)
+ *
+ * @param[in]  size  The size between 1 and 100
+ */
+void cc_setCursorSize(unsigned int size); /* 0-100 */ //TODO
 
 #endif //OS_WINDOWS
 
