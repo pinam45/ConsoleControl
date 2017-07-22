@@ -151,8 +151,10 @@ bool cc_globalContains(cc_Vector2 position);
  *             (https://msdn.microsoft.com/en-us/library/windows/desktop/ms682068(v=vs.85).aspx)
  *
  * @param[in]  size  The size between 1 and 100
+ *
+ * @since      0.3
  */
-void cc_setCursorSize(unsigned int size); /* 0-100 */ //TODO
+void cc_setCursorSize(unsigned int size);
 
 #endif //OS_WINDOWS
 
