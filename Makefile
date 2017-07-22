@@ -39,8 +39,8 @@ BUILDDIR          = build/
 BINARY_OUTPUT_DIR = $(BUILDDIR)bin/
 LIB_OUTPUT_DIR    = $(BUILDDIR)lib/
 OBJDIR            = $(BUILDDIR)obj/
-EXESOURCEDIRS     = Examples/src/
-LIBSOURCEDIRS     = ConsoleControl/src/
+EXESOURCEDIRS     = Examples/src/ Logger/src/
+LIBSOURCEDIRS     = ConsoleControl/src/ Logger/src/
 INCLUDEDIRS       = /usr/include/ ConsoleControl/include/ Logger/include/ Examples/include/
 LIBSDIRS          = /usr/lib/ $(LIB_OUTPUT_DIR)
 

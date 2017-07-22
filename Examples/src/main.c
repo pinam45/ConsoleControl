@@ -17,6 +17,16 @@ static const cc_MenuColors colors = {
 
 int main() {
 
+	FILE* fp = NULL;
+	if(LOGGER_ENABLED){
+		fp = fopen("ConsoleControl_examples_log.txt","w");
+		if(fp == NULL){
+			lg_setEnabled(false);
+		}
+	}
+	lg_setOutputStream(fp);
+	LOG_INFO("ConsoleControl examples start");
+
 	const char* choices[] = {
 		"Basic features",
 		"UI features",
@@ -30,6 +40,7 @@ int main() {
 	menu.choiceOnEscape = 2;
 	menu.currentChoice = 0;
 
+	LOG_INFO("Enter the main menu");
 	bool loop = true;
 	while(loop) {
 		cc_displayColorMenu(&menu, &colors);
@@ -48,7 +59,13 @@ int main() {
 				break;
 		}
 	}
+	LOG_INFO("Exit the main menu");
+
 	cc_setCursorVisibility(true);
 	cc_displayInputs(true);
+	LOG_INFO("ConsoleControl examples end");
+	if(fp != NULL){
+		fclose(fp);
+	}
 	return EXIT_SUCCESS;
 }

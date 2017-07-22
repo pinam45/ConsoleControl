@@ -27,6 +27,8 @@
 #include <BasicExamples.h>
 
 void printColorTable() {
+	LOG_INFO("Print color table");
+
 	cc_displayInputs(false);
 	cc_setBackgroundColor(BLACK);
 	cc_clean();
@@ -125,6 +127,8 @@ void printColorTable() {
 }
 
 void printInputs() {
+	LOG_INFO("Print inputs");
+
 	cc_displayInputs(false);
 	cc_setBackgroundColor(BLACK);
 	cc_clean();
@@ -226,6 +230,8 @@ void printInputs() {
 }
 
 void printLines() {
+	LOG_INFO("Print lines");
+
 	cc_Vector2 topLeft = {0, 0};
 	cc_Vector2 topRight = {cc_getWidth() - 2, 0};
 	cc_Vector2 downLeft = {0, cc_getHeight() - 1};
@@ -325,6 +331,8 @@ void printLines() {
 }
 
 void printRectangles() {
+	LOG_INFO("Print rectangles");
+
 	cc_Vector2 topLeft = {20, 5};
 	cc_Vector2 downRight = {30, 20};
 	cc_displayInputs(false);
@@ -405,6 +413,8 @@ void printRectangles() {
 }
 
 void printCircle() {
+	LOG_INFO("Print circle");
+
 	cc_displayInputs(false);
 	cc_setBackgroundColor(BLACK);
 	cc_clean();
@@ -502,6 +512,7 @@ void basicExamples() {
 	menu.currentChoice = 0;
 	menu.choiceOnEscape = 5;
 
+	LOG_INFO("Enter the basic examples menu");
 	bool loop = true;
 	while(loop) {
 		cc_displayColorMenu(&menu, &colors);
@@ -535,4 +546,5 @@ void basicExamples() {
 				break;
 		}
 	}
+	LOG_INFO("Exit the basic examples menu");
 }

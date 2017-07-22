@@ -28,6 +28,10 @@
 #define PFC_LOG_H
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifdef LOGGER_ENABLED
 #undef LOGGER_ENABLED
 #define LOGGER_ENABLED 1
@@ -35,16 +39,135 @@
 #define LOGGER_ENABLED 0
 #endif
 
-#include <stdio.h>
+#define LOG_DEBUG(...) lg_log(__FILE__, __LINE__, __func__, DEBUG_LV, ## __VA_ARGS__)
+#define LOG_INFO(...) lg_log(__FILE__, __LINE__, __func__, INFO_LV, ## __VA_ARGS__)
+#define LOG_WARN(...) lg_log(__FILE__, __LINE__, __func__, WARN_LV, ## __VA_ARGS__)
+#define LOG_ERROR(...) lg_log(__FILE__, __LINE__, __func__, ERROR_LV, ## __VA_ARGS__)
+#define LOG_FATAL(...) lg_log(__FILE__, __LINE__, __func__, FATAL_LV, ## __VA_ARGS__)
 
-#define LOG_ERR(format, ...) if(LOGGER_ENABLED) fprintf(stderr, "[ERROR]%s:%d in %s: " format "\n", __FILE__, __LINE__, __func__, ## __VA_ARGS__)
-#define LOG_WARN(format, ...) if(LOGGER_ENABLED) fprintf(stderr, "[WARNING]%s:%d in %s: " format "\n", __FILE__, __LINE__, __func__, ## __VA_ARGS__)
-#define LOG_INFO(format, ...) if(LOGGER_ENABLED) fprintf(stderr, "[INFO]%s:%d in %s: " format "\n", __FILE__, __LINE__, __func__, ## __VA_ARGS__)
-#define LOG(format, ...) if(LOGGER_ENABLED) fprintf(stderr, "[LOG]%s:%d in %s: " format "\n", __FILE__, __LINE__, __func__, ## __VA_ARGS__)
-//Previous macro can be used without variadic arguments (ex:LOG("msg");) but ISO C99 requires all arguments to be used so prefer using the following macros
-#define SLOG_ERR(message) if(LOGGER_ENABLED) fprintf(stderr, "[ERROR]%s:%d in %s: " message "\n", __FILE__, __LINE__, __func__)
-#define SLOG_WARN(message) if(LOGGER_ENABLED) fprintf(stderr, "[WARNING]%s:%d in %s: " message "\n", __FILE__, __LINE__, __func__)
-#define SLOG_INFO(message) if(LOGGER_ENABLED) fprintf(stderr, "[INFO]%s:%d in %s: " message "\n", __FILE__, __LINE__, __func__)
-#define SLOG(message) if(LOGGER_ENABLED) fprintf(stderr, "[LOG]%s:%d in %s: " message "\n", __FILE__, __LINE__, __func__)
+#include <stdio.h>
+#include <time.h>
+#include <stdbool.h>
+#include <stdarg.h>
+
+typedef enum {
+	DEBUG_LV = 0x1,
+	INFO_LV = 0x2,
+	WARN_LV = 0x4,
+	ERROR_LV = 0x8,
+	FATAL_LV = 0x10
+} cc_LogLevel;
+
+/*-------------------------------------------------------------------------*//**
+ * @brief      Set the logger output stream, if NULL, stderr is used.
+ *
+ * @details    Default value is NULL, stderr is used.
+ *
+ * @param      outputStream  The logger output stream
+ */
+void lg_setOutputStream(FILE* outputStream);
+
+/*-------------------------------------------------------------------------*//**
+ * @brief      Set if the logger is enabled or not.
+ *
+ * @param[in]  enabled  True for enabled, false for disabled
+ */
+void lg_setEnabled(bool enabled);
+
+/*-------------------------------------------------------------------------*//**
+ * @brief      Set the processed logging levels.
+ *
+ * @details    Default value: DEBUG_LV | INFO_LV | WARN_LV | ERROR_LV | FATAL_LV
+ *
+ * @param[in]  levels  The levels, a binary mask with DEBUG_LV, INFO_LV,
+ *                     WARN_LV, ERROR_LV and FATAL_LV
+ */
+void lg_setLevels(unsigned int levels);
+
+/*-------------------------------------------------------------------------*//**
+ * @brief      Add logging levels from the processed logging levels.
+ *
+ * @param[in]  levels  The levels, a binary mask with DEBUG_LV, INFO_LV,
+ *                     WARN_LV, ERROR_LV and FATAL_LV
+ */
+void lg_addLevels(unsigned int levels);
+
+/*-------------------------------------------------------------------------*//**
+ * @brief      Remove logging levels from the processed logging levels.
+ *
+ * @param[in]  levels  The levels, a binary mask with DEBUG_LV, INFO_LV,
+ *                     WARN_LV, ERROR_LV and FATAL_LV
+ */
+void lg_removeLevels(unsigned int levels);
+
+/*-------------------------------------------------------------------------*//**
+ * @brief      Set the log printer function to use.
+ *
+ * @details    The functions parameters are (output stream, log instant timeinfo
+ *             struct, file of the log, line of the log, function of the log,
+ *             level of the log, format of the log message, arguments of the log
+ *             message). Default value: &lg_simpleLogPrinter
+ *
+ * @param      logPrinter  The log printer function
+ */
+void lg_setLogPrinter(void (* logPrinter)
+	(FILE*, struct tm*, const char*, const int, const char*, const char*, const char*, va_list));
+
+/*-------------------------------------------------------------------------*//**
+ * @brief      Log a message with the configured log printer.
+ *
+ * @details    Use the LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL
+ *             macros functions to automatically fill the file, line, func and
+ *             level parameters
+ *
+ * @param[in]  file       The file of the log (where the log happened not where
+ *                        it should be print)
+ * @param[in]  line       The line of the log
+ * @param[in]  func       The function of the log
+ * @param[in]  level      The level of the log
+ * @param[in]  format     The format of the log message
+ * @param[in]  ...        The arguments of the log message
+ */
+void lg_log(const char* file, const int line, const char* func, cc_LogLevel level, const char* format, ...);
+
+/*-------------------------------------------------------------------------*//**
+ * @brief      Simple log printer
+ *
+ * @details    Format: moment - [LEVEL] function - message
+ *
+ * @param      outputStream  The log output stream
+ * @param      timeinfo      The timeinfo of the moment the log happened
+ * @param[in]  file          The file of the log (where the log happened not
+ *                           where it should be print)
+ * @param[in]  line          The line of the log
+ * @param[in]  func          The function of the log
+ * @param[in]  level         The level of the log
+ * @param[in]  format        The format of the log message
+ * @param[in]  args          The arguments of the log message
+ */
+void lg_simpleLogPrinter(FILE* outputStream, struct tm* timeinfo, const char* file, const int line, const char* func,
+                         const char* level, const char* format, va_list args);
+
+/*-------------------------------------------------------------------------*//**
+ * @brief      Complete log printer
+ *
+ * @details    Format: moment - [LEVEL] function (path_to_file:line) - message
+ *
+ * @param      outputStream  The log output stream
+ * @param      timeinfo      The timeinfo of the moment the log happened
+ * @param[in]  file          The file of the log (where the log happened not
+ *                           where it should be print)
+ * @param[in]  line          The line of the log
+ * @param[in]  func          The function of the log
+ * @param[in]  level         The level of the log
+ * @param[in]  format        The format of the log message
+ * @param[in]  args          The arguments of the log message
+ */
+void lg_completeLogPrinter(FILE* outputStream, struct tm* timeinfo, const char* file, const int line, const char* func,
+                           const char* level, const char* format, va_list args);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //PFC_LOG_H

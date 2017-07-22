@@ -54,10 +54,12 @@ link_directories(
 message(STATUS "Sources preparation")
 file(GLOB_RECURSE LIB_SOURCE_FILES
   "${CMAKE_CURRENT_SOURCE_DIR}/ConsoleControl/src/*"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Logger/src/*"
   )
 message(" -> Library sources prepared")
 file(GLOB_RECURSE EXAMPLES_SOURCE_FILES
   "${CMAKE_CURRENT_SOURCE_DIR}/Examples/src/*"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Logger/src/*"
   )
 message(" -> Examples sources prepared")
 

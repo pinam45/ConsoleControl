@@ -1134,18 +1134,20 @@ static void drawColorOptionMenu(const OptionMenuDrawInfo* info, const cc_Options
 void cc_displayTableMenu(cc_Menu* menu) {
 
 	if(menu->title == NULL) {
-		SLOG_ERR("Menu title field is NULL");
+		LOG_ERROR("Menu title field is NULL");
 		return;
 	}
 	if(menu->choices == NULL) {
-		SLOG_ERR("Menu choices field is NULL");
+		LOG_ERROR("Menu choices field is NULL");
 		return;
 	}
 	if(menu->choicesNumber == 0) {
-		SLOG_ERR("Menu choicesNumber field is 0");
+		LOG_ERROR("Menu choicesNumber field is 0");
 		return;
 	}
 	if(menu->currentChoice > menu->choicesNumber - 1) {
+		LOG_WARN("Menu currentChoice field (%d) is out of choices range ([0,%d]), set to %d", menu->currentChoice,
+		         menu->choicesNumber - 1, menu->choicesNumber - 1);
 		menu->currentChoice = menu->choicesNumber - 1;
 	}
 
@@ -1239,18 +1241,20 @@ void cc_displayTableMenu(cc_Menu* menu) {
 void cc_displayColorMenu(cc_Menu* menu, const cc_MenuColors* colors) {
 
 	if(menu->title == NULL) {
-		SLOG_ERR("Menu title field is NULL");
+		LOG_ERROR("Menu title field is NULL");
 		return;
 	}
 	if(menu->choices == NULL) {
-		SLOG_ERR("Menu choices field is NULL");
+		LOG_ERROR("Menu choices field is NULL");
 		return;
 	}
 	if(menu->choicesNumber == 0) {
-		SLOG_ERR("Menu choicesNumber field is 0");
+		LOG_ERROR("Menu choicesNumber field is 0");
 		return;
 	}
 	if(menu->currentChoice > menu->choicesNumber - 1) {
+		LOG_WARN("Menu currentChoice field (%d) is out of choices range ([0,%d]), set to %d", menu->currentChoice,
+		         menu->choicesNumber - 1, menu->choicesNumber - 1);
 		menu->currentChoice = menu->choicesNumber - 1;
 	}
 
@@ -1344,7 +1348,7 @@ void cc_displayColorMenu(cc_Menu* menu, const cc_MenuColors* colors) {
 void cc_displayTableMessage(cc_Message* message) {
 
 	if(message->message == NULL) {
-		SLOG_ERR("Message message field is NULL");
+		LOG_ERROR("Message message field is NULL");
 		return;
 	}
 
@@ -1510,7 +1514,7 @@ void cc_displayTableMessage(cc_Message* message) {
 void cc_displayColorMessage(cc_Message* message, const cc_MessageColors* colors) {
 
 	if(message->message == NULL) {
-		SLOG_ERR("Message message field is NULL");
+		LOG_ERROR("Message message field is NULL");
 		return;
 	}
 
@@ -1675,40 +1679,47 @@ void cc_displayColorMessage(cc_Message* message, const cc_MessageColors* colors)
 
 void cc_displayTableOptionMenu(cc_OptionsMenu* optionsMenu) {
 	if(optionsMenu->title == NULL) {
-		SLOG_ERR("Option menu title field is NULL");
+		LOG_ERROR("Option menu title field is NULL");
 		return;
 	}
 	if(optionsMenu->options == NULL) {
-		SLOG_ERR("Option menu options field is NULL");
+		LOG_ERROR("Option menu options field is NULL");
 		return;
 	}
 	if(optionsMenu->optionsNumber == 0) {
-		SLOG_ERR("Option menu optionsNumber field is 0");
+		LOG_ERROR("Option menu optionsNumber field is 0");
 		return;
 	}
 	if(optionsMenu->selectedOption > optionsMenu->optionsNumber) {
+		LOG_WARN("Option menu selectedOption field (%d) is out of choices range ([0,%d]), set to %d",
+		         optionsMenu->selectedOption, optionsMenu->optionsNumber, optionsMenu->optionsNumber);
 		optionsMenu->selectedOption = optionsMenu->optionsNumber;
 	}
 	if(optionsMenu->exitText == NULL) {
+		LOG_WARN("Option menu exitText field is NULL, set to \"Exit\"");
 		optionsMenu->exitText = "Exit";
 	}
 	for(unsigned int i = optionsMenu->optionsNumber; i--;) {
 		if(optionsMenu->options[i]->name == NULL) {
-			LOG_ERR("Option %d name field is NULL", i);
+			LOG_ERROR("Option %d name field is NULL", i);
 			return;
 		}
 		switch(optionsMenu->options[i]->optionType) {
 			case CHOICES_OPTION: {
 				if(optionsMenu->options[i]->choicesOption->choices == NULL) {
-					LOG_ERR("Option %d (ChoicesOption) choices field is NULL", i);
+					LOG_ERROR("Option %d (ChoicesOption) choices field is NULL", i);
 					return;
 				}
 				if(optionsMenu->options[i]->choicesOption->choicesNumber == 0) {
-					LOG_ERR("Option %d (ChoicesOption) optionsNumber field is 0", i);
+					LOG_ERROR("Option %d (ChoicesOption) optionsNumber field is 0", i);
 					return;
 				}
 				if(optionsMenu->options[i]->choicesOption->currentChoice >
 				   optionsMenu->options[i]->choicesOption->choicesNumber - 1) {
+					LOG_WARN("Option %d (ChoicesOption) optionsNumber field (%d) is out of range ([0,%d]), set to %d",
+					         i, optionsMenu->options[i]->choicesOption->currentChoice,
+					         optionsMenu->options[i]->choicesOption->choicesNumber - 1,
+					         optionsMenu->options[i]->choicesOption->choicesNumber - 1);
 					optionsMenu->options[i]->choicesOption->currentChoice =
 						optionsMenu->options[i]->choicesOption->choicesNumber - 1;
 				}
@@ -1717,20 +1728,30 @@ void cc_displayTableOptionMenu(cc_OptionsMenu* optionsMenu) {
 			case INTEGER_OPTION: {
 				if(optionsMenu->options[i]->integerOption->minValue >
 				   optionsMenu->options[i]->integerOption->maxValue) {
-					LOG_ERR("Option %d (IntegerOption) minValue > maxValue", i);
+					LOG_ERROR("Option %d (IntegerOption) minValue > maxValue", i);
 					return;
 				}
 				if(optionsMenu->options[i]->integerOption->step <= 0) {
-					LOG_ERR("Option %d (IntegerOption) step field is lower or equal to 0", i);
+					LOG_ERROR("Option %d (IntegerOption) step field is lower or equal to 0", i);
 					return;
 				}
 				if(optionsMenu->options[i]->integerOption->value >
 				   optionsMenu->options[i]->integerOption->maxValue) {
+					LOG_WARN("Option %d (IntegerOption) value field (%d) is out of range ([%d,%d]), set to %d",
+					         i, optionsMenu->options[i]->integerOption->value,
+					         optionsMenu->options[i]->integerOption->minValue,
+					         optionsMenu->options[i]->integerOption->maxValue,
+					         optionsMenu->options[i]->integerOption->maxValue);
 					optionsMenu->options[i]->integerOption->value =
 						optionsMenu->options[i]->integerOption->maxValue;
 				}
 				if(optionsMenu->options[i]->integerOption->value <
 				   optionsMenu->options[i]->integerOption->minValue) {
+					LOG_WARN("Option %d (IntegerOption) value field (%d) is out of range ([%d,%d]), set to %d",
+					         i, optionsMenu->options[i]->integerOption->value,
+					         optionsMenu->options[i]->integerOption->minValue,
+					         optionsMenu->options[i]->integerOption->maxValue,
+					         optionsMenu->options[i]->integerOption->minValue);
 					optionsMenu->options[i]->integerOption->value =
 						optionsMenu->options[i]->integerOption->minValue;
 				}
@@ -1739,23 +1760,33 @@ void cc_displayTableOptionMenu(cc_OptionsMenu* optionsMenu) {
 			case CHARACTER_OPTION: {
 				if(optionsMenu->options[i]->characterOption->minValue >
 				   optionsMenu->options[i]->characterOption->maxValue) {
-					LOG_ERR("Option %d (CharacterOption) minValue > maxValue", i);
+					LOG_ERROR("Option %d (CharacterOption) minValue > maxValue", i);
 					return;
 				}
 				if(optionsMenu->options[i]->characterOption->value >
 				   optionsMenu->options[i]->characterOption->maxValue) {
+					LOG_WARN("Option %d (characterOption) value field (%c) is out of range ([%c,%c]), set to %c",
+					         i, optionsMenu->options[i]->characterOption->value,
+					         optionsMenu->options[i]->characterOption->minValue,
+					         optionsMenu->options[i]->characterOption->maxValue,
+					         optionsMenu->options[i]->characterOption->maxValue);
 					optionsMenu->options[i]->characterOption->value =
 						optionsMenu->options[i]->characterOption->maxValue;
 				}
 				if(optionsMenu->options[i]->characterOption->value <
 				   optionsMenu->options[i]->characterOption->minValue) {
+					LOG_WARN("Option %d (characterOption) value field (%c) is out of range ([%c,%c]), set to %c",
+					         i, optionsMenu->options[i]->characterOption->value,
+					         optionsMenu->options[i]->characterOption->minValue,
+					         optionsMenu->options[i]->characterOption->maxValue,
+					         optionsMenu->options[i]->characterOption->minValue);
 					optionsMenu->options[i]->characterOption->value =
 						optionsMenu->options[i]->characterOption->minValue;
 				}
 			}
 				break;
 			default:
-				LOG_ERR("Option %d has invalid type", i);
+				LOG_ERROR("Option %d has invalid type", i);
 				return;
 		}
 	}
@@ -1866,40 +1897,47 @@ void cc_displayTableOptionMenu(cc_OptionsMenu* optionsMenu) {
 
 void cc_displayColorOptionMenu(cc_OptionsMenu* optionsMenu, const cc_MenuColors* colors) {
 	if(optionsMenu->title == NULL) {
-		SLOG_ERR("Option menu title field is NULL");
+		LOG_ERROR("Option menu title field is NULL");
 		return;
 	}
 	if(optionsMenu->options == NULL) {
-		SLOG_ERR("Option menu options field is NULL");
+		LOG_ERROR("Option menu options field is NULL");
 		return;
 	}
 	if(optionsMenu->optionsNumber == 0) {
-		SLOG_ERR("Option menu optionsNumber field is 0");
+		LOG_ERROR("Option menu optionsNumber field is 0");
 		return;
 	}
 	if(optionsMenu->selectedOption > optionsMenu->optionsNumber) {
+		LOG_WARN("Option menu selectedOption field (%d) is out of choices range ([0,%d]), set to %d",
+		         optionsMenu->selectedOption, optionsMenu->optionsNumber, optionsMenu->optionsNumber);
 		optionsMenu->selectedOption = optionsMenu->optionsNumber;
 	}
 	if(optionsMenu->exitText == NULL) {
+		LOG_WARN("Option menu exitText field is NULL, set to \"Exit\"");
 		optionsMenu->exitText = "Exit";
 	}
 	for(unsigned int i = optionsMenu->optionsNumber; i--;) {
 		if(optionsMenu->options[i]->name == NULL) {
-			LOG_ERR("Option %d name field is NULL", i);
+			LOG_ERROR("Option %d name field is NULL", i);
 			return;
 		}
 		switch(optionsMenu->options[i]->optionType) {
 			case CHOICES_OPTION: {
 				if(optionsMenu->options[i]->choicesOption->choices == NULL) {
-					LOG_ERR("Option %d (ChoicesOption) choices field is NULL", i);
+					LOG_ERROR("Option %d (ChoicesOption) choices field is NULL", i);
 					return;
 				}
 				if(optionsMenu->options[i]->choicesOption->choicesNumber == 0) {
-					LOG_ERR("Option %d (ChoicesOption) optionsNumber field is 0", i);
+					LOG_ERROR("Option %d (ChoicesOption) optionsNumber field is 0", i);
 					return;
 				}
 				if(optionsMenu->options[i]->choicesOption->currentChoice >
 				   optionsMenu->options[i]->choicesOption->choicesNumber - 1) {
+					LOG_WARN("Option %d (ChoicesOption) optionsNumber field (%d) is out of range ([0,%d]), set to %d",
+					         i, optionsMenu->options[i]->choicesOption->currentChoice,
+					         optionsMenu->options[i]->choicesOption->choicesNumber - 1,
+					         optionsMenu->options[i]->choicesOption->choicesNumber - 1);
 					optionsMenu->options[i]->choicesOption->currentChoice =
 						optionsMenu->options[i]->choicesOption->choicesNumber - 1;
 				}
@@ -1908,20 +1946,30 @@ void cc_displayColorOptionMenu(cc_OptionsMenu* optionsMenu, const cc_MenuColors*
 			case INTEGER_OPTION: {
 				if(optionsMenu->options[i]->integerOption->minValue >
 				   optionsMenu->options[i]->integerOption->maxValue) {
-					LOG_ERR("Option %d (IntegerOption) minValue > maxValue", i);
+					LOG_ERROR("Option %d (IntegerOption) minValue > maxValue", i);
 					return;
 				}
 				if(optionsMenu->options[i]->integerOption->step <= 0) {
-					LOG_ERR("Option %d (IntegerOption) step field is lower or equal to 0", i);
+					LOG_ERROR("Option %d (IntegerOption) step field is lower or equal to 0", i);
 					return;
 				}
 				if(optionsMenu->options[i]->integerOption->value >
 				   optionsMenu->options[i]->integerOption->maxValue) {
+					LOG_WARN("Option %d (IntegerOption) value field (%d) is out of range ([%d,%d]), set to %d",
+					         i, optionsMenu->options[i]->integerOption->value,
+					         optionsMenu->options[i]->integerOption->minValue,
+					         optionsMenu->options[i]->integerOption->maxValue,
+					         optionsMenu->options[i]->integerOption->maxValue);
 					optionsMenu->options[i]->integerOption->value =
 						optionsMenu->options[i]->integerOption->maxValue;
 				}
 				if(optionsMenu->options[i]->integerOption->value <
 				   optionsMenu->options[i]->integerOption->minValue) {
+					LOG_WARN("Option %d (IntegerOption) value field (%d) is out of range ([%d,%d]), set to %d",
+					         i, optionsMenu->options[i]->integerOption->value,
+					         optionsMenu->options[i]->integerOption->minValue,
+					         optionsMenu->options[i]->integerOption->maxValue,
+					         optionsMenu->options[i]->integerOption->minValue);
 					optionsMenu->options[i]->integerOption->value =
 						optionsMenu->options[i]->integerOption->minValue;
 				}
@@ -1930,23 +1978,33 @@ void cc_displayColorOptionMenu(cc_OptionsMenu* optionsMenu, const cc_MenuColors*
 			case CHARACTER_OPTION: {
 				if(optionsMenu->options[i]->characterOption->minValue >
 				   optionsMenu->options[i]->characterOption->maxValue) {
-					LOG_ERR("Option %d (CharacterOption) minValue > maxValue", i);
+					LOG_ERROR("Option %d (CharacterOption) minValue > maxValue", i);
 					return;
 				}
 				if(optionsMenu->options[i]->characterOption->value >
 				   optionsMenu->options[i]->characterOption->maxValue) {
+					LOG_WARN("Option %d (characterOption) value field (%c) is out of range ([%c,%c]), set to %c",
+					         i, optionsMenu->options[i]->characterOption->value,
+					         optionsMenu->options[i]->characterOption->minValue,
+					         optionsMenu->options[i]->characterOption->maxValue,
+					         optionsMenu->options[i]->characterOption->maxValue);
 					optionsMenu->options[i]->characterOption->value =
 						optionsMenu->options[i]->characterOption->maxValue;
 				}
 				if(optionsMenu->options[i]->characterOption->value <
 				   optionsMenu->options[i]->characterOption->minValue) {
+					LOG_WARN("Option %d (characterOption) value field (%c) is out of range ([%c,%c]), set to %c",
+					         i, optionsMenu->options[i]->characterOption->value,
+					         optionsMenu->options[i]->characterOption->minValue,
+					         optionsMenu->options[i]->characterOption->maxValue,
+					         optionsMenu->options[i]->characterOption->minValue);
 					optionsMenu->options[i]->characterOption->value =
 						optionsMenu->options[i]->characterOption->minValue;
 				}
 			}
 				break;
 			default:
-				LOG_ERR("Option %d has invalid type", i);
+				LOG_ERROR("Option %d has invalid type", i);
 				return;
 		}
 	}

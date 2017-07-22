@@ -49,6 +49,7 @@ static const cc_MessageColors mcolors = {
 };
 
 void menuExamples() {
+	LOG_INFO("Start menu examples");
 
 	const char* withColorsChoices[] = {
 		"Table",
@@ -100,6 +101,7 @@ void menuExamples() {
 }
 
 void optionMenuExamples() {
+	LOG_INFO("Start option menu examples");
 
 	const char* withColorsChoices[] = {
 		"Table",
@@ -194,6 +196,7 @@ void optionMenuExamples() {
 }
 
 void messageExamples() {
+	LOG_INFO("Start message examples");
 
 	const char* styleChoices[] = {"Table", "Color"};
 	cc_ChoicesOption styleOption;
@@ -328,6 +331,7 @@ void UIExamples() {
 	menu.currentChoice = 0;
 	menu.choiceOnEscape = 3;
 
+	LOG_INFO("Enter the UI examples menu");
 	bool loop = true;
 	while(loop) {
 		cc_displayColorMenu(&menu, &colors);
@@ -349,4 +353,5 @@ void UIExamples() {
 				break;
 		}
 	}
+	LOG_INFO("Exit the UI examples menu");
 }

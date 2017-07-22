@@ -31,14 +31,14 @@
 cc_Vector2 cc_getCursorPosition() {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERR("GetStdHandle failed (error %lu)", GetLastError());
+		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
 		cc_Vector2 position = {0, 0};
 		return position;
 	}
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
-		LOG_ERR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
+		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		cc_Vector2 position = {0, 0};
 		return position;
 	}
@@ -53,14 +53,14 @@ cc_Vector2 cc_getCursorPosition() {
 cc_Vector2 cc_getCursorGlobalPosition() {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERR("GetStdHandle failed (error %lu)", GetLastError());
+		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
 		cc_Vector2 position = {0, 0};
 		return position;
 	}
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
-		LOG_ERR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
+		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		cc_Vector2 position = {0, 0};
 		return position;
 	}
@@ -75,18 +75,18 @@ cc_Vector2 cc_getCursorGlobalPosition() {
 void cc_reverseColors() {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERR("GetStdHandle failed (error %lu)", GetLastError());
+		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
 		return;
 	}
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
-		LOG_ERR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
+		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return;
 	}
 
 	if(!SetConsoleTextAttribute(hStdOut, csbi.wAttributes | (WORD) COMMON_LVB_REVERSE_VIDEO)) {
-		LOG_ERR("SetConsoleTextAttribute failed (error %lu)", GetLastError());
+		LOG_ERROR("SetConsoleTextAttribute failed (error %lu)", GetLastError());
 		return;
 	}
 }
@@ -94,13 +94,13 @@ void cc_reverseColors() {
 cc_type cc_getGlobalWidth() {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERR("GetStdHandle failed (error %lu)", GetLastError());
+		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
 		return 0;
 	}
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
-		LOG_ERR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
+		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return 0;
 	}
 
@@ -110,13 +110,13 @@ cc_type cc_getGlobalWidth() {
 cc_type cc_getGlobalHeight() {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERR("GetStdHandle failed (error %lu)", GetLastError());
+		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
 		return 0;
 	}
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
-		LOG_ERR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
+		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return 0;
 	}
 
@@ -126,7 +126,7 @@ cc_type cc_getGlobalHeight() {
 void cc_setCursorGlobalPosition(const cc_Vector2 position) {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERR("GetStdHandle failed (error %lu)", GetLastError());
+		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
 		return;
 	}
 
@@ -135,7 +135,7 @@ void cc_setCursorGlobalPosition(const cc_Vector2 position) {
 		(short) position.y
 	};
 	if(!SetConsoleCursorPosition(hStdOut, pos)) {
-		LOG_ERR("SetConsoleCursorPosition failed (error %lu)", GetLastError());
+		LOG_ERROR("SetConsoleCursorPosition failed (error %lu)", GetLastError());
 		return;
 	}
 }
@@ -143,13 +143,13 @@ void cc_setCursorGlobalPosition(const cc_Vector2 position) {
 cc_Vector2 cc_globalClamp(const cc_Vector2 position) {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERR("GetStdHandle failed (error %lu)", GetLastError());
+		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
 		return position;
 	}
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
-		LOG_ERR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
+		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return position;
 	}
 
@@ -165,13 +165,13 @@ cc_Vector2 cc_globalClamp(const cc_Vector2 position) {
 bool cc_globalContains(const cc_Vector2 position) {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERR("GetStdHandle failed (error %lu)", GetLastError());
+		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
 		return false;
 	}
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
-		LOG_ERR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
+		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return false;
 	}
 
@@ -184,13 +184,13 @@ bool cc_globalContains(const cc_Vector2 position) {
 void cc_setCursorSize(unsigned int size) {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERR("GetStdHandle failed (error %lu)", GetLastError());
+		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
 		return;
 	}
 
 	CONSOLE_CURSOR_INFO cci;
 	if(!GetConsoleCursorInfo(hStdOut, &cci)) {
-		LOG_ERR("GetConsoleCursorInfo failed (error %lu)", GetLastError());
+		LOG_ERROR("GetConsoleCursorInfo failed (error %lu)", GetLastError());
 		return;
 	}
 
@@ -202,7 +202,7 @@ void cc_setCursorSize(unsigned int size) {
 	}
 
 	if(!SetConsoleCursorInfo(hStdOut, &cci)) {
-		LOG_ERR("SetConsoleCursorInfo failed (error %lu)", GetLastError());
+		LOG_ERROR("SetConsoleCursorInfo failed (error %lu)", GetLastError());
 		return;
 	}
 }
