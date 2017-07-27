@@ -39,7 +39,7 @@ typedef struct {
 	FILE* outputStream;
 	bool enabled;
 	unsigned int levels;
-	void (* logPrinter)(FILE*, struct tm*, const char*, const int, const char*, const char*, const char*, va_list);
+	void (* logPrinter)(FILE*, struct tm*, const char*, int, const char*, const char*, const char*, va_list);
 } log_config;
 
 log_config loggerConfig = {
@@ -89,11 +89,11 @@ void lg_removeLevels(unsigned int levels) {
 }
 
 void lg_setLogPrinter(void (* logPrinter)
-	(FILE*, struct tm*, const char*, const int, const char*, const char*, const char*, va_list)) {
+	(FILE*, struct tm*, const char*, int, const char*, const char*, const char*, va_list)) {
 	loggerConfig.logPrinter = logPrinter;
 }
 
-void lg_log(const char* file, const int line, const char* func, cc_LogLevel level, const char* format, ...) {
+void lg_log(const char* file, int line, const char* func, cc_LogLevel level, const char* format, ...) {
 	if(loggerConfig.enabled) {
 		if(level & loggerConfig.levels) {
 			va_list args;
@@ -110,7 +110,7 @@ void lg_log(const char* file, const int line, const char* func, cc_LogLevel leve
 	}
 }
 
-void lg_simpleLogPrinter(FILE* outputStream, struct tm* timeinfo, const char* UNUSED(file), const int UNUSED(line),
+void lg_simpleLogPrinter(FILE* outputStream, struct tm* timeinfo, const char* UNUSED(file), int UNUSED(line),
                          const char* func, const char* level, const char* format, va_list args) {
 	char buffer[20];
 	strftime(buffer, 20, "%Y-%m-%d %H:%M:%S", timeinfo);
@@ -121,7 +121,7 @@ void lg_simpleLogPrinter(FILE* outputStream, struct tm* timeinfo, const char* UN
 	fflush(outputStream);
 }
 
-void lg_completeLogPrinter(FILE* outputStream, struct tm* timeinfo, const char* file, const int line,
+void lg_completeLogPrinter(FILE* outputStream, struct tm* timeinfo, const char* file, int line,
                            const char* func, const char* level, const char* format, va_list args) {
 	char buffer[20];
 	strftime(buffer, 20, "%Y-%m-%d %H:%M:%S", timeinfo);

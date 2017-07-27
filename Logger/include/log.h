@@ -128,7 +128,7 @@ void lg_setLogPrinter(void (* logPrinter)
  * @param[in]  format     The format of the log message
  * @param[in]  ...        The arguments of the log message
  */
-void lg_log(const char* file, const int line, const char* func, cc_LogLevel level, const char* format, ...);
+void lg_log(const char* file, int line, const char* func, cc_LogLevel level, const char* format, ...);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Simple log printer
@@ -145,7 +145,7 @@ void lg_log(const char* file, const int line, const char* func, cc_LogLevel leve
  * @param[in]  format        The format of the log message
  * @param[in]  args          The arguments of the log message
  */
-void lg_simpleLogPrinter(FILE* outputStream, struct tm* timeinfo, const char* file, const int line, const char* func,
+void lg_simpleLogPrinter(FILE* outputStream, struct tm* timeinfo, const char* file, int line, const char* func,
                          const char* level, const char* format, va_list args);
 
 /*-------------------------------------------------------------------------*//**
@@ -163,7 +163,7 @@ void lg_simpleLogPrinter(FILE* outputStream, struct tm* timeinfo, const char* fi
  * @param[in]  format        The format of the log message
  * @param[in]  args          The arguments of the log message
  */
-void lg_completeLogPrinter(FILE* outputStream, struct tm* timeinfo, const char* file, const int line, const char* func,
+void lg_completeLogPrinter(FILE* outputStream, struct tm* timeinfo, const char* file, int line, const char* func,
                            const char* level, const char* format, va_list args);
 
 #ifdef __cplusplus
