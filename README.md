@@ -6,7 +6,7 @@
 
 ConsoleControl is a C, easy to use, library to control your console.
 
-This library, without any dependencies, supply useful functions to quickly made user interfaces and simple shapes drawings providing basic features (moving the cursor, colors...) and function to print shapes (line, rectangle, circle...) and UI elements (menu, messages...).
+This library, without any dependencies, supply useful functions to quickly made user interfaces and simple shapes drawings providing basic features (moving the cursor, colors...), function to print shapes (line, rectangle, circle...) and UI elements (menu, messages...).
 
 For a complete library to make complex console UI using terminfo/termcap go check [ncurses](http://invisible-island.net/ncurses/ncurses.html).
 
