@@ -26,6 +26,13 @@
 
 #include <ConsoleControlUI.h>
 
+#include <ConsoleControlUtility.h>
+#include <log.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 typedef struct {
 	unsigned int width;
 	unsigned int height;

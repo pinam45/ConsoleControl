@@ -26,6 +26,8 @@
 
 #include <BasicExamples.h>
 
+#include <log.h>
+
 void printColorTable() {
 	LOG_INFO("Print color table");
 

@@ -41,13 +41,7 @@
 extern "C" {
 #endif
 
-#include <stdio.h>
-#include <math.h>
-
-#include <log.h>
 #include <ConsoleControl.h>
-#include <ConsoleControlMenu.h>
-#include <ConsoleControlInput.h>
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Draw the outline of a rectangle.

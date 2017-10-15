@@ -30,14 +30,14 @@
 
 #include <WindowsConsoleControl.h>
 
+#include <ConsoleControlColor.h>
+#include <ConsoleControlInput.h>
+#include <log.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-
-#include <log.h>
-#include <ConsoleControlColor.h>
-#include <ConsoleControlInput.h>
 
 #include <windows.h>
 

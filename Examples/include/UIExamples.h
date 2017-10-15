@@ -28,9 +28,9 @@
 #define CONSOLECONTROL_UIEXAMPLES_H
 
 
-#include <stdbool.h>
-
 #include <ConsoleControlUI.h>
+
+#include <stdbool.h>
 
 void menuExamples();
 

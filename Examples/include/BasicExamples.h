@@ -28,10 +28,11 @@
 #define CONSOLECONTROL_CONSOLECONTROLTEST_H
 
 
-#include <stdio.h>
 #include <ConsoleControl.h>
 #include <ConsoleControlUtility.h>
 #include <ConsoleControlUI.h>
+
+#include <stdio.h>
 
 void printColorTable();
 

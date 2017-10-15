@@ -26,6 +26,9 @@
 
 #include <ConsoleControlUtility.h>
 
+#include <stdio.h>
+#include <math.h>
+
 static cc_type lerp(cc_type x0, cc_type x1, double t);
 
 static cc_Vector2 vectlerp(cc_Vector2 v0, cc_Vector2 v1, double t);

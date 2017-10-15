@@ -40,13 +40,8 @@
 extern "C" {
 #endif
 
-#include <stdio.h>
-
-#include <log.h>
 #include <ConsoleControl.h>
-#include <ConsoleControlUtility.h>
 #include <ConsoleControlMenu.h>
-#include <ConsoleControlInput.h>
 #include <ConsoleControlMessage.h>
 
 /*-------------------------------------------------------------------------*//**

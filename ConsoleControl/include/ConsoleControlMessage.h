@@ -40,9 +40,9 @@
 extern "C" {
 #endif
 
-#include <stdbool.h>
-
 #include <ConsoleControlColor.h>
+
+#include <stdbool.h>
 
 /*-------------------------------------------------------------------------*//**
  * @struct cc_MessageChoice

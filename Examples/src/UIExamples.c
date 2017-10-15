@@ -26,6 +26,8 @@
 
 #include <UIExamples.h>
 
+#include <log.h>
+
 static const cc_MenuColors colors = {
 	BLACK,
 	CYAN,

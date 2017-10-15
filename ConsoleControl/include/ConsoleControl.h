@@ -40,10 +40,10 @@
 extern "C" {
 #endif
 
-#include <stdbool.h>
-
 #include <ConsoleControlColor.h>
 #include <ConsoleControlInput.h>
+
+#include <stdbool.h>
 
 /*-------------------------------------------------------------------------*//**
  * Integral data type used with ConsoleControl.
