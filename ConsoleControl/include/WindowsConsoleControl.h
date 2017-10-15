@@ -45,7 +45,7 @@ extern "C" {
 
 #include <ConsoleControl.h>
 
-#ifdef OS_WINDOWS
+#ifdef _WIN32
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Get the cursor position in the console window.
@@ -156,7 +156,7 @@ bool cc_globalContains(cc_Vector2 position);
  */
 void cc_setCursorSize(unsigned int size);
 
-#endif //OS_WINDOWS
+#endif //_WIN32
 
 #ifdef __cplusplus
 }

@@ -48,7 +48,7 @@ extern "C" {
 
 #include <ConsoleControl.h>
 
-#ifndef OS_WINDOWS
+#ifndef _WIN32
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Permanently reverse the colors. The foreground color will be used
@@ -64,7 +64,7 @@ extern "C" {
  */
 void cc_permanentReverseColors();
 
-#endif //OS_WINDOWS
+#endif //_WIN32
 
 #ifdef __cplusplus
 }

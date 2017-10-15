@@ -30,6 +30,17 @@
 
 #include <WindowsConsoleControl.h>
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+
+#include <log.h>
+#include <ConsoleControlColor.h>
+#include <ConsoleControlInput.h>
+
+#include <windows.h>
+
 // For cc_saveCursorPosition and cc_restoreCursorPosition
 static cc_Vector2 savedPosition = {0, 0};
 

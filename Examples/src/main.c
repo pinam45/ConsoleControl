@@ -5,6 +5,9 @@
 #include <BasicExamples.h>
 #include <UIExamples.h>
 
+#include <stdio.h>
+#include <stdlib.h>
+
 static const cc_MenuColors colors = {
 	BLACK,
 	CYAN,
