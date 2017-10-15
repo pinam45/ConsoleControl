@@ -27,6 +27,7 @@
 #include <ConsoleControlUtility.h>
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 
 static cc_type lerp(cc_type x0, cc_type x1, double t);
