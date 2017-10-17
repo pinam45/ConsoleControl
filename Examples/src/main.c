@@ -10,13 +10,13 @@
 #include <stdlib.h>
 
 static const cc_MenuColors colors = {
-	BLACK,
-	CYAN,
-	BLACK,
-	WHITE,
-	BLACK,
-	CYAN,
-	BLACK
+	CC_BLACK,
+	CC_CYAN,
+	CC_BLACK,
+	CC_WHITE,
+	CC_BLACK,
+	CC_CYAN,
+	CC_BLACK
 };
 
 int main() {
@@ -48,7 +48,7 @@ int main() {
 	bool loop = true;
 	while(loop) {
 		cc_displayColorMenu(&menu, &colors);
-		cc_setColors(BLACK, WHITE);
+		cc_setColors(CC_BLACK, CC_WHITE);
 		switch(menu.currentChoice) {
 			case 0:
 				basicExamples();

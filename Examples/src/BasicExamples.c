@@ -32,26 +32,26 @@ void printColorTable() {
 	LOG_INFO("Print color table");
 
 	cc_displayInputs(false);
-	cc_setBackgroundColor(BLACK);
+	cc_setBackgroundColor(CC_BLACK);
 	cc_clean();
 
 	cc_Color colors[] = {
-		BLACK,
-		BLUE,
-		GREEN,
-		CYAN,
-		RED,
-		MAGENTA,
-		YELLOW,
-		WHITE,
-		LIGHT_BLACK,
-		LIGHT_BLUE,
-		LIGHT_GREEN,
-		LIGHT_CYAN,
-		LIGHT_RED,
-		LIGHT_MAGENTA,
-		LIGHT_YELLOW,
-		LIGHT_WHITE
+		CC_BLACK,
+		CC_BLUE,
+		CC_GREEN,
+		CC_CYAN,
+		CC_RED,
+		CC_MAGENTA,
+		CC_YELLOW,
+		CC_WHITE,
+		CC_LIGHT_BLACK,
+		CC_LIGHT_BLUE,
+		CC_LIGHT_GREEN,
+		CC_LIGHT_CYAN,
+		CC_LIGHT_RED,
+		CC_LIGHT_MAGENTA,
+		CC_LIGHT_YELLOW,
+		CC_LIGHT_WHITE
 	};
 	char colorNames[][20] = {
 		"BLACK         ",
@@ -71,7 +71,7 @@ void printColorTable() {
 		"LIGHT_YELLOW  ",
 		"LIGHT_WHITE   "
 	};
-	cc_setColors(BLACK, WHITE);
+	cc_setColors(CC_BLACK, CC_WHITE);
 	printf("+");
 	for(unsigned int a = 15; --a;) {
 		printf("-");
@@ -83,17 +83,17 @@ void printColorTable() {
 	printf("+");
 	printf("\n");
 	for(unsigned int i = 0; i < 16; ++i) {
-		cc_setColors(BLACK, WHITE);
+		cc_setColors(CC_BLACK, CC_WHITE);
 		printf("|%s|", colorNames[i]);
 		cc_setForegroundColor(colors[i]);
 		for(unsigned int j = 0; j < 8; ++j) {
 			cc_setBackgroundColor(colors[j]);
 			printf("   sample   ");
 		}
-		cc_setColors(BLACK, WHITE);
+		cc_setColors(CC_BLACK, CC_WHITE);
 		printf("|\n");
 	}
-	cc_setColors(BLACK, WHITE);
+	cc_setColors(CC_BLACK, CC_WHITE);
 	printf("+");
 	for(unsigned int a = 15; --a;) {
 		printf("-");
@@ -105,17 +105,17 @@ void printColorTable() {
 	printf("+");
 	printf("\n");
 	for(unsigned int i = 0; i < 16; ++i) {
-		cc_setColors(BLACK, WHITE);
+		cc_setColors(CC_BLACK, CC_WHITE);
 		printf("|%s|", colorNames[i]);
 		cc_setForegroundColor(colors[i]);
 		for(unsigned int j = 8; j < 16; ++j) {
 			cc_setBackgroundColor(colors[j]);
 			printf("   sample   ");
 		}
-		cc_setColors(BLACK, WHITE);
+		cc_setColors(CC_BLACK, CC_WHITE);
 		printf("|\n");
 	}
-	cc_setColors(BLACK, WHITE);
+	cc_setColors(CC_BLACK, CC_WHITE);
 	printf("+");
 	for(unsigned int a = 15; --a;) {
 		printf("-");
@@ -132,7 +132,7 @@ void printInputs() {
 	LOG_INFO("Print inputs");
 
 	cc_displayInputs(false);
-	cc_setBackgroundColor(BLACK);
+	cc_setBackgroundColor(CC_BLACK);
 	cc_clean();
 
 	bool running = true;
@@ -240,18 +240,18 @@ void printLines() {
 	cc_Vector2 downRight = {topRight.x, downLeft.y};
 	cc_Vector2 pos = {cc_getWidth() / 2, cc_getHeight() / 2};
 	cc_displayInputs(false);
-	cc_setBackgroundColor(BLACK);
+	cc_setBackgroundColor(CC_BLACK);
 	cc_clean();
 
-	cc_setForegroundColor(GREEN);
+	cc_setForegroundColor(CC_GREEN);
 	cc_drawLine(topLeft, pos, '*');
-	cc_setForegroundColor(CYAN);
+	cc_setForegroundColor(CC_CYAN);
 	cc_drawLine(topRight, pos, '*');
-	cc_setForegroundColor(MAGENTA);
+	cc_setForegroundColor(CC_MAGENTA);
 	cc_drawLine(downLeft, pos, '*');
-	cc_setForegroundColor(YELLOW);
+	cc_setForegroundColor(CC_YELLOW);
 	cc_drawLine(downRight, pos, '*');
-	cc_setForegroundColor(WHITE);
+	cc_setForegroundColor(CC_WHITE);
 	cc_setCursorPosition(pos);
 	cc_printInPlace('#');
 	cc_Input input = cc_getInput();
@@ -316,15 +316,15 @@ void printLines() {
 		downRight.y = downLeft.y;
 		pos = cc_clamp(pos);
 
-		cc_setForegroundColor(GREEN);
+		cc_setForegroundColor(CC_GREEN);
 		cc_drawLine(topLeft, pos, '*');
-		cc_setForegroundColor(CYAN);
+		cc_setForegroundColor(CC_CYAN);
 		cc_drawLine(topRight, pos, '*');
-		cc_setForegroundColor(MAGENTA);
+		cc_setForegroundColor(CC_MAGENTA);
 		cc_drawLine(downLeft, pos, '*');
-		cc_setForegroundColor(YELLOW);
+		cc_setForegroundColor(CC_YELLOW);
 		cc_drawLine(downRight, pos, '*');
-		cc_setForegroundColor(WHITE);
+		cc_setForegroundColor(CC_WHITE);
 		cc_setCursorPosition(pos);
 		cc_printInPlace('#');
 
@@ -338,14 +338,14 @@ void printRectangles() {
 	cc_Vector2 topLeft = {20, 5};
 	cc_Vector2 downRight = {30, 20};
 	cc_displayInputs(false);
-	cc_setBackgroundColor(BLACK);
+	cc_setBackgroundColor(CC_BLACK);
 	cc_clean();
 
-	cc_setForegroundColor(CYAN);
+	cc_setForegroundColor(CC_CYAN);
 	cc_drawFullRectangle(topLeft, downRight, '*');
-	cc_setForegroundColor(GREEN);
+	cc_setForegroundColor(CC_GREEN);
 	cc_drawRectangle(topLeft, downRight, '+');
-	cc_setForegroundColor(WHITE);
+	cc_setForegroundColor(CC_WHITE);
 	cc_setCursorPosition(downRight);
 	cc_printInPlace('#');
 
@@ -403,11 +403,11 @@ void printRectangles() {
 		}
 
 		downRight = cc_clamp(downRight);
-		cc_setForegroundColor(CYAN);
+		cc_setForegroundColor(CC_CYAN);
 		cc_drawFullRectangle(topLeft, downRight, '*');
-		cc_setForegroundColor(GREEN);
+		cc_setForegroundColor(CC_GREEN);
 		cc_drawRectangle(topLeft, downRight, '+');
-		cc_setForegroundColor(WHITE);
+		cc_setForegroundColor(CC_WHITE);
 		cc_setCursorPosition(downRight);
 		cc_printInPlace('#');
 		input = cc_getInput();
@@ -418,15 +418,15 @@ void printCircle() {
 	LOG_INFO("Print circle");
 
 	cc_displayInputs(false);
-	cc_setBackgroundColor(BLACK);
+	cc_setBackgroundColor(CC_BLACK);
 	cc_clean();
 
 	cc_Vector2 center = {cc_getWidth() / 2, cc_getHeight() / 2};
 	unsigned int radius = 5;
 
-	cc_setForegroundColor(GREEN);
+	cc_setForegroundColor(CC_GREEN);
 	cc_drawCircle(center, radius, '#');
-	cc_setForegroundColor(WHITE);
+	cc_setForegroundColor(CC_WHITE);
 	cc_setCursorPosition(center);
 	putchar('#');
 
@@ -479,9 +479,9 @@ void printCircle() {
 				break;
 		}
 
-		cc_setForegroundColor(GREEN);
+		cc_setForegroundColor(CC_GREEN);
 		cc_drawCircle(center, radius, '#');
-		cc_setForegroundColor(WHITE);
+		cc_setForegroundColor(CC_WHITE);
 		cc_setCursorPosition(center);
 		putchar('#');
 		input = cc_getInput();
@@ -499,13 +499,13 @@ void basicExamples() {
 		"Back",
 	};
 	const cc_MenuColors colors = {
-		BLACK,
-		CYAN,
-		BLACK,
-		WHITE,
-		BLACK,
-		CYAN,
-		BLACK
+		CC_BLACK,
+		CC_CYAN,
+		CC_BLACK,
+		CC_WHITE,
+		CC_BLACK,
+		CC_CYAN,
+		CC_BLACK
 	};
 	cc_Menu menu;
 	menu.title = "Basic examples";
@@ -518,7 +518,7 @@ void basicExamples() {
 	bool loop = true;
 	while(loop) {
 		cc_displayColorMenu(&menu, &colors);
-		cc_setColors(BLACK, WHITE);
+		cc_setColors(CC_BLACK, CC_WHITE);
 		switch(menu.currentChoice) {
 			case 0:
 				cc_clean();

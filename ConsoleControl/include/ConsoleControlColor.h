@@ -48,22 +48,22 @@ extern "C" {
  * @since      0.1
  */
 typedef enum {
-	BLACK, /**< Black color */
-	BLUE, /**< Blue color */
-	GREEN, /**< Green color */
-	CYAN, /**< Cyan color */
-	RED, /**< Red color */
-	MAGENTA, /**< Magenta color */
-	YELLOW, /**< Yellow color */
-	WHITE, /**< White color */
-	LIGHT_BLACK, /**< Light black color */
-	LIGHT_BLUE, /**< Light blue color */
-	LIGHT_GREEN, /**< Light green color */
-	LIGHT_CYAN, /**< Light cyan color */
-	LIGHT_RED, /**< Light red color */
-	LIGHT_MAGENTA, /**< Light magenta color */
-	LIGHT_YELLOW, /**< Light yellow color */
-	LIGHT_WHITE /**< Light white color */
+	CC_BLACK, /**< Black color */
+	CC_BLUE, /**< Blue color */
+	CC_GREEN, /**< Green color */
+	CC_CYAN, /**< Cyan color */
+	CC_RED, /**< Red color */
+	CC_MAGENTA, /**< Magenta color */
+	CC_YELLOW, /**< Yellow color */
+	CC_WHITE, /**< White color */
+	CC_LIGHT_BLACK, /**< Light black color */
+	CC_LIGHT_BLUE, /**< Light blue color */
+	CC_LIGHT_GREEN, /**< Light green color */
+	CC_LIGHT_CYAN, /**< Light cyan color */
+	CC_LIGHT_RED, /**< Light red color */
+	CC_LIGHT_MAGENTA, /**< Light magenta color */
+	CC_LIGHT_YELLOW, /**< Light yellow color */
+	CC_LIGHT_WHITE /**< Light white color */
 } cc_Color;
 
 #ifdef __cplusplus

@@ -51,52 +51,52 @@ static WORD cc_getBackgroundColorIdentifier(cc_Color color);
 WORD cc_getForegroundColorIdentifier(cc_Color color) {
 	WORD colorIdentifier = 0;
 	switch(color) {
-		case LIGHT_BLUE:
+		case CC_LIGHT_BLUE:
 			colorIdentifier |= FOREGROUND_INTENSITY;
 			/* FALLTHROUGH */
-		case BLUE:
+		case CC_BLUE:
 			colorIdentifier |= FOREGROUND_BLUE;
 			break;
-		case LIGHT_GREEN:
+		case CC_LIGHT_GREEN:
 			colorIdentifier |= FOREGROUND_INTENSITY;
 			/* FALLTHROUGH */
-		case GREEN:
+		case CC_GREEN:
 			colorIdentifier |= FOREGROUND_GREEN;
 			break;
-		case LIGHT_CYAN:
+		case CC_LIGHT_CYAN:
 			colorIdentifier |= FOREGROUND_INTENSITY;
 			/* FALLTHROUGH */
-		case CYAN:
+		case CC_CYAN:
 			colorIdentifier |= FOREGROUND_BLUE | FOREGROUND_GREEN;
 			break;
-		case LIGHT_RED:
+		case CC_LIGHT_RED:
 			colorIdentifier |= FOREGROUND_INTENSITY;
 			/* FALLTHROUGH */
-		case RED:
+		case CC_RED:
 			colorIdentifier |= FOREGROUND_RED;
 			break;
-		case LIGHT_MAGENTA:
+		case CC_LIGHT_MAGENTA:
 			colorIdentifier |= FOREGROUND_INTENSITY;
 			/* FALLTHROUGH */
-		case MAGENTA:
+		case CC_MAGENTA:
 			colorIdentifier |= FOREGROUND_BLUE | FOREGROUND_RED;
 			break;
-		case LIGHT_YELLOW:
+		case CC_LIGHT_YELLOW:
 			colorIdentifier |= FOREGROUND_INTENSITY;
 			/* FALLTHROUGH */
-		case YELLOW:
+		case CC_YELLOW:
 			colorIdentifier |= FOREGROUND_GREEN | FOREGROUND_RED;
 			break;
-		case LIGHT_WHITE:
+		case CC_LIGHT_WHITE:
 			colorIdentifier |= FOREGROUND_INTENSITY;
 			/* FALLTHROUGH */
-		case WHITE:
+		case CC_WHITE:
 			colorIdentifier |= FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED;
 			break;
-		case LIGHT_BLACK:
+		case CC_LIGHT_BLACK:
 			colorIdentifier |= FOREGROUND_INTENSITY;
 			break;
-		case BLACK:
+		case CC_BLACK:
 			/* FALLTHROUGH */
 		default:
 			break;
@@ -107,52 +107,52 @@ WORD cc_getForegroundColorIdentifier(cc_Color color) {
 WORD cc_getBackgroundColorIdentifier(cc_Color color) {
 	WORD colorIdentifier = 0;
 	switch(color) {
-		case LIGHT_BLUE:
+		case CC_LIGHT_BLUE:
 			colorIdentifier |= BACKGROUND_INTENSITY;
 			/* FALLTHROUGH */
-		case BLUE:
+		case CC_BLUE:
 			colorIdentifier |= BACKGROUND_BLUE;
 			break;
-		case LIGHT_GREEN:
+		case CC_LIGHT_GREEN:
 			colorIdentifier |= BACKGROUND_INTENSITY;
 			/* FALLTHROUGH */
-		case GREEN:
+		case CC_GREEN:
 			colorIdentifier |= BACKGROUND_GREEN;
 			break;
-		case LIGHT_CYAN:
+		case CC_LIGHT_CYAN:
 			colorIdentifier |= BACKGROUND_INTENSITY;
 			/* FALLTHROUGH */
-		case CYAN:
+		case CC_CYAN:
 			colorIdentifier |= BACKGROUND_BLUE | BACKGROUND_GREEN;
 			break;
-		case LIGHT_RED:
+		case CC_LIGHT_RED:
 			colorIdentifier |= BACKGROUND_INTENSITY;
 			/* FALLTHROUGH */
-		case RED:
+		case CC_RED:
 			colorIdentifier |= BACKGROUND_RED;
 			break;
-		case LIGHT_MAGENTA:
+		case CC_LIGHT_MAGENTA:
 			colorIdentifier |= BACKGROUND_INTENSITY;
 			/* FALLTHROUGH */
-		case MAGENTA:
+		case CC_MAGENTA:
 			colorIdentifier |= BACKGROUND_BLUE | BACKGROUND_RED;
 			break;
-		case LIGHT_YELLOW:
+		case CC_LIGHT_YELLOW:
 			colorIdentifier |= BACKGROUND_INTENSITY;
 			/* FALLTHROUGH */
-		case YELLOW:
+		case CC_YELLOW:
 			colorIdentifier |= BACKGROUND_GREEN | BACKGROUND_RED;
 			break;
-		case LIGHT_WHITE:
+		case CC_LIGHT_WHITE:
 			colorIdentifier |= BACKGROUND_INTENSITY;
 			/* FALLTHROUGH */
-		case WHITE:
+		case CC_WHITE:
 			colorIdentifier |= BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED;
 			break;
-		case LIGHT_BLACK:
+		case CC_LIGHT_BLACK:
 			colorIdentifier |= BACKGROUND_INTENSITY;
 			break;
-		case BLACK:
+		case CC_BLACK:
 			/* FALLTHROUGH */
 		default:
 			break;
@@ -177,7 +177,7 @@ void cc_setForegroundColor(const cc_Color color) {
 
 	if(!SetConsoleTextAttribute(hStdOut,
 	                            (csbi.wAttributes /* current colors */
-	                             & cc_getBackgroundColorIdentifier(LIGHT_WHITE)) /* only keep background */
+	                             & cc_getBackgroundColorIdentifier(CC_LIGHT_WHITE)) /* only keep background */
 	                            | cc_getForegroundColorIdentifier(color)) /* change foreground */) {
 		LOG_ERROR("SetConsoleTextAttribute failed (error %lu)", GetLastError());
 		return;
@@ -199,7 +199,7 @@ void cc_setBackgroundColor(const cc_Color color) {
 
 	if(!SetConsoleTextAttribute(hStdOut,
 	                            (csbi.wAttributes /* current colors */
-	                             & cc_getForegroundColorIdentifier(LIGHT_WHITE)) /* only keep foreground */
+	                             & cc_getForegroundColorIdentifier(CC_LIGHT_WHITE)) /* only keep foreground */
 	                            | cc_getBackgroundColorIdentifier(color)) /* change background */) {
 		LOG_ERROR("SetConsoleTextAttribute failed (error %lu)", GetLastError());
 		return;

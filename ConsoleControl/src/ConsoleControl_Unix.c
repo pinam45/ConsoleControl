@@ -201,40 +201,40 @@ bool cc_matchKeyDefinition(char* input, cc_Key* key) {
 
 const char* cc_getForegroundColorIdentifier(cc_Color color) {
 	switch(color) {
-		case BLACK:
+		case CC_BLACK:
 			return "30";
-		case RED:
+		case CC_RED:
 			return "31";
-		case GREEN:
+		case CC_GREEN:
 			return "32";
-		case YELLOW:
+		case CC_YELLOW:
 			return "33";
-		case BLUE:
+		case CC_BLUE:
 			return "34";
-		case MAGENTA:
+		case CC_MAGENTA:
 			return "35";
-		case CYAN:
+		case CC_CYAN:
 			return "36";
-		case WHITE:
+		case CC_WHITE:
 			return "37";
-		case LIGHT_BLACK:
+		case CC_LIGHT_BLACK:
 			return "90";
-		case LIGHT_RED:
+		case CC_LIGHT_RED:
 			return "91";
-		case LIGHT_GREEN:
+		case CC_LIGHT_GREEN:
 			return "92";
-		case LIGHT_YELLOW:
+		case CC_LIGHT_YELLOW:
 			return "93";
-		case LIGHT_BLUE:
+		case CC_LIGHT_BLUE:
 			return "94";
-		case LIGHT_MAGENTA:
+		case CC_LIGHT_MAGENTA:
 			return "95";
-		case LIGHT_CYAN:
+		case CC_LIGHT_CYAN:
 			return "96";
-		case LIGHT_WHITE:
+		case CC_LIGHT_WHITE:
 			return "97";
 		default:
-			return "37"; //WHITE
+			return "37"; //CC_WHITE
 	}
 }
 
@@ -242,37 +242,37 @@ const char* cc_getForegroundColorIdentifier(cc_Color color) {
 
 const char* cc_getBackgroundColorIdentifier(cc_Color color) {
 	switch(color) {
-		case BLACK:
+		case CC_BLACK:
 			return "40";
-		case RED:
+		case CC_RED:
 			return "41";
-		case GREEN:
+		case CC_GREEN:
 			return "42";
-		case YELLOW:
+		case CC_YELLOW:
 			return "43";
-		case BLUE:
+		case CC_BLUE:
 			return "44";
-		case MAGENTA:
+		case CC_MAGENTA:
 			return "45";
-		case CYAN:
+		case CC_CYAN:
 			return "46";
-		case WHITE:
+		case CC_WHITE:
 			return "47";
-		case LIGHT_BLACK:
+		case CC_LIGHT_BLACK:
 			return "100";
-		case LIGHT_RED:
+		case CC_LIGHT_RED:
 			return "101";
-		case LIGHT_GREEN:
+		case CC_LIGHT_GREEN:
 			return "102";
-		case LIGHT_YELLOW:
+		case CC_LIGHT_YELLOW:
 			return "103";
-		case LIGHT_BLUE:
+		case CC_LIGHT_BLUE:
 			return "104";
-		case LIGHT_MAGENTA:
+		case CC_LIGHT_MAGENTA:
 			return "105";
-		case LIGHT_CYAN:
+		case CC_LIGHT_CYAN:
 			return "106";
-		case LIGHT_WHITE:
+		case CC_LIGHT_WHITE:
 			return "107";
 		default:
 			return "40"; //BLACK
