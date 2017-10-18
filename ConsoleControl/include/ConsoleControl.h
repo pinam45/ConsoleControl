@@ -46,13 +46,6 @@ extern "C" {
 #include <stdbool.h>
 
 /*-------------------------------------------------------------------------*//**
- * Integral data type used with ConsoleControl.
- *
- * @since      0.1
- */
-typedef int cc_type;
-
-/*-------------------------------------------------------------------------*//**
  * @struct cc_Vector2
  *
  * @brief      2D vector used with ConsoleControl.
@@ -60,8 +53,8 @@ typedef int cc_type;
  * @since      0.1
  */
 typedef struct {
-	cc_type x; /**< x coordinate of the vector */
-	cc_type y; /**< y coordinate of the vector */
+	int x; /**< x coordinate of the vector */
+	int y; /**< y coordinate of the vector */
 } cc_Vector2;
 
 /*-------------------------------------------------------------------------*//**
@@ -99,7 +92,7 @@ void cc_setColors(cc_Color backgroundColor, cc_Color foregroundColor);
  *
  * @since      0.1
  */
-cc_type cc_getWidth();
+int cc_getWidth();
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Get the console window height.
@@ -108,7 +101,7 @@ cc_type cc_getWidth();
  *
  * @since      0.1
  */
-cc_type cc_getHeight();
+int cc_getHeight();
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Set the cursor position in the console window.
@@ -126,7 +119,7 @@ void cc_setCursorPosition(cc_Vector2 position);
  *
  * @since      0.1
  */
-void cc_moveCursorUp(cc_type steps);
+void cc_moveCursorUp(int steps);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Move the cursor @p steps steps down.
@@ -135,7 +128,7 @@ void cc_moveCursorUp(cc_type steps);
  *
  * @since      0.1
  */
-void cc_moveCursorDown(cc_type steps);
+void cc_moveCursorDown(int steps);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Move the cursor @p steps steps left.
@@ -144,7 +137,7 @@ void cc_moveCursorDown(cc_type steps);
  *
  * @since      0.1
  */
-void cc_moveCursorLeft(cc_type steps);
+void cc_moveCursorLeft(int steps);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Move the cursor @p steps steps right.
@@ -153,7 +146,7 @@ void cc_moveCursorLeft(cc_type steps);
  *
  * @since      0.1
  */
-void cc_moveCursorRight(cc_type steps);
+void cc_moveCursorRight(int steps);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Move the cursor @p steps steps horizontally.
@@ -162,7 +155,7 @@ void cc_moveCursorRight(cc_type steps);
  *
  * @since      0.1
  */
-void cc_moveCursorHorizontally(cc_type steps);
+void cc_moveCursorHorizontally(int steps);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Move the cursor @p steps steps vertically.
@@ -171,7 +164,7 @@ void cc_moveCursorHorizontally(cc_type steps);
  *
  * @since      0.1
  */
-void cc_moveCursorVertically(cc_type steps);
+void cc_moveCursorVertically(int steps);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Move the cursor.
@@ -225,7 +218,7 @@ cc_Vector2 cc_clamp(cc_Vector2 position);
  *
  * @since      0.1
  */
-cc_type cc_clampX(cc_type x);
+int cc_clampX(int x);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Clamp down the y coordinate in the console window.
@@ -236,7 +229,7 @@ cc_type cc_clampX(cc_type x);
  *
  * @since      0.1
  */
-cc_type cc_clampY(cc_type y);
+int cc_clampY(int y);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Determine if the console window contains the position

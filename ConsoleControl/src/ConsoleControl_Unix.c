@@ -292,7 +292,7 @@ void cc_setColors(cc_Color backgroundColor, cc_Color foregroundColor) {
 	printf(CSI "%s" SGR_CODE, cc_getForegroundColorIdentifier(foregroundColor));
 }
 
-cc_type cc_getWidth() {
+int cc_getWidth() {
 	struct winsize w;
 	if(ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == -1) {
 		LOG_ERROR("ioctl failed");
@@ -302,7 +302,7 @@ cc_type cc_getWidth() {
 	return w.ws_col;
 }
 
-cc_type cc_getHeight() {
+int cc_getHeight() {
 	struct winsize w;
 	if(ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == -1) {
 		LOG_ERROR("ioctl failed");
@@ -316,7 +316,7 @@ void cc_setCursorPosition(cc_Vector2 position) {
 	printf(CSI "%d;%d" CUP_CODE, position.y + 1, position.x + 1);
 }
 
-void cc_moveCursorUp(cc_type steps) {
+void cc_moveCursorUp(int steps) {
 	if(steps > 0) {
 		printf(CSI "%d" CUU_CODE, steps);
 	}
@@ -325,7 +325,7 @@ void cc_moveCursorUp(cc_type steps) {
 	}
 }
 
-void cc_moveCursorDown(cc_type steps) {
+void cc_moveCursorDown(int steps) {
 	if(steps > 0) {
 		printf(CSI "%d" CUD_CODE, steps);
 	}
@@ -334,7 +334,7 @@ void cc_moveCursorDown(cc_type steps) {
 	}
 }
 
-void cc_moveCursorLeft(cc_type steps) {
+void cc_moveCursorLeft(int steps) {
 	if(steps > 0) {
 		printf(CSI "%d" CUB_CODE, steps);
 	}
@@ -343,7 +343,7 @@ void cc_moveCursorLeft(cc_type steps) {
 	}
 }
 
-void cc_moveCursorRight(cc_type steps) {
+void cc_moveCursorRight(int steps) {
 	if(steps > 0) {
 		printf(CSI "%d" CUF_CODE, steps);
 	}
@@ -352,7 +352,7 @@ void cc_moveCursorRight(cc_type steps) {
 	}
 }
 
-void cc_moveCursorHorizontally(cc_type steps) {
+void cc_moveCursorHorizontally(int steps) {
 	if(steps > 0) {
 		printf(CSI "%d" CUF_CODE, steps);
 	}
@@ -361,7 +361,7 @@ void cc_moveCursorHorizontally(cc_type steps) {
 	}
 }
 
-void cc_moveCursorVertically(cc_type steps) {
+void cc_moveCursorVertically(int steps) {
 	if(steps > 0) {
 		printf(CSI "%d" CUD_CODE, steps);
 	}
@@ -399,8 +399,8 @@ cc_Vector2 cc_clamp(cc_Vector2 position) {
 		return position;
 	}
 
-	cc_type maxX = w.ws_col - 1;
-	cc_type maxY = w.ws_row - 1;
+	int maxX = w.ws_col - 1;
+	int maxY = w.ws_row - 1;
 	cc_Vector2 result = {
 		position.x < maxX ? (position.x < 0 ? 0 : position.x) : maxX,
 		position.y < maxY ? (position.y < 0 ? 0 : position.y) : maxY
@@ -408,25 +408,25 @@ cc_Vector2 cc_clamp(cc_Vector2 position) {
 	return result;
 }
 
-cc_type cc_clampX(cc_type x) {
+int cc_clampX(int x) {
 	struct winsize w;
 	if(ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == -1) {
 		LOG_ERROR("ioctl failed");
 		return x;
 	}
 
-	cc_type maxX = w.ws_col - 1;
+	int maxX = w.ws_col - 1;
 	return x < maxX ? (x < 0 ? 0 : x) : maxX;
 }
 
-cc_type cc_clampY(cc_type y) {
+int cc_clampY(int y) {
 	struct winsize w;
 	if(ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == -1) {
 		LOG_ERROR("ioctl failed");
 		return y;
 	}
 
-	cc_type maxY = w.ws_row - 1;
+	int maxY = w.ws_row - 1;
 	return y < maxY ? (y < 0 ? 0 : y) : maxY;
 }
 

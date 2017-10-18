@@ -30,14 +30,14 @@
 #include <stdlib.h>
 #include <math.h>
 
-static cc_type lerp(cc_type x0, cc_type x1, double t);
+static int lerp(int x0, int x1, double t);
 
 static cc_Vector2 vectlerp(cc_Vector2 v0, cc_Vector2 v1, double t);
 
-static cc_type dist(cc_Vector2 v0, cc_Vector2 v1);
+static int dist(cc_Vector2 v0, cc_Vector2 v1);
 
-cc_type lerp(cc_type x0, cc_type x1, double t) {
-	return x0 + (cc_type) lround(t * (x1 - x0));
+int lerp(int x0, int x1, double t) {
+	return x0 + (int) lround(t * (x1 - x0));
 }
 
 cc_Vector2 vectlerp(cc_Vector2 v0, cc_Vector2 v1, double t) {
@@ -48,28 +48,28 @@ cc_Vector2 vectlerp(cc_Vector2 v0, cc_Vector2 v1, double t) {
 	return result;
 }
 
-cc_type dist(cc_Vector2 v0, cc_Vector2 v1) {
-	cc_type dx = abs(v1.x - v0.x);
-	cc_type dy = abs(v1.y - v0.y);
+int dist(cc_Vector2 v0, cc_Vector2 v1) {
+	int dx = abs(v1.x - v0.x);
+	int dy = abs(v1.y - v0.y);
 	return dx > dy ? dx : dy;
 }
 
 void cc_drawRectangle(cc_Vector2 topLeft, cc_Vector2 downRight, const char ch) {
 	//orientation check
 	if(topLeft.x > downRight.x) {
-		cc_type tmp = topLeft.x;
+		int tmp = topLeft.x;
 		topLeft.x = downRight.x;
 		downRight.x = tmp;
 	}
 	if(topLeft.y > downRight.y) {
-		cc_type tmp = topLeft.y;
+		int tmp = topLeft.y;
 		topLeft.y = downRight.y;
 		downRight.y = tmp;
 	}
 
 	//top line
 	cc_setCursorPosition(topLeft);
-	for(cc_type i = topLeft.x; i <= downRight.x; ++i) {
+	for(int i = topLeft.x; i <= downRight.x; ++i) {
 		putchar(ch);
 	}
 
@@ -88,7 +88,7 @@ void cc_drawRectangle(cc_Vector2 topLeft, cc_Vector2 downRight, const char ch) {
 	if(topLeft.y != downRight.y) {
 		pos.x = topLeft.x;
 		cc_setCursorPosition(pos);
-		for(cc_type i = topLeft.x; i <= downRight.x; ++i) {
+		for(int i = topLeft.x; i <= downRight.x; ++i) {
 			putchar(ch);
 		}
 	}
@@ -97,12 +97,12 @@ void cc_drawRectangle(cc_Vector2 topLeft, cc_Vector2 downRight, const char ch) {
 void cc_drawTableRectangle(cc_Vector2 topLeft, cc_Vector2 downRight) {
 	//orientation check
 	if(topLeft.x > downRight.x) {
-		cc_type tmp = topLeft.x;
+		int tmp = topLeft.x;
 		topLeft.x = downRight.x;
 		downRight.x = tmp;
 	}
 	if(topLeft.y > downRight.y) {
-		cc_type tmp = topLeft.y;
+		int tmp = topLeft.y;
 		topLeft.y = downRight.y;
 		downRight.y = tmp;
 	}
@@ -110,7 +110,7 @@ void cc_drawTableRectangle(cc_Vector2 topLeft, cc_Vector2 downRight) {
 	//top line
 	cc_setCursorPosition(topLeft);
 	putchar('+');
-	for(cc_type i = topLeft.x + 1; i < downRight.x; ++i) {
+	for(int i = topLeft.x + 1; i < downRight.x; ++i) {
 		putchar('-');
 	}
 	putchar('+');
@@ -130,7 +130,7 @@ void cc_drawTableRectangle(cc_Vector2 topLeft, cc_Vector2 downRight) {
 	pos.x = topLeft.x;
 	cc_setCursorPosition(pos);
 	putchar('+');
-	for(cc_type i = topLeft.x + 1; i < downRight.x; ++i) {
+	for(int i = topLeft.x + 1; i < downRight.x; ++i) {
 		putchar('-');
 	}
 	putchar('+');
@@ -139,12 +139,12 @@ void cc_drawTableRectangle(cc_Vector2 topLeft, cc_Vector2 downRight) {
 void cc_drawFullRectangle(cc_Vector2 topLeft, cc_Vector2 downRight, const char ch) {
 	//orientation check
 	if(topLeft.x > downRight.x) {
-		cc_type tmp = topLeft.x;
+		int tmp = topLeft.x;
 		topLeft.x = downRight.x;
 		downRight.x = tmp;
 	}
 	if(topLeft.y > downRight.y) {
-		cc_type tmp = topLeft.y;
+		int tmp = topLeft.y;
 		topLeft.y = downRight.y;
 		downRight.y = tmp;
 	}
@@ -153,7 +153,7 @@ void cc_drawFullRectangle(cc_Vector2 topLeft, cc_Vector2 downRight, const char c
 	pos.x = topLeft.x;
 	for(pos.y = topLeft.y; pos.y <= downRight.y; ++pos.y) {
 		cc_setCursorPosition(pos);
-		for(cc_type i = topLeft.x; i <= downRight.x; ++i) {
+		for(int i = topLeft.x; i <= downRight.x; ++i) {
 			putchar(ch);
 		}
 	}
@@ -162,11 +162,11 @@ void cc_drawFullRectangle(cc_Vector2 topLeft, cc_Vector2 downRight, const char c
 void cc_drawLine(cc_Vector2 from, cc_Vector2 to, const char ch) {
 	cc_setCursorPosition(from);
 	putchar(ch);
-	cc_type n = dist(from, to);
+	int n = dist(from, to);
 	if(n) {
 		double t;
-		for(double i = 1; i <= n; ++i) {
-			t = i / n;
+		for(int i = 1; i <= n; ++i) {
+			t = (double) i / n;
 			cc_setCursorPosition(vectlerp(from, to, t));
 			putchar(ch);
 		}
@@ -176,11 +176,11 @@ void cc_drawLine(cc_Vector2 from, cc_Vector2 to, const char ch) {
 void cc_drawTableHorizontalLine(cc_Vector2 from, cc_Vector2 to) {
 	cc_setCursorPosition(from);
 	putchar('+');
-	cc_type n = dist(from, to);
+	int n = dist(from, to);
 	if(n) {
 		double t;
-		for(double i = 1; i < n; ++i) {
-			t = i / n;
+		for(int i = 1; i < n; ++i) {
+			t = (double) i / n;
 			cc_setCursorPosition(vectlerp(from, to, t));
 			putchar('-');
 		}
@@ -192,11 +192,11 @@ void cc_drawTableHorizontalLine(cc_Vector2 from, cc_Vector2 to) {
 void cc_drawTableVerticalLine(cc_Vector2 from, cc_Vector2 to) {
 	cc_setCursorPosition(from);
 	putchar('+');
-	cc_type n = dist(from, to);
+	int n = dist(from, to);
 	if(n) {
 		double t;
-		for(double i = 1; i < n; ++i) {
-			t = i / n;
+		for(int i = 1; i < n; ++i) {
+			t = (double) i / n;
 			cc_setCursorPosition(vectlerp(from, to, t));
 			putchar('|');
 		}
@@ -209,11 +209,11 @@ void cc_drawPatternLine(cc_Vector2 from, cc_Vector2 to, const char* pattern) {
 	unsigned int chNumber = 0;
 	cc_setCursorPosition(from);
 	putchar(pattern[chNumber]);
-	cc_type n = dist(from, to);
+	int n = dist(from, to);
 	if(n) {
 		double t;
-		for(double i = 1; i <= n; ++i) {
-			t = i / n;
+		for(int i = 1; i <= n; ++i) {
+			t = (double) i / n;
 			cc_setCursorPosition(vectlerp(from, to, t));
 			if(pattern[++chNumber] == '\0') {
 				chNumber = 0;

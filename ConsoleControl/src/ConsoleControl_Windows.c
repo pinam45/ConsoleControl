@@ -221,7 +221,7 @@ void cc_setColors(const cc_Color backgroundColor, const cc_Color foregroundColor
 	}
 }
 
-cc_type cc_getWidth() {
+int cc_getWidth() {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -237,7 +237,7 @@ cc_type cc_getWidth() {
 	return csbi.srWindow.Right - csbi.srWindow.Left + 1;
 }
 
-cc_type cc_getHeight() {
+int cc_getHeight() {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -267,8 +267,8 @@ void cc_setCursorPosition(const cc_Vector2 position) {
 	}
 
 	COORD pos = {
-		(short) (position.x + csbi.srWindow.Left),
-		(short) (position.y + csbi.srWindow.Top)
+		(SHORT) (position.x + csbi.srWindow.Left),
+		(SHORT) (position.y + csbi.srWindow.Top)
 	};
 
 	if(!SetConsoleCursorPosition(hStdOut, pos)) {
@@ -277,7 +277,7 @@ void cc_setCursorPosition(const cc_Vector2 position) {
 	}
 }
 
-void cc_moveCursorUp(cc_type steps) {
+void cc_moveCursorUp(int steps) {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -301,7 +301,7 @@ void cc_moveCursorUp(cc_type steps) {
 	}
 }
 
-void cc_moveCursorDown(cc_type steps) {
+void cc_moveCursorDown(int steps) {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -325,7 +325,7 @@ void cc_moveCursorDown(cc_type steps) {
 	}
 }
 
-void cc_moveCursorLeft(cc_type steps) {
+void cc_moveCursorLeft(int steps) {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -349,7 +349,7 @@ void cc_moveCursorLeft(cc_type steps) {
 	}
 }
 
-void cc_moveCursorRight(cc_type steps) {
+void cc_moveCursorRight(int steps) {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -373,7 +373,7 @@ void cc_moveCursorRight(cc_type steps) {
 	}
 }
 
-void cc_moveCursorHorizontally(cc_type steps) {
+void cc_moveCursorHorizontally(int steps) {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -397,7 +397,7 @@ void cc_moveCursorHorizontally(cc_type steps) {
 	}
 }
 
-void cc_moveCursorVertically(cc_type steps) {
+void cc_moveCursorVertically(int steps) {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -476,8 +476,8 @@ void cc_restoreCursorPosition() {
 	}
 
 	COORD position = {
-		(short) (savedPosition.x + csbi.srWindow.Left),
-		(short) (savedPosition.y + csbi.srWindow.Top)
+		(SHORT) (savedPosition.x + csbi.srWindow.Left),
+		(SHORT) (savedPosition.y + csbi.srWindow.Top)
 	};
 
 	if(!SetConsoleCursorPosition(hStdOut, position)) {
@@ -525,8 +525,8 @@ cc_Vector2 cc_clamp(const cc_Vector2 position) {
 		return position;
 	}
 
-	short maxX = (short) (csbi.srWindow.Right - csbi.srWindow.Left);
-	short maxY = (short) (csbi.srWindow.Bottom - csbi.srWindow.Top);
+	int maxX = csbi.srWindow.Right - csbi.srWindow.Left;
+	int maxY = csbi.srWindow.Bottom - csbi.srWindow.Top;
 	cc_Vector2 result = {
 		position.x < maxX ? (position.x < 0 ? 0 : position.x) : maxX,
 		position.y < maxY ? (position.y < 0 ? 0 : position.y) : maxY
@@ -534,7 +534,7 @@ cc_Vector2 cc_clamp(const cc_Vector2 position) {
 	return result;
 }
 
-cc_type cc_clampX(cc_type x) {
+int cc_clampX(int x) {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -547,11 +547,11 @@ cc_type cc_clampX(cc_type x) {
 		return x;
 	}
 
-	short maxX = (short) (csbi.srWindow.Right - csbi.srWindow.Left);
+	int maxX = csbi.srWindow.Right - csbi.srWindow.Left;
 	return x < maxX ? (x < 0 ? 0 : x) : maxX;
 }
 
-cc_type cc_clampY(cc_type y) {
+int cc_clampY(int y) {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -564,7 +564,7 @@ cc_type cc_clampY(cc_type y) {
 		return y;
 	}
 
-	short maxY = (short) (csbi.srWindow.Bottom - csbi.srWindow.Top - 1);
+	int maxY = csbi.srWindow.Bottom - csbi.srWindow.Top - 1;
 	return y < maxY ? (y < 0 ? 0 : y) : maxY;
 }
 
@@ -602,8 +602,8 @@ void cc_clean() {
 	}
 
 	/* Compute the number of cells in the current screen */
-	DWORD cellCount = (DWORD) ((csbi.srWindow.Right - csbi.srWindow.Left + (short) 1)
-	                           * (csbi.srWindow.Bottom - csbi.srWindow.Top + (short) 1));
+	DWORD cellCount = (DWORD) ((csbi.srWindow.Right - csbi.srWindow.Left + 1)
+	                           * (csbi.srWindow.Bottom - csbi.srWindow.Top + 1));
 
 	/* Home is at the top left of the current screen */
 	COORD homeCoords = {csbi.srWindow.Left, csbi.srWindow.Top};
@@ -993,7 +993,7 @@ void cc_reverseColors() {
 	}
 }
 
-cc_type cc_getGlobalWidth() {
+int cc_getGlobalWidth() {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -1009,7 +1009,7 @@ cc_type cc_getGlobalWidth() {
 	return csbi.dwSize.X;
 }
 
-cc_type cc_getGlobalHeight() {
+int cc_getGlobalHeight() {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -1033,8 +1033,8 @@ void cc_setCursorGlobalPosition(const cc_Vector2 position) {
 	}
 
 	COORD pos = {
-		(short) position.x,
-		(short) position.y
+		(SHORT) position.x,
+		(SHORT) position.y
 	};
 	if(!SetConsoleCursorPosition(hStdOut, pos)) {
 		LOG_ERROR("SetConsoleCursorPosition failed (error %lu)", GetLastError());
@@ -1055,8 +1055,8 @@ cc_Vector2 cc_globalClamp(const cc_Vector2 position) {
 		return position;
 	}
 
-	short maxX = (short) (csbi.dwSize.X - 1);
-	short maxY = (short) (csbi.dwSize.Y - 1);
+	int maxX = csbi.dwSize.X - 1;
+	int maxY = csbi.dwSize.Y - 1;
 	cc_Vector2 result = {
 		position.x < maxX ? (position.x < 0 ? 0 : position.x) : maxX,
 		position.y < maxY ? (position.y < 0 ? 0 : position.y) : maxY

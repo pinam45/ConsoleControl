@@ -87,7 +87,7 @@ void cc_reverseColors();
  *
  * @since      0.3
  */
-cc_type cc_getGlobalWidth();
+int cc_getGlobalWidth();
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Get the global console height.
@@ -99,7 +99,7 @@ cc_type cc_getGlobalWidth();
  *
  * @since      0.3
  */
-cc_type cc_getGlobalHeight();
+int cc_getGlobalHeight();
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Set the cursor global position.
