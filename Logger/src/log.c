@@ -85,7 +85,7 @@ void lg_addLevels(unsigned int levels) {
 }
 
 void lg_removeLevels(unsigned int levels) {
-	loggerConfig.levels &= !levels;
+	loggerConfig.levels &= ~levels;
 }
 
 void lg_setLogPrinter(void (* logPrinter)
