@@ -54,7 +54,7 @@ int dist(cc_Vector2 v0, cc_Vector2 v1) {
 	return dx > dy ? dx : dy;
 }
 
-void cc_drawRectangle(cc_Vector2 topLeft, cc_Vector2 downRight, const char ch) {
+void cc_drawRectangle(cc_Handle cch, cc_Vector2 topLeft, cc_Vector2 downRight, const char ch) {
 	//orientation check
 	if(topLeft.x > downRight.x) {
 		int tmp = topLeft.x;
@@ -68,7 +68,7 @@ void cc_drawRectangle(cc_Vector2 topLeft, cc_Vector2 downRight, const char ch) {
 	}
 
 	//top line
-	cc_setCursorPosition(topLeft);
+	cc_setCursorPosition(cch, topLeft);
 	for(int i = topLeft.x; i <= downRight.x; ++i) {
 		putchar(ch);
 	}
@@ -77,24 +77,24 @@ void cc_drawRectangle(cc_Vector2 topLeft, cc_Vector2 downRight, const char ch) {
 	cc_Vector2 pos;
 	for(pos.y = topLeft.y + 1; pos.y < downRight.y; ++pos.y) {
 		pos.x = topLeft.x;
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		putchar(ch);
 		pos.x = downRight.x;
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		putchar(ch);
 	}
 
 	//bottom line
 	if(topLeft.y != downRight.y) {
 		pos.x = topLeft.x;
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		for(int i = topLeft.x; i <= downRight.x; ++i) {
 			putchar(ch);
 		}
 	}
 }
 
-void cc_drawTableRectangle(cc_Vector2 topLeft, cc_Vector2 downRight) {
+void cc_drawTableRectangle(cc_Handle cch, cc_Vector2 topLeft, cc_Vector2 downRight) {
 	//orientation check
 	if(topLeft.x > downRight.x) {
 		int tmp = topLeft.x;
@@ -108,7 +108,7 @@ void cc_drawTableRectangle(cc_Vector2 topLeft, cc_Vector2 downRight) {
 	}
 
 	//top line
-	cc_setCursorPosition(topLeft);
+	cc_setCursorPosition(cch, topLeft);
 	putchar('+');
 	for(int i = topLeft.x + 1; i < downRight.x; ++i) {
 		putchar('-');
@@ -119,16 +119,16 @@ void cc_drawTableRectangle(cc_Vector2 topLeft, cc_Vector2 downRight) {
 	cc_Vector2 pos;
 	for(pos.y = topLeft.y + 1; pos.y < downRight.y; ++pos.y) {
 		pos.x = topLeft.x;
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		putchar('|');
 		pos.x = downRight.x;
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		putchar('|');
 	}
 
 	//bottom line
 	pos.x = topLeft.x;
-	cc_setCursorPosition(pos);
+	cc_setCursorPosition(cch, pos);
 	putchar('+');
 	for(int i = topLeft.x + 1; i < downRight.x; ++i) {
 		putchar('-');
@@ -136,7 +136,7 @@ void cc_drawTableRectangle(cc_Vector2 topLeft, cc_Vector2 downRight) {
 	putchar('+');
 }
 
-void cc_drawFullRectangle(cc_Vector2 topLeft, cc_Vector2 downRight, const char ch) {
+void cc_drawFullRectangle(cc_Handle cch, cc_Vector2 topLeft, cc_Vector2 downRight, const char ch) {
 	//orientation check
 	if(topLeft.x > downRight.x) {
 		int tmp = topLeft.x;
@@ -152,69 +152,69 @@ void cc_drawFullRectangle(cc_Vector2 topLeft, cc_Vector2 downRight, const char c
 	cc_Vector2 pos;
 	pos.x = topLeft.x;
 	for(pos.y = topLeft.y; pos.y <= downRight.y; ++pos.y) {
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		for(int i = topLeft.x; i <= downRight.x; ++i) {
 			putchar(ch);
 		}
 	}
 }
 
-void cc_drawLine(cc_Vector2 from, cc_Vector2 to, const char ch) {
-	cc_setCursorPosition(from);
+void cc_drawLine(cc_Handle cch, cc_Vector2 from, cc_Vector2 to, const char ch) {
+	cc_setCursorPosition(cch, from);
 	putchar(ch);
 	int n = dist(from, to);
 	if(n) {
 		double t;
 		for(int i = 1; i <= n; ++i) {
 			t = (double) i / n;
-			cc_setCursorPosition(vectlerp(from, to, t));
+			cc_setCursorPosition(cch, vectlerp(from, to, t));
 			putchar(ch);
 		}
 	}
 }
 
-void cc_drawTableHorizontalLine(cc_Vector2 from, cc_Vector2 to) {
-	cc_setCursorPosition(from);
+void cc_drawTableHorizontalLine(cc_Handle cch, cc_Vector2 from, cc_Vector2 to) {
+	cc_setCursorPosition(cch, from);
 	putchar('+');
 	int n = dist(from, to);
 	if(n) {
 		double t;
 		for(int i = 1; i < n; ++i) {
 			t = (double) i / n;
-			cc_setCursorPosition(vectlerp(from, to, t));
+			cc_setCursorPosition(cch, vectlerp(from, to, t));
 			putchar('-');
 		}
-		cc_setCursorPosition(vectlerp(from, to, 1));
+		cc_setCursorPosition(cch, vectlerp(from, to, 1));
 		putchar('+');
 	}
 }
 
-void cc_drawTableVerticalLine(cc_Vector2 from, cc_Vector2 to) {
-	cc_setCursorPosition(from);
+void cc_drawTableVerticalLine(cc_Handle cch, cc_Vector2 from, cc_Vector2 to) {
+	cc_setCursorPosition(cch, from);
 	putchar('+');
 	int n = dist(from, to);
 	if(n) {
 		double t;
 		for(int i = 1; i < n; ++i) {
 			t = (double) i / n;
-			cc_setCursorPosition(vectlerp(from, to, t));
+			cc_setCursorPosition(cch, vectlerp(from, to, t));
 			putchar('|');
 		}
-		cc_setCursorPosition(vectlerp(from, to, 1));
+		cc_setCursorPosition(cch, vectlerp(from, to, 1));
 		putchar('+');
 	}
 }
 
-void cc_drawPatternLine(cc_Vector2 from, cc_Vector2 to, const char* pattern) {
+void cc_drawPatternLine(cc_Handle cch, cc_Vector2 from, cc_Vector2 to, const char* pattern) {
 	unsigned int chNumber = 0;
-	cc_setCursorPosition(from);
+	cc_setCursorPosition(cch, from);
 	putchar(pattern[chNumber]);
 	int n = dist(from, to);
 	if(n) {
 		double t;
 		for(int i = 1; i <= n; ++i) {
 			t = (double) i / n;
-			cc_setCursorPosition(vectlerp(from, to, t));
+			cc_setCursorPosition(cch, vectlerp(from, to, t));
 			if(pattern[++chNumber] == '\0') {
 				chNumber = 0;
 			}
@@ -223,7 +223,7 @@ void cc_drawPatternLine(cc_Vector2 from, cc_Vector2 to, const char* pattern) {
 	}
 }
 
-void cc_drawCircle(cc_Vector2 center, unsigned int radius, char ch) {
+void cc_drawCircle(cc_Handle cch, cc_Vector2 center, unsigned int radius, char ch) {
 	int x = (int) radius;
 	int y = 0;
 	int err = 0;
@@ -232,34 +232,34 @@ void cc_drawCircle(cc_Vector2 center, unsigned int radius, char ch) {
 	while(x >= y) {
 		pos.x = center.x + x;
 		pos.y = center.y + y;
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		putchar(ch);
 		pos.y = center.y - y;
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		putchar(ch);
 
 		pos.x = center.x + y;
 		pos.y = center.y + x;
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		putchar(ch);
 		pos.y = center.y - x;
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		putchar(ch);
 
 		pos.x = center.x - y;
 		pos.y = center.y + x;
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		putchar(ch);
 		pos.y = center.y - x;
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		putchar(ch);
 
 		pos.x = center.x - x;
 		pos.y = center.y + y;
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		putchar(ch);
 		pos.y = center.y - y;
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		putchar(ch);
 
 		if(err <= 0) {
