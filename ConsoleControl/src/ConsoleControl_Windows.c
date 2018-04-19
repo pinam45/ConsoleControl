@@ -41,6 +41,8 @@
 
 #include <windows.h>
 
+#define UNUSED_PARAMETER(x) (void)(x)
+
 // For cc_saveCursorPosition and cc_restoreCursorPosition
 static cc_Vector2 savedPosition = {0, 0};
 
@@ -162,7 +164,18 @@ WORD cc_getBackgroundColorIdentifier(cc_Color color) {
 
 // functions from ConsoleControl.h
 
-void cc_setForegroundColor(const cc_Color color) {
+cc_Handle cc_start() {
+	// Not yet implemented
+	return NULL;
+}
+
+void cc_end(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
+	// Not yet implemented
+}
+
+void cc_setForegroundColor(cc_Handle cch, const cc_Color color) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -184,7 +197,8 @@ void cc_setForegroundColor(const cc_Color color) {
 	}
 }
 
-void cc_setBackgroundColor(const cc_Color color) {
+void cc_setBackgroundColor(cc_Handle cch, const cc_Color color) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -206,7 +220,8 @@ void cc_setBackgroundColor(const cc_Color color) {
 	}
 }
 
-void cc_setColors(const cc_Color backgroundColor, const cc_Color foregroundColor) {
+void cc_setColors(cc_Handle cch, const cc_Color backgroundColor, const cc_Color foregroundColor) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -221,7 +236,8 @@ void cc_setColors(const cc_Color backgroundColor, const cc_Color foregroundColor
 	}
 }
 
-int cc_getWidth() {
+int cc_getWidth(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -237,7 +253,8 @@ int cc_getWidth() {
 	return csbi.srWindow.Right - csbi.srWindow.Left + 1;
 }
 
-int cc_getHeight() {
+int cc_getHeight(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -253,7 +270,8 @@ int cc_getHeight() {
 	return csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
 }
 
-void cc_setCursorPosition(const cc_Vector2 position) {
+void cc_setCursorPosition(cc_Handle cch, const cc_Vector2 position) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -277,7 +295,8 @@ void cc_setCursorPosition(const cc_Vector2 position) {
 	}
 }
 
-void cc_moveCursorUp(int steps) {
+void cc_moveCursorUp(cc_Handle cch, int steps) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -301,7 +320,8 @@ void cc_moveCursorUp(int steps) {
 	}
 }
 
-void cc_moveCursorDown(int steps) {
+void cc_moveCursorDown(cc_Handle cch, int steps) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -325,7 +345,8 @@ void cc_moveCursorDown(int steps) {
 	}
 }
 
-void cc_moveCursorLeft(int steps) {
+void cc_moveCursorLeft(cc_Handle cch, int steps) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -349,7 +370,8 @@ void cc_moveCursorLeft(int steps) {
 	}
 }
 
-void cc_moveCursorRight(int steps) {
+void cc_moveCursorRight(cc_Handle cch, int steps) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -373,7 +395,8 @@ void cc_moveCursorRight(int steps) {
 	}
 }
 
-void cc_moveCursorHorizontally(int steps) {
+void cc_moveCursorHorizontally(cc_Handle cch, int steps) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -397,7 +420,8 @@ void cc_moveCursorHorizontally(int steps) {
 	}
 }
 
-void cc_moveCursorVertically(int steps) {
+void cc_moveCursorVertically(cc_Handle cch, int steps) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -421,7 +445,8 @@ void cc_moveCursorVertically(int steps) {
 	}
 }
 
-void cc_moveCursor(cc_Vector2 move) {
+void cc_moveCursor(cc_Handle cch, cc_Vector2 move) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -445,7 +470,8 @@ void cc_moveCursor(cc_Vector2 move) {
 	}
 }
 
-void cc_saveCursorPosition() {
+void cc_saveCursorPosition(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -462,7 +488,8 @@ void cc_saveCursorPosition() {
 	savedPosition.y = csbi.dwCursorPosition.Y - csbi.srWindow.Top;
 }
 
-void cc_restoreCursorPosition() {
+void cc_restoreCursorPosition(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -486,7 +513,8 @@ void cc_restoreCursorPosition() {
 	}
 }
 
-void cc_setCursorVisibility(bool visibility) {
+void cc_setCursorVisibility(cc_Handle cch, bool visibility) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -512,7 +540,8 @@ void cc_setCursorVisibility(bool visibility) {
 	}
 }
 
-cc_Vector2 cc_clamp(const cc_Vector2 position) {
+cc_Vector2 cc_clamp(cc_Handle cch, const cc_Vector2 position) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -534,7 +563,8 @@ cc_Vector2 cc_clamp(const cc_Vector2 position) {
 	return result;
 }
 
-int cc_clampX(int x) {
+int cc_clampX(cc_Handle cch, int x) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -551,7 +581,8 @@ int cc_clampX(int x) {
 	return x < maxX ? (x < 0 ? 0 : x) : maxX;
 }
 
-int cc_clampY(int y) {
+int cc_clampY(cc_Handle cch, int y) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -568,7 +599,8 @@ int cc_clampY(int y) {
 	return y < maxY ? (y < 0 ? 0 : y) : maxY;
 }
 
-bool cc_contains(const cc_Vector2 position) {
+bool cc_contains(cc_Handle cch, const cc_Vector2 position) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -588,7 +620,8 @@ bool cc_contains(const cc_Vector2 position) {
 }
 
 // credits: http://www.cplusplus.com/articles/4z18T05o/
-void cc_clean() {
+void cc_clean(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -628,7 +661,8 @@ void cc_clean() {
 }
 
 // credits: http://www.cplusplus.com/articles/4z18T05o/
-void cc_completeClean() {
+void cc_completeClean(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -665,7 +699,8 @@ void cc_completeClean() {
 	}
 }
 
-char cc_instantGetChar() {
+char cc_instantGetChar(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdIn = GetStdHandle(STD_INPUT_HANDLE);
 	if(hStdIn == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -704,7 +739,8 @@ char cc_instantGetChar() {
 	return ch;
 }
 
-bool cc_waitingInput() {
+bool cc_waitingInput(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdIn = GetStdHandle(STD_INPUT_HANDLE);
 	if(hStdIn == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -720,7 +756,8 @@ bool cc_waitingInput() {
 	return (num > 1);
 }
 
-void cc_displayInputs(bool display) {
+void cc_displayInputs(cc_Handle cch, bool display) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdIn = GetStdHandle(STD_INPUT_HANDLE);
 	if(hStdIn == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -752,7 +789,7 @@ void cc_displayInputs(bool display) {
 
 static WORD processedInputsNb = 0;
 
-cc_Input cc_getInput() {
+cc_Input cc_getInput(cc_Handle cch) {
 	cc_Input input = {OTHER_KEY, 0};
 
 	HANDLE hStdIn = GetStdHandle(STD_INPUT_HANDLE);
@@ -922,7 +959,7 @@ cc_Input cc_getInput() {
 		input.ch = event.Event.KeyEvent.uChar.AsciiChar;
 	}
 	else {
-		input.ch = cc_getAssociatedChar(input.key);
+		input.ch = cc_getAssociatedChar(cch, input.key);
 	}
 
 	return input;
