@@ -28,11 +28,15 @@
 
 #include <stdio.h>
 
-void cc_printInPlace(const char c) {
+#define UNUSED_PARAMETER(x) (void)(x)
+
+void cc_printInPlace(cc_Handle cch, const char c) {
+	UNUSED_PARAMETER(cch);
 	printf("%c\b", c);
 }
 
-char cc_getAssociatedChar(cc_Key key) {
+char cc_getAssociatedChar(cc_Handle cch, cc_Key key) {
+	UNUSED_PARAMETER(cch);
 	switch(key) {
 		case BACKSPACE_KEY:
 			return 8;
