@@ -28,10 +28,9 @@ make_target(
 	INCLUDES "${ConsoleControl_dir}/include/" "${Logger_dir}/include/"
 	OPTIONS c static_runtime
 )
-target_link_libraries(
-	ConsoleControl
-	PRIVATE m
-)
+if(NOT MSVC)
+	target_link_libraries(ConsoleControl PRIVATE m)
+endif()
 set_property(TARGET ConsoleControl PROPERTY C_STANDARD 11)
 
 ### Examples
@@ -44,9 +43,6 @@ make_target(
 	INCLUDES "${Examples_dir}/include/" "${ConsoleControl_dir}/include/" "${Logger_dir}/include/"
 	OPTIONS c executable static_runtime
 )
-target_link_libraries(
-	Examples
-	PRIVATE ConsoleControl
-)
+target_link_libraries(Examples PRIVATE ConsoleControl)
 set_property(TARGET Examples PROPERTY C_STANDARD 11)
 target_compile_definitions(Examples PRIVATE "$<$<CONFIG:Debug>:LOGGER_ENABLED>")
