@@ -45,6 +45,8 @@
 #include <fcntl.h>
 #include <sys/ioctl.h>
 
+#define UNUSED_PARAMETER(x) (void)(x)
+
 #define CSI "\033[" //Control Sequence Introducer
 
 //Moves the cursor n (default 1) cells in the given direction.
@@ -238,8 +240,6 @@ const char* cc_getForegroundColorIdentifier(cc_Color color) {
 	}
 }
 
-// functions from ConsoleControl.h
-
 const char* cc_getBackgroundColorIdentifier(cc_Color color) {
 	switch(color) {
 		case CC_BLACK:
@@ -279,20 +279,37 @@ const char* cc_getBackgroundColorIdentifier(cc_Color color) {
 	}
 }
 
-void cc_setForegroundColor(cc_Color color) {
+
+// functions from ConsoleControl.h
+
+cc_Handle cc_start() {
+	// Not yet implemented
+	return NULL;
+}
+
+void cc_end(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
+	// Not yet implemented
+}
+
+void cc_setForegroundColor(cc_Handle cch, cc_Color color) {
+	UNUSED_PARAMETER(cch);
 	printf(CSI "%s" SGR_CODE, cc_getForegroundColorIdentifier(color));
 }
 
-void cc_setBackgroundColor(cc_Color color) {
+void cc_setBackgroundColor(cc_Handle cch, cc_Color color) {
+	UNUSED_PARAMETER(cch);
 	printf(CSI "%s" SGR_CODE, cc_getBackgroundColorIdentifier(color));
 }
 
-void cc_setColors(cc_Color backgroundColor, cc_Color foregroundColor) {
+void cc_setColors(cc_Handle cch, cc_Color backgroundColor, cc_Color foregroundColor) {
+	UNUSED_PARAMETER(cch);
 	printf(CSI "%s" SGR_CODE, cc_getBackgroundColorIdentifier(backgroundColor));
 	printf(CSI "%s" SGR_CODE, cc_getForegroundColorIdentifier(foregroundColor));
 }
 
-int cc_getWidth() {
+int cc_getWidth(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
 	struct winsize w;
 	if(ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == -1) {
 		LOG_ERROR("ioctl failed");
@@ -302,7 +319,8 @@ int cc_getWidth() {
 	return w.ws_col;
 }
 
-int cc_getHeight() {
+int cc_getHeight(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
 	struct winsize w;
 	if(ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == -1) {
 		LOG_ERROR("ioctl failed");
@@ -312,11 +330,13 @@ int cc_getHeight() {
 	return w.ws_row;
 }
 
-void cc_setCursorPosition(cc_Vector2 position) {
+void cc_setCursorPosition(cc_Handle cch, cc_Vector2 position) {
+	UNUSED_PARAMETER(cch);
 	printf(CSI "%d;%d" CUP_CODE, position.y + 1, position.x + 1);
 }
 
-void cc_moveCursorUp(int steps) {
+void cc_moveCursorUp(cc_Handle cch, int steps) {
+	UNUSED_PARAMETER(cch);
 	if(steps > 0) {
 		printf(CSI "%d" CUU_CODE, steps);
 	}
@@ -325,7 +345,8 @@ void cc_moveCursorUp(int steps) {
 	}
 }
 
-void cc_moveCursorDown(int steps) {
+void cc_moveCursorDown(cc_Handle cch, int steps) {
+	UNUSED_PARAMETER(cch);
 	if(steps > 0) {
 		printf(CSI "%d" CUD_CODE, steps);
 	}
@@ -334,7 +355,8 @@ void cc_moveCursorDown(int steps) {
 	}
 }
 
-void cc_moveCursorLeft(int steps) {
+void cc_moveCursorLeft(cc_Handle cch, int steps) {
+	UNUSED_PARAMETER(cch);
 	if(steps > 0) {
 		printf(CSI "%d" CUB_CODE, steps);
 	}
@@ -343,7 +365,8 @@ void cc_moveCursorLeft(int steps) {
 	}
 }
 
-void cc_moveCursorRight(int steps) {
+void cc_moveCursorRight(cc_Handle cch, int steps) {
+	UNUSED_PARAMETER(cch);
 	if(steps > 0) {
 		printf(CSI "%d" CUF_CODE, steps);
 	}
@@ -352,7 +375,8 @@ void cc_moveCursorRight(int steps) {
 	}
 }
 
-void cc_moveCursorHorizontally(int steps) {
+void cc_moveCursorHorizontally(cc_Handle cch, int steps) {
+	UNUSED_PARAMETER(cch);
 	if(steps > 0) {
 		printf(CSI "%d" CUF_CODE, steps);
 	}
@@ -361,7 +385,8 @@ void cc_moveCursorHorizontally(int steps) {
 	}
 }
 
-void cc_moveCursorVertically(int steps) {
+void cc_moveCursorVertically(cc_Handle cch, int steps) {
+	UNUSED_PARAMETER(cch);
 	if(steps > 0) {
 		printf(CSI "%d" CUD_CODE, steps);
 	}
@@ -370,20 +395,23 @@ void cc_moveCursorVertically(int steps) {
 	}
 }
 
-void cc_moveCursor(cc_Vector2 move) {
-	cc_moveCursorHorizontally(move.x);
-	cc_moveCursorVertically(move.y);
+void cc_moveCursor(cc_Handle cch, cc_Vector2 move) {
+	cc_moveCursorHorizontally(cch, move.x);
+	cc_moveCursorVertically(cch, move.y);
 }
 
-void cc_saveCursorPosition() {
+void cc_saveCursorPosition(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
 	printf(CSI SCP_CODE);
 }
 
-void cc_restoreCursorPosition() {
+void cc_restoreCursorPosition(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
 	printf(CSI RCP_CODE);
 }
 
-void cc_setCursorVisibility(bool visibility) {
+void cc_setCursorVisibility(cc_Handle cch, bool visibility) {
+	UNUSED_PARAMETER(cch);
 	if(visibility) {
 		printf(CSI DECTCEM_S_CODE);
 	}
@@ -392,7 +420,8 @@ void cc_setCursorVisibility(bool visibility) {
 	}
 }
 
-cc_Vector2 cc_clamp(cc_Vector2 position) {
+cc_Vector2 cc_clamp(cc_Handle cch, cc_Vector2 position) {
+	UNUSED_PARAMETER(cch);
 	struct winsize w;
 	if(ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == -1) {
 		LOG_ERROR("ioctl failed");
@@ -408,7 +437,8 @@ cc_Vector2 cc_clamp(cc_Vector2 position) {
 	return result;
 }
 
-int cc_clampX(int x) {
+int cc_clampX(cc_Handle cch, int x) {
+	UNUSED_PARAMETER(cch);
 	struct winsize w;
 	if(ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == -1) {
 		LOG_ERROR("ioctl failed");
@@ -419,7 +449,8 @@ int cc_clampX(int x) {
 	return x < maxX ? (x < 0 ? 0 : x) : maxX;
 }
 
-int cc_clampY(int y) {
+int cc_clampY(cc_Handle cch, int y) {
+	UNUSED_PARAMETER(cch);
 	struct winsize w;
 	if(ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == -1) {
 		LOG_ERROR("ioctl failed");
@@ -430,7 +461,8 @@ int cc_clampY(int y) {
 	return y < maxY ? (y < 0 ? 0 : y) : maxY;
 }
 
-bool cc_contains(cc_Vector2 position) {
+bool cc_contains(cc_Handle cch, cc_Vector2 position) {
+	UNUSED_PARAMETER(cch);
 	struct winsize w;
 	if(ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == -1) {
 		LOG_ERROR("ioctl failed");
@@ -443,18 +475,21 @@ bool cc_contains(cc_Vector2 position) {
 	       && position.y < w.ws_row;
 }
 
-void cc_clean() {
+void cc_clean(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
 	printf(CSI "2" ED_CODE);
 	printf(CSI "0;0" CUP_CODE);
 }
 
-void cc_completeClean() {
+void cc_completeClean(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
 	printf(CSI "2" ED_CODE);
 	printf(CSI "3" ED_CODE);
 	printf(CSI "0;0" CUP_CODE);
 }
 
-char cc_instantGetChar() {
+char cc_instantGetChar(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
 	struct termios oldt, newt;
 	char ch;
 
@@ -489,7 +524,8 @@ char cc_instantGetChar() {
 	return ch;
 }
 
-bool cc_waitingInput() {
+bool cc_waitingInput(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
 	struct termios oldt, newt;
 	int ch;
 	int oldf;
@@ -557,7 +593,8 @@ bool cc_waitingInput() {
 	return false;
 }
 
-void cc_displayInputs(bool display) {
+void cc_displayInputs(cc_Handle cch, bool display) {
+	UNUSED_PARAMETER(cch);
 	struct termios t;
 
 	/* Get console mode */
@@ -581,7 +618,7 @@ void cc_displayInputs(bool display) {
 	}
 }
 
-cc_Input cc_getInput() {
+cc_Input cc_getInput(cc_Handle cch) {
 	cc_Input input = {OTHER_KEY, 0};
 
 	struct termios oldt, newt;
@@ -614,7 +651,7 @@ cc_Input cc_getInput() {
 	/* Determine the input */
 	lastch = (char) getchar();
 	inputChar[chNumber++] = lastch;
-	while(cc_matchKeyDefinition(inputChar, &matchedKey) && cc_waitingInput()) {
+	while(cc_matchKeyDefinition(inputChar, &matchedKey) && cc_waitingInput(cch)) {
 		if(matchedKey != OTHER_KEY) {
 			input.key = matchedKey;
 			matchpos = chNumber;
@@ -642,7 +679,7 @@ cc_Input cc_getInput() {
 		input.ch = inputChar[--chNumber];
 	}
 	else {
-		input.ch = cc_getAssociatedChar(input.key);
+		input.ch = cc_getAssociatedChar(cch, input.key);
 	}
 
 	/* Restore console mode */
