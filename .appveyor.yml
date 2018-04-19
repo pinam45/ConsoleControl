@@ -1,0 +1,9 @@
+version: '{build}'
+image:
+- Visual Studio 2017
+before_build:
+  - cmd: cd ide
+  - cmd: configure_VS2017_x64.cmd
+  - cmd: cd VS2017_v141_x64
+build_script:
+- cmd: cmake --build .
