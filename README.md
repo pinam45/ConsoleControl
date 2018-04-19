@@ -1,6 +1,7 @@
 # ConsoleControl
 
 [![Build Status](https://travis-ci.org/pinam45/ConsoleControl.svg?branch=master)](https://travis-ci.org/pinam45/ConsoleControl)
+[![Build status](https://ci.appveyor.com/api/projects/status/n6x0j87vv9wsu8j2/branch/master?svg=true)](https://ci.appveyor.com/project/pinam45/consolecontrol/branch/master)
 ![platform](https://img.shields.io/badge/platform-UNIX%20%7C%20Windows-lightgrey.svg)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/MIT)
 
