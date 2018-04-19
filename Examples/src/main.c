@@ -21,6 +21,8 @@ static const cc_MenuColors colors = {
 
 int main() {
 
+	cc_Handle cch = cc_start();
+
 	FILE* fp = NULL;
 	if(LOGGER_ENABLED){
 		fp = fopen("ConsoleControl_examples_log.txt","w");
@@ -47,14 +49,14 @@ int main() {
 	LOG_INFO("Enter the main menu");
 	bool loop = true;
 	while(loop) {
-		cc_displayColorMenu(&menu, &colors);
-		cc_setColors(CC_BLACK, CC_WHITE);
+		cc_displayColorMenu(cch, &menu, &colors);
+		cc_setColors(cch, CC_BLACK, CC_WHITE);
 		switch(menu.currentChoice) {
 			case 0:
-				basicExamples();
+				basicExamples(cch);
 				break;
 			case 1:
-				UIExamples();
+				UIExamples(cch);
 				break;
 			case 2:
 				loop = false;
@@ -65,8 +67,8 @@ int main() {
 	}
 	LOG_INFO("Exit the main menu");
 
-	cc_setCursorVisibility(true);
-	cc_displayInputs(true);
+	cc_setCursorVisibility(cch, true);
+	cc_displayInputs(cch, true);
 	LOG_INFO("ConsoleControl examples end");
 	if(fp != NULL){
 		fclose(fp);

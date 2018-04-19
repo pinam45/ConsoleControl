@@ -28,12 +28,12 @@
 
 #include <log.h>
 
-void printColorTable() {
+void printColorTable(cc_Handle cch) {
 	LOG_INFO("Print color table");
 
-	cc_displayInputs(false);
-	cc_setBackgroundColor(CC_BLACK);
-	cc_clean();
+	cc_displayInputs(cch, false);
+	cc_setBackgroundColor(cch, CC_BLACK);
+	cc_clean(cch);
 
 	cc_Color colors[] = {
 		CC_BLACK,
@@ -71,7 +71,7 @@ void printColorTable() {
 		"LIGHT_YELLOW  ",
 		"LIGHT_WHITE   "
 	};
-	cc_setColors(CC_BLACK, CC_WHITE);
+	cc_setColors(cch, CC_BLACK, CC_WHITE);
 	printf("+");
 	for(unsigned int a = 15; --a;) {
 		printf("-");
@@ -83,17 +83,17 @@ void printColorTable() {
 	printf("+");
 	printf("\n");
 	for(unsigned int i = 0; i < 16; ++i) {
-		cc_setColors(CC_BLACK, CC_WHITE);
+		cc_setColors(cch, CC_BLACK, CC_WHITE);
 		printf("|%s|", colorNames[i]);
-		cc_setForegroundColor(colors[i]);
+		cc_setForegroundColor(cch, colors[i]);
 		for(unsigned int j = 0; j < 8; ++j) {
-			cc_setBackgroundColor(colors[j]);
+			cc_setBackgroundColor(cch, colors[j]);
 			printf("   sample   ");
 		}
-		cc_setColors(CC_BLACK, CC_WHITE);
+		cc_setColors(cch, CC_BLACK, CC_WHITE);
 		printf("|\n");
 	}
-	cc_setColors(CC_BLACK, CC_WHITE);
+	cc_setColors(cch, CC_BLACK, CC_WHITE);
 	printf("+");
 	for(unsigned int a = 15; --a;) {
 		printf("-");
@@ -105,17 +105,17 @@ void printColorTable() {
 	printf("+");
 	printf("\n");
 	for(unsigned int i = 0; i < 16; ++i) {
-		cc_setColors(CC_BLACK, CC_WHITE);
+		cc_setColors(cch, CC_BLACK, CC_WHITE);
 		printf("|%s|", colorNames[i]);
-		cc_setForegroundColor(colors[i]);
+		cc_setForegroundColor(cch, colors[i]);
 		for(unsigned int j = 8; j < 16; ++j) {
-			cc_setBackgroundColor(colors[j]);
+			cc_setBackgroundColor(cch, colors[j]);
 			printf("   sample   ");
 		}
-		cc_setColors(CC_BLACK, CC_WHITE);
+		cc_setColors(cch, CC_BLACK, CC_WHITE);
 		printf("|\n");
 	}
-	cc_setColors(CC_BLACK, CC_WHITE);
+	cc_setColors(cch, CC_BLACK, CC_WHITE);
 	printf("+");
 	for(unsigned int a = 15; --a;) {
 		printf("-");
@@ -128,16 +128,16 @@ void printColorTable() {
 	printf("\n");
 }
 
-void printInputs() {
+void printInputs(cc_Handle cch) {
 	LOG_INFO("Print inputs");
 
-	cc_displayInputs(false);
-	cc_setBackgroundColor(CC_BLACK);
-	cc_clean();
+	cc_displayInputs(cch, false);
+	cc_setBackgroundColor(cch, CC_BLACK);
+	cc_clean(cch);
 
 	bool running = true;
 	while(running) {
-		cc_Input input = cc_getInput();
+		cc_Input input = cc_getInput(cch);
 		switch(input.key) {
 			case HOME_KEY:
 				printf(" >> HOME_KEY");
@@ -231,35 +231,35 @@ void printInputs() {
 	}
 }
 
-void printLines() {
+void printLines(cc_Handle cch) {
 	LOG_INFO("Print lines");
 
 	cc_Vector2 topLeft = {0, 0};
-	cc_Vector2 topRight = {cc_getWidth() - 2, 0};
-	cc_Vector2 downLeft = {0, cc_getHeight() - 1};
+	cc_Vector2 topRight = {cc_getWidth(cch) - 2, 0};
+	cc_Vector2 downLeft = {0, cc_getHeight(cch) - 1};
 	cc_Vector2 downRight = {topRight.x, downLeft.y};
-	cc_Vector2 pos = {cc_getWidth() / 2, cc_getHeight() / 2};
-	cc_displayInputs(false);
-	cc_setBackgroundColor(CC_BLACK);
-	cc_clean();
+	cc_Vector2 pos = {cc_getWidth(cch) / 2, cc_getHeight(cch) / 2};
+	cc_displayInputs(cch, false);
+	cc_setBackgroundColor(cch, CC_BLACK);
+	cc_clean(cch);
 
-	cc_setForegroundColor(CC_GREEN);
-	cc_drawLine(topLeft, pos, '*');
-	cc_setForegroundColor(CC_CYAN);
-	cc_drawLine(topRight, pos, '*');
-	cc_setForegroundColor(CC_MAGENTA);
-	cc_drawLine(downLeft, pos, '*');
-	cc_setForegroundColor(CC_YELLOW);
-	cc_drawLine(downRight, pos, '*');
-	cc_setForegroundColor(CC_WHITE);
-	cc_setCursorPosition(pos);
-	cc_printInPlace('#');
-	cc_Input input = cc_getInput();
+	cc_setForegroundColor(cch, CC_GREEN);
+	cc_drawLine(cch, topLeft, pos, '*');
+	cc_setForegroundColor(cch, CC_CYAN);
+	cc_drawLine(cch, topRight, pos, '*');
+	cc_setForegroundColor(cch, CC_MAGENTA);
+	cc_drawLine(cch, downLeft, pos, '*');
+	cc_setForegroundColor(cch, CC_YELLOW);
+	cc_drawLine(cch, downRight, pos, '*');
+	cc_setForegroundColor(cch, CC_WHITE);
+	cc_setCursorPosition(cch, pos);
+	cc_printInPlace(cch, '#');
+	cc_Input input = cc_getInput(cch);
 	while(input.key != ESC_KEY) {
-		cc_drawLine(topLeft, pos, ' ');
-		cc_drawLine(topRight, pos, ' ');
-		cc_drawLine(downLeft, pos, ' ');
-		cc_drawLine(downRight, pos, ' ');
+		cc_drawLine(cch, topLeft, pos, ' ');
+		cc_drawLine(cch, topRight, pos, ' ');
+		cc_drawLine(cch, downLeft, pos, ' ');
+		cc_drawLine(cch, downRight, pos, ' ');
 
 		switch(input.key) {
 			case UP_ARROW_KEY:
@@ -272,20 +272,20 @@ void printLines() {
 				--pos.x;
 				break;
 			case RIGHT_ARROW_KEY:
-				if(pos.x < cc_getWidth() - 2)
+				if(pos.x < cc_getWidth(cch) - 2)
 					++pos.x;
 				break;
 			case HOME_KEY:
 				pos.x = 0;
 				break;
 			case END_KEY:
-				pos.x = cc_getWidth() - 2;
+				pos.x = cc_getWidth(cch) - 2;
 				break;
 			case PAGE_UP_KEY:
 				pos.y = 0;
 				break;
 			case PAGE_DOWN_KEY:
-				pos.y = cc_getHeight() - 1;
+				pos.y = cc_getHeight(cch) - 1;
 				break;
 			case BACKSPACE_KEY:
 			case TAB_KEY:
@@ -310,48 +310,48 @@ void printLines() {
 			default:
 				break;
 		}
-		topRight.x = cc_getWidth() - 2;
-		downLeft.y = cc_getHeight() - 1;
+		topRight.x = cc_getWidth(cch) - 2;
+		downLeft.y = cc_getHeight(cch) - 1;
 		downRight.x = topRight.x;
 		downRight.y = downLeft.y;
-		pos = cc_clamp(pos);
+		pos = cc_clamp(cch, pos);
 
-		cc_setForegroundColor(CC_GREEN);
-		cc_drawLine(topLeft, pos, '*');
-		cc_setForegroundColor(CC_CYAN);
-		cc_drawLine(topRight, pos, '*');
-		cc_setForegroundColor(CC_MAGENTA);
-		cc_drawLine(downLeft, pos, '*');
-		cc_setForegroundColor(CC_YELLOW);
-		cc_drawLine(downRight, pos, '*');
-		cc_setForegroundColor(CC_WHITE);
-		cc_setCursorPosition(pos);
-		cc_printInPlace('#');
+		cc_setForegroundColor(cch, CC_GREEN);
+		cc_drawLine(cch, topLeft, pos, '*');
+		cc_setForegroundColor(cch, CC_CYAN);
+		cc_drawLine(cch, topRight, pos, '*');
+		cc_setForegroundColor(cch, CC_MAGENTA);
+		cc_drawLine(cch, downLeft, pos, '*');
+		cc_setForegroundColor(cch, CC_YELLOW);
+		cc_drawLine(cch, downRight, pos, '*');
+		cc_setForegroundColor(cch, CC_WHITE);
+		cc_setCursorPosition(cch, pos);
+		cc_printInPlace(cch, '#');
 
-		input = cc_getInput();
+		input = cc_getInput(cch);
 	}
 }
 
-void printRectangles() {
+void printRectangles(cc_Handle cch) {
 	LOG_INFO("Print rectangles");
 
 	cc_Vector2 topLeft = {20, 5};
 	cc_Vector2 downRight = {30, 20};
-	cc_displayInputs(false);
-	cc_setBackgroundColor(CC_BLACK);
-	cc_clean();
+	cc_displayInputs(cch, false);
+	cc_setBackgroundColor(cch, CC_BLACK);
+	cc_clean(cch);
 
-	cc_setForegroundColor(CC_CYAN);
-	cc_drawFullRectangle(topLeft, downRight, '*');
-	cc_setForegroundColor(CC_GREEN);
-	cc_drawRectangle(topLeft, downRight, '+');
-	cc_setForegroundColor(CC_WHITE);
-	cc_setCursorPosition(downRight);
-	cc_printInPlace('#');
+	cc_setForegroundColor(cch, CC_CYAN);
+	cc_drawFullRectangle(cch, topLeft, downRight, '*');
+	cc_setForegroundColor(cch, CC_GREEN);
+	cc_drawRectangle(cch, topLeft, downRight, '+');
+	cc_setForegroundColor(cch, CC_WHITE);
+	cc_setCursorPosition(cch, downRight);
+	cc_printInPlace(cch, '#');
 
-	cc_Input input = cc_getInput();
+	cc_Input input = cc_getInput(cch);
 	while(input.key != ESC_KEY) {
-		cc_drawFullRectangle(topLeft, downRight, ' ');
+		cc_drawFullRectangle(cch, topLeft, downRight, ' ');
 		switch(input.key) {
 			case UP_ARROW_KEY:
 				--downRight.y;
@@ -363,20 +363,20 @@ void printRectangles() {
 				--downRight.x;
 				break;
 			case RIGHT_ARROW_KEY:
-				if(downRight.x < cc_getWidth() - 2)
+				if(downRight.x < cc_getWidth(cch) - 2)
 					++downRight.x;
 				break;
 			case HOME_KEY:
 				downRight.x = 0;
 				break;
 			case END_KEY:
-				downRight.x = cc_getWidth() - 2;
+				downRight.x = cc_getWidth(cch) - 2;
 				break;
 			case PAGE_UP_KEY:
 				downRight.y = 0;
 				break;
 			case PAGE_DOWN_KEY:
-				downRight.y = cc_getHeight() - 1;
+				downRight.y = cc_getHeight(cch) - 1;
 				break;
 			case BACKSPACE_KEY:
 			case TAB_KEY:
@@ -402,46 +402,46 @@ void printRectangles() {
 				break;
 		}
 
-		downRight = cc_clamp(downRight);
-		cc_setForegroundColor(CC_CYAN);
-		cc_drawFullRectangle(topLeft, downRight, '*');
-		cc_setForegroundColor(CC_GREEN);
-		cc_drawRectangle(topLeft, downRight, '+');
-		cc_setForegroundColor(CC_WHITE);
-		cc_setCursorPosition(downRight);
-		cc_printInPlace('#');
-		input = cc_getInput();
+		downRight = cc_clamp(cch, downRight);
+		cc_setForegroundColor(cch, CC_CYAN);
+		cc_drawFullRectangle(cch, topLeft, downRight, '*');
+		cc_setForegroundColor(cch, CC_GREEN);
+		cc_drawRectangle(cch, topLeft, downRight, '+');
+		cc_setForegroundColor(cch, CC_WHITE);
+		cc_setCursorPosition(cch, downRight);
+		cc_printInPlace(cch, '#');
+		input = cc_getInput(cch);
 	}
 }
 
-void printCircle() {
+void printCircle(cc_Handle cch) {
 	LOG_INFO("Print circle");
 
-	cc_displayInputs(false);
-	cc_setBackgroundColor(CC_BLACK);
-	cc_clean();
+	cc_displayInputs(cch, false);
+	cc_setBackgroundColor(cch, CC_BLACK);
+	cc_clean(cch);
 
-	cc_Vector2 center = {cc_getWidth() / 2, cc_getHeight() / 2};
+	cc_Vector2 center = {cc_getWidth(cch) / 2, cc_getHeight(cch) / 2};
 	unsigned int radius = 5;
 
-	cc_setForegroundColor(CC_GREEN);
-	cc_drawCircle(center, radius, '#');
-	cc_setForegroundColor(CC_WHITE);
-	cc_setCursorPosition(center);
+	cc_setForegroundColor(cch, CC_GREEN);
+	cc_drawCircle(cch, center, radius, '#');
+	cc_setForegroundColor(cch, CC_WHITE);
+	cc_setCursorPosition(cch, center);
 	putchar('#');
 
-	cc_Input input = cc_getInput();
+	cc_Input input = cc_getInput(cch);
 	while(input.key != ESC_KEY) {
-		cc_drawCircle(center, radius, ' ');
-		cc_setCursorPosition(center);
+		cc_drawCircle(cch, center, radius, ' ');
+		cc_setCursorPosition(cch, center);
 		putchar(' ');
-		center.x = cc_getWidth() / 2;
-		center.y = cc_getHeight() / 2;
+		center.x = cc_getWidth(cch) / 2;
+		center.y = cc_getHeight(cch) / 2;
 		switch(input.key) {
 			case UP_ARROW_KEY:
 			case RIGHT_ARROW_KEY:
-				if((unsigned int) (center.x) + radius < (unsigned int) (cc_getWidth() - 1)
-				   && (unsigned int) (center.y) + radius < (unsigned int) (cc_getHeight() - 1)) {
+				if((unsigned int) (center.x) + radius < (unsigned int) (cc_getWidth(cch) - 1)
+				   && (unsigned int) (center.y) + radius < (unsigned int) (cc_getHeight(cch) - 1)) {
 					++radius;
 				}
 				break;
@@ -479,16 +479,16 @@ void printCircle() {
 				break;
 		}
 
-		cc_setForegroundColor(CC_GREEN);
-		cc_drawCircle(center, radius, '#');
-		cc_setForegroundColor(CC_WHITE);
-		cc_setCursorPosition(center);
+		cc_setForegroundColor(cch, CC_GREEN);
+		cc_drawCircle(cch, center, radius, '#');
+		cc_setForegroundColor(cch, CC_WHITE);
+		cc_setCursorPosition(cch, center);
 		putchar('#');
-		input = cc_getInput();
+		input = cc_getInput(cch);
 	}
 }
 
-void basicExamples() {
+void basicExamples(cc_Handle cch) {
 
 	const char* choices[] = {
 		"Print color table",
@@ -517,29 +517,29 @@ void basicExamples() {
 	LOG_INFO("Enter the basic examples menu");
 	bool loop = true;
 	while(loop) {
-		cc_displayColorMenu(&menu, &colors);
-		cc_setColors(CC_BLACK, CC_WHITE);
+		cc_displayColorMenu(cch, &menu, &colors);
+		cc_setColors(cch, CC_BLACK, CC_WHITE);
 		switch(menu.currentChoice) {
 			case 0:
-				cc_clean();
-				printColorTable();
-				cc_getInput();
+				cc_clean(cch);
+				printColorTable(cch);
+				cc_getInput(cch);
 				break;
 			case 1:
-				cc_clean();
-				printInputs();
+				cc_clean(cch);
+				printInputs(cch);
 				break;
 			case 2:
-				cc_clean();
-				printLines();
+				cc_clean(cch);
+				printLines(cch);
 				break;
 			case 3:
-				cc_clean();
-				printRectangles();
+				cc_clean(cch);
+				printRectangles(cch);
 				break;
 			case 4:
-				cc_clean();
-				printCircle();
+				cc_clean(cch);
+				printCircle(cch);
 				break;
 			case 5:
 				loop = false;

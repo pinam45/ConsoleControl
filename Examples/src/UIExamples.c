@@ -50,7 +50,7 @@ static const cc_MessageColors mcolors = {
 	CC_BLACK
 };
 
-void menuExamples() {
+void menuExamples(cc_Handle cch) {
 	LOG_INFO("Start menu examples");
 
 	const char* withColorsChoices[] = {
@@ -88,21 +88,21 @@ void menuExamples() {
 	choiceMessage.currentChoice = NO_CHOICE;
 	choiceMessage.canEscape = true;
 
-	cc_displayColorMenu(&styleMenu, &colors);
+	cc_displayColorMenu(cch, &styleMenu, &colors);
 	if(styleMenu.currentChoice == 0) {
-		cc_setColors(CC_BLACK, CC_WHITE);
-		cc_displayTableMenu(&menu);
+		cc_setColors(cch, CC_BLACK, CC_WHITE);
+		cc_displayTableMenu(cch, &menu);
 		choiceMessage.message = choices[menu.currentChoice];
-		cc_displayTableMessage(&choiceMessage);
+		cc_displayTableMessage(cch, &choiceMessage);
 	}
 	else if(styleMenu.currentChoice == 1) {
-		cc_displayColorMenu(&menu, &colors);
+		cc_displayColorMenu(cch, &menu, &colors);
 		choiceMessage.message = choices[menu.currentChoice];
-		cc_displayColorMessage(&choiceMessage, &mcolors);
+		cc_displayColorMessage(cch, &choiceMessage, &mcolors);
 	}
 }
 
-void optionMenuExamples() {
+void optionMenuExamples(cc_Handle cch) {
 	LOG_INFO("Start option menu examples");
 
 	const char* withColorsChoices[] = {
@@ -172,14 +172,14 @@ void optionMenuExamples() {
 	choiceMessage.currentChoice = NO_CHOICE;
 	choiceMessage.canEscape = true;
 
-	cc_displayColorMenu(&styleMenu, &colors);
+	cc_displayColorMenu(cch, &styleMenu, &colors);
 	if(styleMenu.currentChoice != 2) {
 		if(styleMenu.currentChoice == 1) {
-			cc_displayColorOptionMenu(&optionsMenu, &colors);
+			cc_displayColorOptionMenu(cch, &optionsMenu, &colors);
 		}
 		else {
-			cc_setColors(CC_BLACK, CC_WHITE);
-			cc_displayTableOptionMenu(&optionsMenu);
+			cc_setColors(cch, CC_BLACK, CC_WHITE);
+			cc_displayTableOptionMenu(cch, &optionsMenu);
 		}
 		sprintf(messageText,
 		        "Integer option value:\n%d\n\nCharacter option value:\n%c\n\nChoices option, selected option:\n%d\n(%s)",
@@ -189,15 +189,15 @@ void optionMenuExamples() {
 		        choices[choicesOption.currentChoice]
 		);
 		if(styleMenu.currentChoice == 1) {
-			cc_displayColorMessage(&choiceMessage, &mcolors);
+			cc_displayColorMessage(cch, &choiceMessage, &mcolors);
 		}
 		else {
-			cc_displayTableMessage(&choiceMessage);
+			cc_displayTableMessage(cch, &choiceMessage);
 		}
 	}
 }
 
-void messageExamples() {
+void messageExamples(cc_Handle cch) {
 	LOG_INFO("Start message examples");
 
 	const char* styleChoices[] = {"Table", "Color"};
@@ -265,7 +265,7 @@ void messageExamples() {
 	optionsMenu.exitText = "Display";
 	optionsMenu.hasEscaped = false;
 
-	cc_displayColorOptionMenu(&optionsMenu, &colors);
+	cc_displayColorOptionMenu(cch, &optionsMenu, &colors);
 
 	if(!optionsMenu.hasEscaped) {
 		cc_Message message;
@@ -278,11 +278,11 @@ void messageExamples() {
 		message.canEscape = true;
 
 		if(styleOption.currentChoice == 1) {
-			cc_displayColorMessage(&message, &mcolors);
+			cc_displayColorMessage(cch, &message, &mcolors);
 		}
 		else {
-			cc_setColors(CC_BLACK, CC_WHITE);
-			cc_displayTableMessage(&message);
+			cc_setColors(cch, CC_BLACK, CC_WHITE);
+			cc_displayTableMessage(cch, &message);
 		}
 
 		cc_Message choiceMessage;
@@ -309,15 +309,15 @@ void messageExamples() {
 		choiceMessage.canEscape = true;
 
 		if(styleOption.currentChoice == 1) {
-			cc_displayColorMessage(&choiceMessage, &mcolors);
+			cc_displayColorMessage(cch, &choiceMessage, &mcolors);
 		}
 		else {
-			cc_displayTableMessage(&choiceMessage);
+			cc_displayTableMessage(cch, &choiceMessage);
 		}
 	}
 }
 
-void UIExamples() {
+void UIExamples(cc_Handle cch) {
 
 	const char* choices[] = {
 		"Menu examples",
@@ -336,17 +336,17 @@ void UIExamples() {
 	LOG_INFO("Enter the UI examples menu");
 	bool loop = true;
 	while(loop) {
-		cc_displayColorMenu(&menu, &colors);
-		cc_setColors(CC_BLACK, CC_WHITE);
+		cc_displayColorMenu(cch, &menu, &colors);
+		cc_setColors(cch, CC_BLACK, CC_WHITE);
 		switch(menu.currentChoice) {
 			case 0:
-				menuExamples();
+				menuExamples(cch);
 				break;
 			case 1:
-				optionMenuExamples();
+				optionMenuExamples(cch);
 				break;
 			case 2:
-				messageExamples();
+				messageExamples(cch);
 				break;
 			case 3:
 				loop = false;

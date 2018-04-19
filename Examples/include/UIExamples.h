@@ -32,13 +32,13 @@
 
 #include <stdbool.h>
 
-void menuExamples();
+void menuExamples(cc_Handle cch);
 
-void optionMenuExamples();
+void optionMenuExamples(cc_Handle cch);
 
-void messageExamples();
+void messageExamples(cc_Handle cch);
 
-void UIExamples();
+void UIExamples(cc_Handle cch);
 
 
 #endif //CONSOLECONTROL_UIEXAMPLES_H

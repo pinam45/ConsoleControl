@@ -34,17 +34,17 @@
 
 #include <stdio.h>
 
-void printColorTable();
+void printColorTable(cc_Handle cch);
 
-void printInputs();
+void printInputs(cc_Handle cch);
 
-void printLines();
+void printLines(cc_Handle cch);
 
-void printRectangles();
+void printRectangles(cc_Handle cch);
 
-void printCircle();
+void printCircle(cc_Handle cch);
 
-void basicExamples();
+void basicExamples(cc_Handle cch);
 
 
 #endif //CONSOLECONTROL_CONSOLECONTROLTEST_H
