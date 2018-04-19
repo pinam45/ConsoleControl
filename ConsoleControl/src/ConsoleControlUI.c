@@ -67,46 +67,46 @@ typedef enum {
 static const cc_Vector2 nullpos = {0, 0};
 
 // For cc_displayTableMenu
-static MenuDrawInfo computeTableMenuDrawInfo(const cc_Menu* menu);
+static MenuDrawInfo computeTableMenuDrawInfo(cc_Handle cch, const cc_Menu* menu);
 
 // For cc_displayTableMenu
-static void drawTableMenuChoices(const MenuDrawInfo* info, const cc_Menu* menu);
+static void drawTableMenuChoices(cc_Handle cch, const MenuDrawInfo* info, const cc_Menu* menu);
 
 // For cc_displayTableMenu
-static void drawTableMenu(const MenuDrawInfo* info, const cc_Menu* menu);
+static void drawTableMenu(cc_Handle cch, const MenuDrawInfo* info, const cc_Menu* menu);
 
 // For cc_displayColorMenu
-static MenuDrawInfo computeColorMenuDrawInfo(const cc_Menu* menu);
+static MenuDrawInfo computeColorMenuDrawInfo(cc_Handle cch, const cc_Menu* menu);
 
 // For cc_displayTableMenu
-static void drawColorMenuChoices(const MenuDrawInfo* info, const cc_Menu* menu, const cc_MenuColors* colors);
+static void drawColorMenuChoices(cc_Handle cch, const MenuDrawInfo* info, const cc_Menu* menu, const cc_MenuColors* colors);
 
 // For cc_displayColorMenu
-static void drawColorMenu(const MenuDrawInfo* info, const cc_Menu* menu, const cc_MenuColors* colors);
+static void drawColorMenu(cc_Handle cch, const MenuDrawInfo* info, const cc_Menu* menu, const cc_MenuColors* colors);
 
 // For cc_displayTableMessage and cc_displayColorMessage
 static inline bool messageHasChoices(const cc_Message* message);
 
 // For cc_displayTableMessage
-static MessageDrawInfo computeTableMessageDrawInfo(const cc_Message* message, char** messageLines,
+static MessageDrawInfo computeTableMessageDrawInfo(cc_Handle cch, const cc_Message* message, char** messageLines,
                                                    unsigned int linesNumber);
 
 // For cc_displayTableMessage
-static void drawTableMessageChoices(const MessageDrawInfo* info, const cc_Message* message);
+static void drawTableMessageChoices(cc_Handle cch, const MessageDrawInfo* info, const cc_Message* message);
 
 // For cc_displayTableMessage
-static void drawTableMessage(const MessageDrawInfo* info, const cc_Message* message, char** messageLines);
+static void drawTableMessage(cc_Handle cch, const MessageDrawInfo* info, const cc_Message* message, char** messageLines);
 
 // For cc_displayColorMessage
-static MessageDrawInfo computeColorMessageDrawInfo(const cc_Message* message, char** messageLines,
+static MessageDrawInfo computeColorMessageDrawInfo(cc_Handle cch, const cc_Message* message, char** messageLines,
                                                    unsigned int linesNumber);
 
 // For cc_displayColorMessage
-static void drawColorMessageChoices(const MessageDrawInfo* info, const cc_Message* message,
+static void drawColorMessageChoices(cc_Handle cch, const MessageDrawInfo* info, const cc_Message* message,
                                     const cc_MessageColors* colors);
 
 // For cc_displayColorMessage
-static void drawColorMessage(const MessageDrawInfo* info, const cc_Message* message,
+static void drawColorMessage(cc_Handle cch, const MessageDrawInfo* info, const cc_Message* message,
                              char** messageLines, const cc_MessageColors* colors);
 
 // For changeOption
@@ -125,26 +125,26 @@ static void changeOption(cc_Option* option, ChangeType changeType);
 static unsigned int intLen(int value);
 
 // For cc_displayTableOptionMenu
-static OptionMenuDrawInfo computeTableOptionMenuDrawInfo(const cc_OptionsMenu* optionsMenu);
+static OptionMenuDrawInfo computeTableOptionMenuDrawInfo(cc_Handle cch, const cc_OptionsMenu* optionsMenu);
 
 // For cc_displayTableOptionMenu
-static void drawTableOptionMenuOptions(const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu);
+static void drawTableOptionMenuOptions(cc_Handle cch, const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu);
 
 // For cc_displayTableOptionMenu
-static void drawTableOptionMenu(const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu);
+static void drawTableOptionMenu(cc_Handle cch, const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu);
 
 // For cc_displayColorOptionMenu
-static OptionMenuDrawInfo computeColorOptionMenuDrawInfo(const cc_OptionsMenu* optionsMenu);
+static OptionMenuDrawInfo computeColorOptionMenuDrawInfo(cc_Handle cch, const cc_OptionsMenu* optionsMenu);
 
 // For cc_displayColorOptionMenu
-static void drawColorOptionMenuOptions(const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu,
+static void drawColorOptionMenuOptions(cc_Handle cch, const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu,
                                        const cc_MenuColors* colors);
 
 // For cc_displayColorOptionMenu
-static void drawColorOptionMenu(const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu,
+static void drawColorOptionMenu(cc_Handle cch, const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu,
                                 const cc_MenuColors* colors);
 
-MenuDrawInfo computeTableMenuDrawInfo(const cc_Menu* menu) {
+MenuDrawInfo computeTableMenuDrawInfo(cc_Handle cch, const cc_Menu* menu) {
 
 	unsigned int maxLength = (unsigned int) strlen(menu->title);
 	unsigned int len;
@@ -159,19 +159,19 @@ MenuDrawInfo computeTableMenuDrawInfo(const cc_Menu* menu) {
 	MenuDrawInfo info;
 	info.width = maxLength + 7;
 	info.height = menu->choicesNumber * 2 + 6;
-	info.topLeft.x = (cc_getWidth() - (int) info.width) / 2;
-	info.topLeft.y = (cc_getHeight() - (int) info.height) / 2;
+	info.topLeft.x = (cc_getWidth(cch) - (int) info.width) / 2;
+	info.topLeft.y = (cc_getHeight(cch) - (int) info.height) / 2;
 
 	return info;
 }
 
-void drawTableMenuChoices(const MenuDrawInfo* info, const cc_Menu* menu) {
+void drawTableMenuChoices(cc_Handle cch, const MenuDrawInfo* info, const cc_Menu* menu) {
 
 	cc_Vector2 pos;
 	for(unsigned int i = menu->choicesNumber; i--;) {
 		pos.x = info->topLeft.x + (int) (info->width - (unsigned int) strlen(menu->choices[i])) / 2 - 1;
 		pos.y = info->topLeft.y + (int) (4 + 2 * (i + 1));
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		if(menu->currentChoice == i) {
 			printf("> %s <", menu->choices[i]);
 		}
@@ -181,7 +181,7 @@ void drawTableMenuChoices(const MenuDrawInfo* info, const cc_Menu* menu) {
 	}
 }
 
-void drawTableMenu(const MenuDrawInfo* info, const cc_Menu* menu) {
+void drawTableMenu(cc_Handle cch, const MenuDrawInfo* info, const cc_Menu* menu) {
 
 	cc_Vector2 topLeft = info->topLeft;
 	cc_Vector2 downRight = {
@@ -189,29 +189,29 @@ void drawTableMenu(const MenuDrawInfo* info, const cc_Menu* menu) {
 		topLeft.y + (int) info->height
 	};
 
-	cc_clean();
+	cc_clean(cch);
 
 	/* Print table and title */
-	cc_drawTableRectangle(topLeft, downRight);
+	cc_drawTableRectangle(cch, topLeft, downRight);
 	topLeft.y += 2;
 	cc_Vector2 pos = {
 		topLeft.x + (int) (info->width - (unsigned int) strlen(menu->title)) / 2 + 1,
 		topLeft.y
 	};
-	cc_setCursorPosition(pos);
+	cc_setCursorPosition(cch, pos);
 	printf("%s", menu->title);
 	topLeft.y += 2;
 	cc_Vector2 topright = {
 		downRight.x,
 		topLeft.y
 	};
-	cc_drawTableHorizontalLine(topLeft, topright);
+	cc_drawTableHorizontalLine(cch, topLeft, topright);
 
 	/* Print the choices */
-	drawTableMenuChoices(info, menu);
+	drawTableMenuChoices(cch, info, menu);
 }
 
-MenuDrawInfo computeColorMenuDrawInfo(const cc_Menu* menu) {
+MenuDrawInfo computeColorMenuDrawInfo(cc_Handle cch, const cc_Menu* menu) {
 
 	unsigned int maxLength = (unsigned int) strlen(menu->title);
 	unsigned int len;
@@ -226,23 +226,23 @@ MenuDrawInfo computeColorMenuDrawInfo(const cc_Menu* menu) {
 	MenuDrawInfo info;
 	info.width = maxLength + 5;
 	info.height = menu->choicesNumber * 2 + 5;
-	info.topLeft.x = (cc_getWidth() - (int) info.width) / 2;
-	info.topLeft.y = (cc_getHeight() - (int) info.height) / 2;
+	info.topLeft.x = (cc_getWidth(cch) - (int) info.width) / 2;
+	info.topLeft.y = (cc_getHeight(cch) - (int) info.height) / 2;
 
 	return info;
 }
 
-void drawColorMenuChoices(const MenuDrawInfo* info, const cc_Menu* menu, const cc_MenuColors* colors) {
+void drawColorMenuChoices(cc_Handle cch, const MenuDrawInfo* info, const cc_Menu* menu, const cc_MenuColors* colors) {
 
 	cc_Vector2 pos;
 	pos.x = info->topLeft.x + 1;
 
-	cc_setColors(colors->choicesBackgroundColor, colors->choicesForegroundColor);
+	cc_setColors(cch, colors->choicesBackgroundColor, colors->choicesForegroundColor);
 	for(unsigned int i = menu->choicesNumber; i--;) {
 		pos.y = info->topLeft.y + (int) (4 + (2 * i));
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		if(menu->currentChoice == i) {
-			cc_setColors(colors->selectionBackgroundColor, colors->selectionForegroundColor);
+			cc_setColors(cch, colors->selectionBackgroundColor, colors->selectionForegroundColor);
 		}
 		unsigned j = 0;
 		for(; j < (info->width - (unsigned int) strlen(menu->choices[i])) / 2; ++j) {
@@ -254,12 +254,12 @@ void drawColorMenuChoices(const MenuDrawInfo* info, const cc_Menu* menu, const c
 			putchar(' ');
 		}
 		if(menu->currentChoice == i) {
-			cc_setColors(colors->choicesBackgroundColor, colors->choicesForegroundColor);
+			cc_setColors(cch, colors->choicesBackgroundColor, colors->choicesForegroundColor);
 		}
 	}
 }
 
-void drawColorMenu(const MenuDrawInfo* info, const cc_Menu* menu, const cc_MenuColors* colors) {
+void drawColorMenu(cc_Handle cch, const MenuDrawInfo* info, const cc_Menu* menu, const cc_MenuColors* colors) {
 
 	cc_Vector2 topLeft = info->topLeft;
 	cc_Vector2 downRight = { // downRight for the title
@@ -267,25 +267,25 @@ void drawColorMenu(const MenuDrawInfo* info, const cc_Menu* menu, const cc_MenuC
 		topLeft.y + 3
 	};
 
-	cc_setBackgroundColor(colors->mainBackgroundColor);
-	cc_clean();
+	cc_setBackgroundColor(cch, colors->mainBackgroundColor);
+	cc_clean(cch);
 
 	/* Print the title background and text */
-	cc_setColors(colors->titleBackgroundColor, colors->titleForegroundColor);
-	cc_drawFullRectangle(topLeft, downRight, ' ');
+	cc_setColors(cch, colors->titleBackgroundColor, colors->titleForegroundColor);
+	cc_drawFullRectangle(cch, topLeft, downRight, ' ');
 	++topLeft.y;
 	cc_Vector2 pos = {
 		topLeft.x + (int) (info->width - (unsigned int) strlen(menu->title)) / 2 + 1,
 		topLeft.y
 	};
-	cc_setCursorPosition(pos);
+	cc_setCursorPosition(cch, pos);
 	printf("%s", menu->title);
 
 	/* If same background color for title and choices, draw a line */
 	if(colors->titleBackgroundColor == colors->choicesBackgroundColor) {
 		++topLeft.y;
 		--downRight.y;
-		cc_drawLine(topLeft, downRight, '_');
+		cc_drawLine(cch, topLeft, downRight, '_');
 		++topLeft.y;
 	}
 	else {
@@ -295,11 +295,11 @@ void drawColorMenu(const MenuDrawInfo* info, const cc_Menu* menu, const cc_MenuC
 
 	/* Print the choices background */
 	downRight.y = topLeft.y + (int) info->height - 5; // downRight for the choices
-	cc_setColors(colors->choicesBackgroundColor, colors->choicesForegroundColor);
-	cc_drawFullRectangle(topLeft, downRight, ' ');
+	cc_setColors(cch, colors->choicesBackgroundColor, colors->choicesForegroundColor);
+	cc_drawFullRectangle(cch, topLeft, downRight, ' ');
 
 	/* Print the choices */
-	drawColorMenuChoices(info, menu, colors);
+	drawColorMenuChoices(cch, info, menu, colors);
 }
 
 bool messageHasChoices(const cc_Message* message) {
@@ -308,7 +308,7 @@ bool messageHasChoices(const cc_Message* message) {
 	       || (message->rightChoice != NULL && message->rightChoice[0] != '\0');
 }
 
-MessageDrawInfo computeTableMessageDrawInfo(const cc_Message* message, char** messageLines, unsigned int linesNumber) {
+MessageDrawInfo computeTableMessageDrawInfo(cc_Handle cch, const cc_Message* message, char** messageLines, unsigned int linesNumber) {
 
 	MessageDrawInfo info;
 	info.linesNumber = linesNumber;
@@ -353,8 +353,8 @@ MessageDrawInfo computeTableMessageDrawInfo(const cc_Message* message, char** me
 		/* Set information */
 		info.width = maxLength + 5;
 		info.height = info.linesNumber + 5 + (unsigned int) (4 * info.hasTitle);
-		info.topLeft.x = (cc_getWidth() - (int) info.width) / 2;
-		info.topLeft.y = (cc_getHeight() - (int) info.height) / 2;
+		info.topLeft.x = (cc_getWidth(cch) - (int) info.width) / 2;
+		info.topLeft.y = (cc_getHeight(cch) - (int) info.height) / 2;
 
 		/* Set choices X positions */
 		if(message->leftChoice != NULL) {
@@ -373,20 +373,20 @@ MessageDrawInfo computeTableMessageDrawInfo(const cc_Message* message, char** me
 		/* Set information */
 		info.width = maxLength + 5;
 		info.height = info.linesNumber + 3 + (unsigned int) (4 * info.hasTitle);
-		info.topLeft.x = (cc_getWidth() - (int) info.width) / 2;
-		info.topLeft.y = (cc_getHeight() - (int) info.height) / 2;
+		info.topLeft.x = (cc_getWidth(cch) - (int) info.width) / 2;
+		info.topLeft.y = (cc_getHeight(cch) - (int) info.height) / 2;
 	}
 
 	return info;
 }
 
-void drawTableMessageChoices(const MessageDrawInfo* info, const cc_Message* message) {
+void drawTableMessageChoices(cc_Handle cch, const MessageDrawInfo* info, const cc_Message* message) {
 	cc_Vector2 pos;
 	pos.y = info->topLeft.y + (int) (info->linesNumber + 3 + (unsigned int) (4 * info->hasTitle));
 	/* Left choice */
 	if(message->leftChoice != NULL && message->leftChoice[0] != '\0') {
 		pos.x = (int) (info->leftChoicePosX);
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		if(message->currentChoice == LEFT_CHOICE) {
 			printf("> %s <", message->leftChoice);
 		}
@@ -397,7 +397,7 @@ void drawTableMessageChoices(const MessageDrawInfo* info, const cc_Message* mess
 	/* Middle choice */
 	if(message->middleChoice != NULL && message->middleChoice[0] != '\0') {
 		pos.x = (int) (info->middleChoicePosX);
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		if(message->currentChoice == MIDDLE_CHOICE) {
 			printf("> %s <", message->middleChoice);
 		}
@@ -408,7 +408,7 @@ void drawTableMessageChoices(const MessageDrawInfo* info, const cc_Message* mess
 	/* Right choice */
 	if(message->rightChoice != NULL && message->rightChoice[0] != '\0') {
 		pos.x = (int) (info->rightChoicePosX);
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		if(message->currentChoice == RIGHT_CHOICE) {
 			printf("> %s <", message->rightChoice);
 		}
@@ -418,7 +418,7 @@ void drawTableMessageChoices(const MessageDrawInfo* info, const cc_Message* mess
 	}
 }
 
-void drawTableMessage(const MessageDrawInfo* info, const cc_Message* message, char** messageLines) {
+void drawTableMessage(cc_Handle cch, const MessageDrawInfo* info, const cc_Message* message, char** messageLines) {
 
 	cc_Vector2 topLeft = info->topLeft;
 	cc_Vector2 downRight = {
@@ -426,24 +426,24 @@ void drawTableMessage(const MessageDrawInfo* info, const cc_Message* message, ch
 		topLeft.y + (int) info->height
 	};
 
-	cc_clean();
+	cc_clean(cch);
 
 	/* Print table and title */
-	cc_drawTableRectangle(topLeft, downRight);
+	cc_drawTableRectangle(cch, topLeft, downRight);
 	if(info->hasTitle) {
 		topLeft.y += 2;
 		cc_Vector2 pos = {
 			topLeft.x + (int) (info->width - (unsigned int) strlen(message->title)) / 2 + 1,
 			topLeft.y
 		};
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		printf("%s", message->title);
 		topLeft.y += 2;
 		cc_Vector2 titleDownRight = {
 			downRight.x,
 			topLeft.y
 		};
-		cc_drawTableHorizontalLine(topLeft, titleDownRight);
+		cc_drawTableHorizontalLine(cch, topLeft, titleDownRight);
 	}
 
 	/* Print message */
@@ -451,17 +451,17 @@ void drawTableMessage(const MessageDrawInfo* info, const cc_Message* message, ch
 	for(unsigned int i = info->linesNumber; i--;) {
 		--topLeft.y;
 		topLeft.x = info->topLeft.x + 1 + (int) (info->width - (unsigned int) strlen(messageLines[i])) / 2;
-		cc_setCursorPosition(topLeft);
+		cc_setCursorPosition(cch, topLeft);
 		printf("%s", messageLines[i]);
 	}
 
 	/* Print the choices */
 	if(info->hasChoices) {
-		drawTableMessageChoices(info, message);
+		drawTableMessageChoices(cch, info, message);
 	}
 }
 
-MessageDrawInfo computeColorMessageDrawInfo(const cc_Message* message, char** messageLines, unsigned int linesNumber) {
+MessageDrawInfo computeColorMessageDrawInfo(cc_Handle cch, const cc_Message* message, char** messageLines, unsigned int linesNumber) {
 
 	MessageDrawInfo info;
 	info.linesNumber = linesNumber;
@@ -506,8 +506,8 @@ MessageDrawInfo computeColorMessageDrawInfo(const cc_Message* message, char** me
 		/* Set information */
 		info.width = maxLength + 3;
 		info.height = info.linesNumber + 3 + (unsigned int) (3 * info.hasTitle);
-		info.topLeft.x = (cc_getWidth() - (int) info.width) / 2;
-		info.topLeft.y = (cc_getHeight() - (int) info.height) / 2;
+		info.topLeft.x = (cc_getWidth(cch) - (int) info.width) / 2;
+		info.topLeft.y = (cc_getHeight(cch) - (int) info.height) / 2;
 
 		/* Set choices X positions */
 		if(message->leftChoice != NULL) {
@@ -526,55 +526,55 @@ MessageDrawInfo computeColorMessageDrawInfo(const cc_Message* message, char** me
 		/* Set information */
 		info.width = maxLength + 3;
 		info.height = info.linesNumber + 1 + (unsigned int) (3 * info.hasTitle);
-		info.topLeft.x = (cc_getWidth() - (int) info.width) / 2;
-		info.topLeft.y = (cc_getHeight() - (int) info.height) / 2;
+		info.topLeft.x = (cc_getWidth(cch) - (int) info.width) / 2;
+		info.topLeft.y = (cc_getHeight(cch) - (int) info.height) / 2;
 	}
 
 	return info;
 }
 
-void drawColorMessageChoices(const MessageDrawInfo* info, const cc_Message* message, const cc_MessageColors* colors) {
+void drawColorMessageChoices(cc_Handle cch, const MessageDrawInfo* info, const cc_Message* message, const cc_MessageColors* colors) {
 	cc_Vector2 pos;
 	pos.y = info->topLeft.y + (int) (info->linesNumber + 2 + (unsigned int) (3 * info->hasTitle));
 	/* Left choice */
 	if(message->leftChoice != NULL && message->leftChoice[0] != '\0') {
 		pos.x = (int) (info->leftChoicePosX);
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		if(message->currentChoice == LEFT_CHOICE) {
-			cc_setColors(colors->selectionBackgroundColor, colors->selectionForegroundColor);
+			cc_setColors(cch, colors->selectionBackgroundColor, colors->selectionForegroundColor);
 		}
 		else {
-			cc_setColors(colors->choicesBackgroundColor, colors->choicesForegroundColor);
+			cc_setColors(cch, colors->choicesBackgroundColor, colors->choicesForegroundColor);
 		}
 		printf(" %s ", message->leftChoice);
 	}
 	/* Middle choice */
 	if(message->middleChoice != NULL && message->middleChoice[0] != '\0') {
 		pos.x = (int) (info->middleChoicePosX);
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		if(message->currentChoice == MIDDLE_CHOICE) {
-			cc_setColors(colors->selectionBackgroundColor, colors->selectionForegroundColor);
+			cc_setColors(cch, colors->selectionBackgroundColor, colors->selectionForegroundColor);
 		}
 		else {
-			cc_setColors(colors->choicesBackgroundColor, colors->choicesForegroundColor);
+			cc_setColors(cch, colors->choicesBackgroundColor, colors->choicesForegroundColor);
 		}
 		printf(" %s ", message->middleChoice);
 	}
 	/* Right choice */
 	if(message->rightChoice != NULL && message->rightChoice[0] != '\0') {
 		pos.x = (int) (info->rightChoicePosX);
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		if(message->currentChoice == RIGHT_CHOICE) {
-			cc_setColors(colors->selectionBackgroundColor, colors->selectionForegroundColor);
+			cc_setColors(cch, colors->selectionBackgroundColor, colors->selectionForegroundColor);
 		}
 		else {
-			cc_setColors(colors->choicesBackgroundColor, colors->choicesForegroundColor);
+			cc_setColors(cch, colors->choicesBackgroundColor, colors->choicesForegroundColor);
 		}
 		printf(" %s ", message->rightChoice);
 	}
 }
 
-void drawColorMessage(const MessageDrawInfo* info, const cc_Message* message,
+void drawColorMessage(cc_Handle cch, const MessageDrawInfo* info, const cc_Message* message,
                       char** messageLines, const cc_MessageColors* colors) {
 
 	cc_Vector2 topLeft = info->topLeft;
@@ -583,26 +583,26 @@ void drawColorMessage(const MessageDrawInfo* info, const cc_Message* message,
 		topLeft.y + 3
 	};
 
-	cc_setBackgroundColor(colors->mainBackgroundColor);
-	cc_clean();
+	cc_setBackgroundColor(cch, colors->mainBackgroundColor);
+	cc_clean(cch);
 
 	/* Print the title background and text */
 	if(info->hasTitle) {
-		cc_setColors(colors->titleBackgroundColor, colors->titleForegroundColor);
-		cc_drawFullRectangle(topLeft, downRight, ' ');
+		cc_setColors(cch, colors->titleBackgroundColor, colors->titleForegroundColor);
+		cc_drawFullRectangle(cch, topLeft, downRight, ' ');
 		++topLeft.y;
 		cc_Vector2 pos = {
 			topLeft.x + (int) (info->width - (unsigned int) strlen(message->title)) / 2 + 1,
 			topLeft.y
 		};
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 		printf("%s", message->title);
 
 		/* If same background color for title and choices, draw a line */
 		if(colors->titleBackgroundColor == colors->choicesBackgroundColor) {
 			++topLeft.y;
 			--downRight.y;
-			cc_drawLine(topLeft, downRight, '_');
+			cc_drawLine(cch, topLeft, downRight, '_');
 			++topLeft.y;
 		}
 		else {
@@ -613,21 +613,21 @@ void drawColorMessage(const MessageDrawInfo* info, const cc_Message* message,
 
 	/* Print the message and choices background */
 	downRight.y = topLeft.y + (int) info->height - 3 * info->hasTitle; // downRight for the message and choices
-	cc_setColors(colors->messageBackgroundColor, colors->messageForegroundColor);
-	cc_drawFullRectangle(topLeft, downRight, ' ');
+	cc_setColors(cch, colors->messageBackgroundColor, colors->messageForegroundColor);
+	cc_drawFullRectangle(cch, topLeft, downRight, ' ');
 
 	/* Print message */
 	topLeft.y += (int) (info->linesNumber) + 1;
 	for(unsigned int i = info->linesNumber; i--;) {
 		--topLeft.y;
 		topLeft.x = info->topLeft.x + 1 + (int) (info->width - (unsigned int) strlen(messageLines[i])) / 2;
-		cc_setCursorPosition(topLeft);
+		cc_setCursorPosition(cch, topLeft);
 		printf("%s", messageLines[i]);
 	}
 
 	/* Print the choices */
 	if(info->hasChoices) {
-		drawColorMessageChoices(info, message, colors);
+		drawColorMessageChoices(cch, info, message, colors);
 	}
 }
 
@@ -727,7 +727,7 @@ unsigned int intLen(int value) {
 	return l;
 }
 
-OptionMenuDrawInfo computeTableOptionMenuDrawInfo(const cc_OptionsMenu* optionsMenu) {
+OptionMenuDrawInfo computeTableOptionMenuDrawInfo(cc_Handle cch, const cc_OptionsMenu* optionsMenu) {
 	unsigned int maxLength = (unsigned int) strlen(optionsMenu->title);
 	unsigned int len;
 
@@ -776,17 +776,17 @@ OptionMenuDrawInfo computeTableOptionMenuDrawInfo(const cc_OptionsMenu* optionsM
 	OptionMenuDrawInfo info;
 	info.width = maxLength + 7;
 	info.height = optionsMenu->optionsNumber * 3 + 8;
-	info.topLeft.x = (cc_getWidth() - (int) info.width) / 2;
-	info.topLeft.y = (cc_getHeight() - (int) info.height) / 2;
+	info.topLeft.x = (cc_getWidth(cch) - (int) info.width) / 2;
+	info.topLeft.y = (cc_getHeight(cch) - (int) info.height) / 2;
 
 	return info;
 }
 
-void drawTableOptionMenuOptions(const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu) {
+void drawTableOptionMenuOptions(cc_Handle cch, const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu) {
 	cc_Vector2 pos;
 	pos.x = info->topLeft.x + 1;
 	pos.y = info->topLeft.y + (int) (6 + 3 * optionsMenu->optionsNumber);
-	cc_setCursorPosition(pos);
+	cc_setCursorPosition(cch, pos);
 
 	unsigned int len = (unsigned int) strlen(optionsMenu->exitText);
 	unsigned int j = 0;
@@ -815,7 +815,7 @@ void drawTableOptionMenuOptions(const OptionMenuDrawInfo* info, const cc_Options
 
 	for(unsigned int i = optionsMenu->optionsNumber; i--;) {
 		pos.y = info->topLeft.y + (int) (6 + 3 * i);
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 
 		if(optionsMenu->selectedOption == i) {
 			len = (unsigned int) strlen(optionsMenu->options[i]->name) + 4;
@@ -843,7 +843,7 @@ void drawTableOptionMenuOptions(const OptionMenuDrawInfo* info, const cc_Options
 		}
 
 		++pos.y;
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 
 		switch(optionsMenu->options[i]->optionType) {
 			case CHOICES_OPTION: {
@@ -893,7 +893,7 @@ void drawTableOptionMenuOptions(const OptionMenuDrawInfo* info, const cc_Options
 	}
 }
 
-void drawTableOptionMenu(const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu) {
+void drawTableOptionMenu(cc_Handle cch, const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu) {
 
 	cc_Vector2 topLeft = info->topLeft;
 	cc_Vector2 downRight = {
@@ -901,29 +901,29 @@ void drawTableOptionMenu(const OptionMenuDrawInfo* info, const cc_OptionsMenu* o
 		topLeft.y + (int) info->height
 	};
 
-	cc_clean();
+	cc_clean(cch);
 
 	/* Print table and title */
-	cc_drawTableRectangle(topLeft, downRight);
+	cc_drawTableRectangle(cch, topLeft, downRight);
 	topLeft.y += 2;
 	cc_Vector2 pos = {
 		topLeft.x + (int) (info->width - (unsigned int) strlen(optionsMenu->title)) / 2 + 1,
 		topLeft.y
 	};
-	cc_setCursorPosition(pos);
+	cc_setCursorPosition(cch, pos);
 	printf("%s", optionsMenu->title);
 	topLeft.y += 2;
 	cc_Vector2 topright = {
 		downRight.x,
 		topLeft.y
 	};
-	cc_drawTableHorizontalLine(topLeft, topright);
+	cc_drawTableHorizontalLine(cch, topLeft, topright);
 
 	/* Print the choices */
-	drawTableOptionMenuOptions(info, optionsMenu);
+	drawTableOptionMenuOptions(cch, info, optionsMenu);
 }
 
-static OptionMenuDrawInfo computeColorOptionMenuDrawInfo(const cc_OptionsMenu* optionsMenu) {
+static OptionMenuDrawInfo computeColorOptionMenuDrawInfo(cc_Handle cch, const cc_OptionsMenu* optionsMenu) {
 	unsigned int maxLength = (unsigned int) strlen(optionsMenu->title);
 	unsigned int len;
 
@@ -972,24 +972,24 @@ static OptionMenuDrawInfo computeColorOptionMenuDrawInfo(const cc_OptionsMenu* o
 	OptionMenuDrawInfo info;
 	info.width = maxLength + 5;
 	info.height = optionsMenu->optionsNumber * 3 + 5;
-	info.topLeft.x = (cc_getWidth() - (int) info.width) / 2;
-	info.topLeft.y = (cc_getHeight() - (int) info.height) / 2;
+	info.topLeft.x = (cc_getWidth(cch) - (int) info.width) / 2;
+	info.topLeft.y = (cc_getHeight(cch) - (int) info.height) / 2;
 
 	return info;
 }
 
-static void drawColorOptionMenuOptions(const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu,
+static void drawColorOptionMenuOptions(cc_Handle cch, const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu,
                                        const cc_MenuColors* colors) {
 	cc_Vector2 pos;
 	pos.x = info->topLeft.x + 1;
 	pos.y = info->topLeft.y + (int) (4 + 3 * optionsMenu->optionsNumber);
-	cc_setCursorPosition(pos);
+	cc_setCursorPosition(cch, pos);
 
 	if(optionsMenu->selectedOption == optionsMenu->optionsNumber) {
-		cc_setColors(colors->selectionBackgroundColor, colors->selectionForegroundColor);
+		cc_setColors(cch, colors->selectionBackgroundColor, colors->selectionForegroundColor);
 	}
 	else {
-		cc_setColors(colors->choicesBackgroundColor, colors->choicesForegroundColor);
+		cc_setColors(cch, colors->choicesBackgroundColor, colors->choicesForegroundColor);
 	}
 
 	unsigned int len = (unsigned int) strlen(optionsMenu->exitText);
@@ -1005,15 +1005,15 @@ static void drawColorOptionMenuOptions(const OptionMenuDrawInfo* info, const cc_
 	}
 
 	if(optionsMenu->selectedOption == optionsMenu->optionsNumber) {
-		cc_setColors(colors->choicesBackgroundColor, colors->choicesForegroundColor);
+		cc_setColors(cch, colors->choicesBackgroundColor, colors->choicesForegroundColor);
 	}
 
 	for(unsigned int i = optionsMenu->optionsNumber; i--;) {
 		pos.y = info->topLeft.y + (int) (4 + 3 * i);
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 
 		if(optionsMenu->selectedOption == i) {
-			cc_setColors(colors->selectionBackgroundColor, colors->selectionForegroundColor);
+			cc_setColors(cch, colors->selectionBackgroundColor, colors->selectionForegroundColor);
 		}
 
 		len = (unsigned int) strlen(optionsMenu->options[i]->name);
@@ -1028,7 +1028,7 @@ static void drawColorOptionMenuOptions(const OptionMenuDrawInfo* info, const cc_
 		}
 
 		++pos.y;
-		cc_setCursorPosition(pos);
+		cc_setCursorPosition(cch, pos);
 
 		switch(optionsMenu->options[i]->optionType) {
 			case CHOICES_OPTION: {
@@ -1089,12 +1089,12 @@ static void drawColorOptionMenuOptions(const OptionMenuDrawInfo* info, const cc_
 		}
 
 		if(optionsMenu->selectedOption == i) {
-			cc_setColors(colors->choicesBackgroundColor, colors->choicesForegroundColor);
+			cc_setColors(cch, colors->choicesBackgroundColor, colors->choicesForegroundColor);
 		}
 	}
 }
 
-static void drawColorOptionMenu(const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu,
+static void drawColorOptionMenu(cc_Handle cch, const OptionMenuDrawInfo* info, const cc_OptionsMenu* optionsMenu,
                                 const cc_MenuColors* colors) {
 
 	cc_Vector2 topLeft = info->topLeft;
@@ -1103,25 +1103,25 @@ static void drawColorOptionMenu(const OptionMenuDrawInfo* info, const cc_Options
 		topLeft.y + 3
 	};
 
-	cc_setBackgroundColor(colors->mainBackgroundColor);
-	cc_clean();
+	cc_setBackgroundColor(cch, colors->mainBackgroundColor);
+	cc_clean(cch);
 
 	/* Print the title background and text */
-	cc_setColors(colors->titleBackgroundColor, colors->titleForegroundColor);
-	cc_drawFullRectangle(topLeft, downRight, ' ');
+	cc_setColors(cch, colors->titleBackgroundColor, colors->titleForegroundColor);
+	cc_drawFullRectangle(cch, topLeft, downRight, ' ');
 	++topLeft.y;
 	cc_Vector2 pos = {
 		topLeft.x + (int) (info->width - (unsigned int) strlen(optionsMenu->title)) / 2 + 1,
 		topLeft.y
 	};
-	cc_setCursorPosition(pos);
+	cc_setCursorPosition(cch, pos);
 	printf("%s", optionsMenu->title);
 
 	/* If same background color for title and choices, draw a line */
 	if(colors->titleBackgroundColor == colors->choicesBackgroundColor) {
 		++topLeft.y;
 		--downRight.y;
-		cc_drawLine(topLeft, downRight, '_');
+		cc_drawLine(cch, topLeft, downRight, '_');
 		++topLeft.y;
 	}
 	else {
@@ -1131,14 +1131,14 @@ static void drawColorOptionMenu(const OptionMenuDrawInfo* info, const cc_Options
 
 	/* Print the choices background */
 	downRight.y = topLeft.y + (int) info->height - 3; // downRight for the choices
-	cc_setColors(colors->choicesBackgroundColor, colors->choicesForegroundColor);
-	cc_drawFullRectangle(topLeft, downRight, ' ');
+	cc_setColors(cch, colors->choicesBackgroundColor, colors->choicesForegroundColor);
+	cc_drawFullRectangle(cch, topLeft, downRight, ' ');
 
 	/* Print the choices */
-	drawColorOptionMenuOptions(info, optionsMenu, colors);
+	drawColorOptionMenuOptions(cch, info, optionsMenu, colors);
 }
 
-void cc_displayTableMenu(cc_Menu* menu) {
+void cc_displayTableMenu(cc_Handle cch, cc_Menu* menu) {
 
 	if(menu->title == NULL) {
 		LOG_ERROR("Menu title field is NULL");
@@ -1158,23 +1158,23 @@ void cc_displayTableMenu(cc_Menu* menu) {
 		menu->currentChoice = menu->choicesNumber - 1;
 	}
 
-	int consoleWidth = cc_getWidth();
-	int consoleHeight = cc_getHeight();
+	int consoleWidth = cc_getWidth(cch);
+	int consoleHeight = cc_getHeight(cch);
 	int usedWidth = consoleWidth;
 	int usedHeight = consoleHeight;
 
-	MenuDrawInfo info = computeTableMenuDrawInfo(menu);
+	MenuDrawInfo info = computeTableMenuDrawInfo(cch, menu);
 
 	/* Display menu */
-	drawTableMenu(&info, menu);
+	drawTableMenu(cch, &info, menu);
 
 	/* Main loop */
-	cc_displayInputs(false);
-	cc_setCursorVisibility(false);
+	cc_displayInputs(cch, false);
+	cc_setCursorVisibility(cch, false);
 	cc_Input input;
 	bool exit = false;
 	while(!exit) {
-		input = cc_getInput();
+		input = cc_getInput(cch);
 		switch(input.key) {
 			case PAGE_UP_KEY:
 				menu->currentChoice = 0;
@@ -1229,23 +1229,23 @@ void cc_displayTableMenu(cc_Menu* menu) {
 				break;
 		}
 
-		consoleWidth = cc_getWidth();
-		consoleHeight = cc_getHeight();
+		consoleWidth = cc_getWidth(cch);
+		consoleHeight = cc_getHeight(cch);
 		if(usedWidth == consoleWidth && usedHeight == consoleHeight) {
-			drawTableMenuChoices(&info, menu);
+			drawTableMenuChoices(cch, &info, menu);
 		}
 		else {
 			usedWidth = consoleWidth;
 			usedHeight = consoleHeight;
-			info = computeTableMenuDrawInfo(menu);
-			drawTableMenu(&info, menu);
+			info = computeTableMenuDrawInfo(cch, menu);
+			drawTableMenu(cch, &info, menu);
 		}
 	}
 
-	cc_setCursorPosition(nullpos);
+	cc_setCursorPosition(cch, nullpos);
 }
 
-void cc_displayColorMenu(cc_Menu* menu, const cc_MenuColors* colors) {
+void cc_displayColorMenu(cc_Handle cch, cc_Menu* menu, const cc_MenuColors* colors) {
 
 	if(menu->title == NULL) {
 		LOG_ERROR("Menu title field is NULL");
@@ -1265,23 +1265,23 @@ void cc_displayColorMenu(cc_Menu* menu, const cc_MenuColors* colors) {
 		menu->currentChoice = menu->choicesNumber - 1;
 	}
 
-	int consoleWidth = cc_getWidth();
-	int consoleHeight = cc_getHeight();
+	int consoleWidth = cc_getWidth(cch);
+	int consoleHeight = cc_getHeight(cch);
 	int usedWidth = consoleWidth;
 	int usedHeight = consoleHeight;
 
-	MenuDrawInfo info = computeColorMenuDrawInfo(menu);
+	MenuDrawInfo info = computeColorMenuDrawInfo(cch, menu);
 
 	/* Display menu */
-	drawColorMenu(&info, menu, colors);
+	drawColorMenu(cch, &info, menu, colors);
 
 	/* Main loop */
-	cc_displayInputs(false);
-	cc_setCursorVisibility(false);
+	cc_displayInputs(cch, false);
+	cc_setCursorVisibility(cch, false);
 	cc_Input input;
 	bool exit = false;
 	while(!exit) {
-		input = cc_getInput();
+		input = cc_getInput(cch);
 		switch(input.key) {
 			case PAGE_UP_KEY:
 				menu->currentChoice = 0;
@@ -1336,23 +1336,23 @@ void cc_displayColorMenu(cc_Menu* menu, const cc_MenuColors* colors) {
 				break;
 		}
 
-		consoleWidth = cc_getWidth();
-		consoleHeight = cc_getHeight();
+		consoleWidth = cc_getWidth(cch);
+		consoleHeight = cc_getHeight(cch);
 		if(usedWidth == consoleWidth && usedHeight == consoleHeight) {
-			drawColorMenuChoices(&info, menu, colors);
+			drawColorMenuChoices(cch, &info, menu, colors);
 		}
 		else {
 			usedWidth = consoleWidth;
 			usedHeight = consoleHeight;
-			info = computeColorMenuDrawInfo(menu);
-			drawColorMenu(&info, menu, colors);
+			info = computeColorMenuDrawInfo(cch, menu);
+			drawColorMenu(cch, &info, menu, colors);
 		}
 	}
 
-	cc_setCursorPosition(nullpos);
+	cc_setCursorPosition(cch, nullpos);
 }
 
-void cc_displayTableMessage(cc_Message* message) {
+void cc_displayTableMessage(cc_Handle cch, cc_Message* message) {
 
 	if(message->message == NULL) {
 		LOG_ERROR("Message message field is NULL");
@@ -1379,12 +1379,12 @@ void cc_displayTableMessage(cc_Message* message) {
 		lastStop = ++stop;
 	}
 
-	int consoleWidth = cc_getWidth();
-	int consoleHeight = cc_getHeight();
+	int consoleWidth = cc_getWidth(cch);
+	int consoleHeight = cc_getHeight(cch);
 	int usedWidth = consoleWidth;
 	int usedHeight = consoleHeight;
 
-	MessageDrawInfo info = computeTableMessageDrawInfo(message, messageLines, linesNumber);
+	MessageDrawInfo info = computeTableMessageDrawInfo(cch, message, messageLines, linesNumber);
 
 	/* Compute available choices */
 	cc_MessageChoice choices[4];
@@ -1420,15 +1420,15 @@ void cc_displayTableMessage(cc_Message* message) {
 	}
 
 	/* Display message */
-	drawTableMessage(&info, message, messageLines);
+	drawTableMessage(cch, &info, message, messageLines);
 
 	/* Main loop */
-	cc_displayInputs(false);
-	cc_setCursorVisibility(false);
+	cc_displayInputs(cch, false);
+	cc_setCursorVisibility(cch, false);
 	cc_Input input;
 	bool exit = false;
 	while(!exit) {
-		input = cc_getInput();
+		input = cc_getInput(cch);
 		if(info.hasChoices) {
 			switch(input.key) {
 				case HOME_KEY:
@@ -1494,18 +1494,18 @@ void cc_displayTableMessage(cc_Message* message) {
 			}
 		}
 
-		consoleWidth = cc_getWidth();
-		consoleHeight = cc_getHeight();
+		consoleWidth = cc_getWidth(cch);
+		consoleHeight = cc_getHeight(cch);
 		if(usedWidth == consoleWidth && usedHeight == consoleHeight) {
 			if(info.hasChoices) {
-				drawTableMessageChoices(&info, message);
+				drawTableMessageChoices(cch, &info, message);
 			}
 		}
 		else {
 			usedWidth = consoleWidth;
 			usedHeight = consoleHeight;
-			info = computeTableMessageDrawInfo(message, messageLines, linesNumber);
-			drawTableMessage(&info, message, messageLines);
+			info = computeTableMessageDrawInfo(cch, message, messageLines, linesNumber);
+			drawTableMessage(cch, &info, message, messageLines);
 		}
 	}
 
@@ -1515,10 +1515,10 @@ void cc_displayTableMessage(cc_Message* message) {
 	free(messageLines[0]);
 	free(messageLines);
 
-	cc_setCursorPosition(nullpos);
+	cc_setCursorPosition(cch, nullpos);
 }
 
-void cc_displayColorMessage(cc_Message* message, const cc_MessageColors* colors) {
+void cc_displayColorMessage(cc_Handle cch, cc_Message* message, const cc_MessageColors* colors) {
 
 	if(message->message == NULL) {
 		LOG_ERROR("Message message field is NULL");
@@ -1545,12 +1545,12 @@ void cc_displayColorMessage(cc_Message* message, const cc_MessageColors* colors)
 		lastStop = ++stop;
 	}
 
-	int consoleWidth = cc_getWidth();
-	int consoleHeight = cc_getHeight();
+	int consoleWidth = cc_getWidth(cch);
+	int consoleHeight = cc_getHeight(cch);
 	int usedWidth = consoleWidth;
 	int usedHeight = consoleHeight;
 
-	MessageDrawInfo info = computeColorMessageDrawInfo(message, messageLines, linesNumber);
+	MessageDrawInfo info = computeColorMessageDrawInfo(cch, message, messageLines, linesNumber);
 
 	/* Compute available choices */
 	cc_MessageChoice choices[4];
@@ -1586,15 +1586,15 @@ void cc_displayColorMessage(cc_Message* message, const cc_MessageColors* colors)
 	}
 
 	/* Display message */
-	drawColorMessage(&info, message, messageLines, colors);
+	drawColorMessage(cch, &info, message, messageLines, colors);
 
 	/* Main loop */
-	cc_displayInputs(false);
-	cc_setCursorVisibility(false);
+	cc_displayInputs(cch, false);
+	cc_setCursorVisibility(cch, false);
 	cc_Input input;
 	bool exit = false;
 	while(!exit) {
-		input = cc_getInput();
+		input = cc_getInput(cch);
 		if(info.hasChoices) {
 			switch(input.key) {
 				case HOME_KEY:
@@ -1660,18 +1660,18 @@ void cc_displayColorMessage(cc_Message* message, const cc_MessageColors* colors)
 			}
 		}
 
-		consoleWidth = cc_getWidth();
-		consoleHeight = cc_getHeight();
+		consoleWidth = cc_getWidth(cch);
+		consoleHeight = cc_getHeight(cch);
 		if(usedWidth == consoleWidth && usedHeight == consoleHeight) {
 			if(info.hasChoices) {
-				drawColorMessageChoices(&info, message, colors);
+				drawColorMessageChoices(cch, &info, message, colors);
 			}
 		}
 		else {
 			usedWidth = consoleWidth;
 			usedHeight = consoleHeight;
-			info = computeColorMessageDrawInfo(message, messageLines, linesNumber);
-			drawColorMessage(&info, message, messageLines, colors);
+			info = computeColorMessageDrawInfo(cch, message, messageLines, linesNumber);
+			drawColorMessage(cch, &info, message, messageLines, colors);
 		}
 	}
 
@@ -1681,10 +1681,10 @@ void cc_displayColorMessage(cc_Message* message, const cc_MessageColors* colors)
 	free(messageLines[0]);
 	free(messageLines);
 
-	cc_setCursorPosition(nullpos);
+	cc_setCursorPosition(cch, nullpos);
 }
 
-void cc_displayTableOptionMenu(cc_OptionsMenu* optionsMenu) {
+void cc_displayTableOptionMenu(cc_Handle cch, cc_OptionsMenu* optionsMenu) {
 	if(optionsMenu->title == NULL) {
 		LOG_ERROR("Option menu title field is NULL");
 		return;
@@ -1799,23 +1799,23 @@ void cc_displayTableOptionMenu(cc_OptionsMenu* optionsMenu) {
 	}
 	optionsMenu->hasEscaped = false;
 
-	int consoleWidth = cc_getWidth();
-	int consoleHeight = cc_getHeight();
+	int consoleWidth = cc_getWidth(cch);
+	int consoleHeight = cc_getHeight(cch);
 	int usedWidth = consoleWidth;
 	int usedHeight = consoleHeight;
 
-	OptionMenuDrawInfo info = computeTableOptionMenuDrawInfo(optionsMenu);
+	OptionMenuDrawInfo info = computeTableOptionMenuDrawInfo(cch, optionsMenu);
 
 	/* Display menu */
-	drawTableOptionMenu(&info, optionsMenu);
+	drawTableOptionMenu(cch, &info, optionsMenu);
 
 	/* Main loop */
-	cc_displayInputs(false);
-	cc_setCursorVisibility(false);
+	cc_displayInputs(cch, false);
+	cc_setCursorVisibility(cch, false);
 	cc_Input input;
 	bool exit = false;
 	while(!exit) {
-		input = cc_getInput();
+		input = cc_getInput(cch);
 		switch(input.key) {
 			case PAGE_UP_KEY:
 				optionsMenu->selectedOption = 0;
@@ -1886,23 +1886,23 @@ void cc_displayTableOptionMenu(cc_OptionsMenu* optionsMenu) {
 				break;
 		}
 
-		consoleWidth = cc_getWidth();
-		consoleHeight = cc_getHeight();
+		consoleWidth = cc_getWidth(cch);
+		consoleHeight = cc_getHeight(cch);
 		if(usedWidth == consoleWidth && usedHeight == consoleHeight) {
-			drawTableOptionMenuOptions(&info, optionsMenu);
+			drawTableOptionMenuOptions(cch, &info, optionsMenu);
 		}
 		else {
 			usedWidth = consoleWidth;
 			usedHeight = consoleHeight;
-			info = computeTableOptionMenuDrawInfo(optionsMenu);
-			drawTableOptionMenu(&info, optionsMenu);
+			info = computeTableOptionMenuDrawInfo(cch, optionsMenu);
+			drawTableOptionMenu(cch, &info, optionsMenu);
 		}
 	}
 
-	cc_setCursorPosition(nullpos);
+	cc_setCursorPosition(cch, nullpos);
 }
 
-void cc_displayColorOptionMenu(cc_OptionsMenu* optionsMenu, const cc_MenuColors* colors) {
+void cc_displayColorOptionMenu(cc_Handle cch, cc_OptionsMenu* optionsMenu, const cc_MenuColors* colors) {
 	if(optionsMenu->title == NULL) {
 		LOG_ERROR("Option menu title field is NULL");
 		return;
@@ -2017,23 +2017,23 @@ void cc_displayColorOptionMenu(cc_OptionsMenu* optionsMenu, const cc_MenuColors*
 	}
 	optionsMenu->hasEscaped = false;
 
-	int consoleWidth = cc_getWidth();
-	int consoleHeight = cc_getHeight();
+	int consoleWidth = cc_getWidth(cch);
+	int consoleHeight = cc_getHeight(cch);
 	int usedWidth = consoleWidth;
 	int usedHeight = consoleHeight;
 
-	OptionMenuDrawInfo info = computeColorOptionMenuDrawInfo(optionsMenu);
+	OptionMenuDrawInfo info = computeColorOptionMenuDrawInfo(cch, optionsMenu);
 
 	/* Display menu */
-	drawColorOptionMenu(&info, optionsMenu, colors);
+	drawColorOptionMenu(cch, &info, optionsMenu, colors);
 
 	/* Main loop */
-	cc_displayInputs(false);
-	cc_setCursorVisibility(false);
+	cc_displayInputs(cch, false);
+	cc_setCursorVisibility(cch, false);
 	cc_Input input;
 	bool exit = false;
 	while(!exit) {
-		input = cc_getInput();
+		input = cc_getInput(cch);
 		switch(input.key) {
 			case PAGE_UP_KEY:
 				optionsMenu->selectedOption = 0;
@@ -2104,18 +2104,18 @@ void cc_displayColorOptionMenu(cc_OptionsMenu* optionsMenu, const cc_MenuColors*
 				break;
 		}
 
-		consoleWidth = cc_getWidth();
-		consoleHeight = cc_getHeight();
+		consoleWidth = cc_getWidth(cch);
+		consoleHeight = cc_getHeight(cch);
 		if(usedWidth == consoleWidth && usedHeight == consoleHeight) {
-			drawColorOptionMenuOptions(&info, optionsMenu, colors);
+			drawColorOptionMenuOptions(cch, &info, optionsMenu, colors);
 		}
 		else {
 			usedWidth = consoleWidth;
 			usedHeight = consoleHeight;
-			info = computeColorOptionMenuDrawInfo(optionsMenu);
-			drawColorOptionMenu(&info, optionsMenu, colors);
+			info = computeColorOptionMenuDrawInfo(cch, optionsMenu);
+			drawColorOptionMenu(cch, &info, optionsMenu, colors);
 		}
 	}
 
-	cc_setCursorPosition(nullpos);
+	cc_setCursorPosition(cch, nullpos);
 }
