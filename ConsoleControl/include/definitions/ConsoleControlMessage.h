@@ -40,7 +40,7 @@
 extern "C" {
 #endif
 
-#include <ConsoleControlColor.h>
+#include <definitions/ConsoleControlColor.h>
 
 #include <stdbool.h>
 

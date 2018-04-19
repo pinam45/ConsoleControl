@@ -36,8 +36,8 @@
 #include <string.h>
 
 #include <log.h>
-#include <ConsoleControlColor.h>
-#include <ConsoleControlInput.h>
+#include <definitions/ConsoleControlColor.h>
+#include <definitions/ConsoleControlInput.h>
 
 #include <errno.h>
 #include <unistd.h>

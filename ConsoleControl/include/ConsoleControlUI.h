@@ -41,8 +41,8 @@ extern "C" {
 #endif
 
 #include <ConsoleControl.h>
-#include <ConsoleControlMenu.h>
-#include <ConsoleControlMessage.h>
+#include <definitions/ConsoleControlMenu.h>
+#include <definitions/ConsoleControlMessage.h>
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Display the menu with the table style ('-' for horizontal lines,

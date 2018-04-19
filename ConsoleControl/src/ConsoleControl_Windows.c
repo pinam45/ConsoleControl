@@ -30,8 +30,8 @@
 
 #include <WindowsConsoleControl.h>
 
-#include <ConsoleControlColor.h>
-#include <ConsoleControlInput.h>
+#include <definitions/ConsoleControlColor.h>
+#include <definitions/ConsoleControlInput.h>
 #include <log.h>
 
 #include <stdio.h>
