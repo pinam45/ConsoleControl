@@ -52,7 +52,7 @@ extern "C" {
  *
  * @since      0.1
  */
-void cc_drawRectangle(cc_Vector2 topLeft, cc_Vector2 downRight, const char ch);
+void cc_drawRectangle(cc_Handle cch, cc_Vector2 topLeft, cc_Vector2 downRight, const char ch);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Draw the outline of a rectangle with the table style ('-' for
@@ -64,7 +64,7 @@ void cc_drawRectangle(cc_Vector2 topLeft, cc_Vector2 downRight, const char ch);
  *
  * @since      0.1
  */
-void cc_drawTableRectangle(cc_Vector2 topLeft, cc_Vector2 downRight);
+void cc_drawTableRectangle(cc_Handle cch, cc_Vector2 topLeft, cc_Vector2 downRight);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Draw a filled rectangle.
@@ -75,7 +75,7 @@ void cc_drawTableRectangle(cc_Vector2 topLeft, cc_Vector2 downRight);
  *
  * @since      0.1
  */
-void cc_drawFullRectangle(cc_Vector2 topLeft, cc_Vector2 downRight, const char ch);
+void cc_drawFullRectangle(cc_Handle cch, cc_Vector2 topLeft, cc_Vector2 downRight, const char ch);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Draw a line with a character.
@@ -86,7 +86,7 @@ void cc_drawFullRectangle(cc_Vector2 topLeft, cc_Vector2 downRight, const char c
  *
  * @since      0.1
  */
-void cc_drawLine(cc_Vector2 from, cc_Vector2 to, const char ch);
+void cc_drawLine(cc_Handle cch, cc_Vector2 from, cc_Vector2 to, const char ch);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Draw a line with the horizontal table style ('-' for the line,
@@ -97,7 +97,7 @@ void cc_drawLine(cc_Vector2 from, cc_Vector2 to, const char ch);
  *
  * @since      0.1
  */
-void cc_drawTableHorizontalLine(cc_Vector2 from, cc_Vector2 to);
+void cc_drawTableHorizontalLine(cc_Handle cch, cc_Vector2 from, cc_Vector2 to);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Draw a line with the vertical table style ('|' for the line, '+'
@@ -108,7 +108,7 @@ void cc_drawTableHorizontalLine(cc_Vector2 from, cc_Vector2 to);
  *
  * @since      0.1
  */
-void cc_drawTableVerticalLine(cc_Vector2 from, cc_Vector2 to);
+void cc_drawTableVerticalLine(cc_Handle cch, cc_Vector2 from, cc_Vector2 to);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Draw a line with a pattern of characters.
@@ -119,7 +119,7 @@ void cc_drawTableVerticalLine(cc_Vector2 from, cc_Vector2 to);
  *
  * @since      0.1
  */
-void cc_drawPatternLine(cc_Vector2 from, cc_Vector2 to, const char* pattern);
+void cc_drawPatternLine(cc_Handle cch, cc_Vector2 from, cc_Vector2 to, const char* pattern);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Draw a circle.
@@ -130,7 +130,7 @@ void cc_drawPatternLine(cc_Vector2 from, cc_Vector2 to, const char* pattern);
  *
  * @since      0.1
  */
-void cc_drawCircle(cc_Vector2 center, unsigned int radius, char ch);
+void cc_drawCircle(cc_Handle cch, cc_Vector2 center, unsigned int radius, char ch);
 
 #ifdef __cplusplus
 }

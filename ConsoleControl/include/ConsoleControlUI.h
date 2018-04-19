@@ -60,7 +60,7 @@ extern "C" {
  *
  * @since      0.1
  */
-void cc_displayTableMenu(cc_Menu* menu);
+void cc_displayTableMenu(cc_Handle cch, cc_Menu* menu);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Display the menu with the specified color style.
@@ -78,7 +78,7 @@ void cc_displayTableMenu(cc_Menu* menu);
  *
  * @since      0.1
  */
-void cc_displayColorMenu(cc_Menu* menu, const cc_MenuColors* colors);
+void cc_displayColorMenu(cc_Handle cch, cc_Menu* menu, const cc_MenuColors* colors);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Display the message with the table style ('-' for horizontal
@@ -99,7 +99,7 @@ void cc_displayColorMenu(cc_Menu* menu, const cc_MenuColors* colors);
  *
  * @since      0.2
  */
-void cc_displayTableMessage(cc_Message* message);
+void cc_displayTableMessage(cc_Handle cch, cc_Message* message);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Display the message with the specified color style.
@@ -120,7 +120,7 @@ void cc_displayTableMessage(cc_Message* message);
  *
  * @since      0.2
  */
-void cc_displayColorMessage(cc_Message* message, const cc_MessageColors* colors);
+void cc_displayColorMessage(cc_Handle cch, cc_Message* message, const cc_MessageColors* colors);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Display the option menu with the table style ('-' for horizontal
@@ -138,7 +138,7 @@ void cc_displayColorMessage(cc_Message* message, const cc_MessageColors* colors)
  *
  * @since      0.2
  */
-void cc_displayTableOptionMenu(cc_OptionsMenu* optionsMenu);
+void cc_displayTableOptionMenu(cc_Handle cch, cc_OptionsMenu* optionsMenu);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Display the option menu with the specified color style.
@@ -156,7 +156,7 @@ void cc_displayTableOptionMenu(cc_OptionsMenu* optionsMenu);
  *
  * @since      0.2
  */
-void cc_displayColorOptionMenu(cc_OptionsMenu* optionsMenu, const cc_MenuColors* colors);
+void cc_displayColorOptionMenu(cc_Handle cch, cc_OptionsMenu* optionsMenu, const cc_MenuColors* colors);
 
 #ifdef __cplusplus
 }

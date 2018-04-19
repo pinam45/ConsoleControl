@@ -46,6 +46,13 @@ extern "C" {
 #include <stdbool.h>
 
 /*-------------------------------------------------------------------------*//**
+ * @brief      ConsoleControl handle type.
+ *
+ * @since      0.3
+ */
+typedef void* cc_Handle;
+
+/*-------------------------------------------------------------------------*//**
  * @struct cc_Vector2
  *
  * @brief      2D vector used with ConsoleControl.
@@ -58,13 +65,32 @@ typedef struct {
 } cc_Vector2;
 
 /*-------------------------------------------------------------------------*//**
+ * @brief      Strart ConsoleControl, initialise the handle.
+ *
+ * @return     The ConsoleControl handle
+ *
+ * @since      0.3
+ */
+cc_Handle cc_start();
+
+/*-------------------------------------------------------------------------*//**
+ * @brief      End ConsoleControl, delete the handle. Warning: after calling
+ *             this function the handle is no longer valid.
+ *
+ * @param[in]  cch   The ConsoleControl handle
+ *
+ * @since      0.3
+ */
+void cc_end(cc_Handle cch);
+
+/*-------------------------------------------------------------------------*//**
  * @brief      Set the console output foreground color.
  *
  * @param[in]  color  The color
  *
  * @since      0.1
  */
-void cc_setForegroundColor(cc_Color color);
+void cc_setForegroundColor(cc_Handle cch, cc_Color color);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Set the console output background color.
@@ -73,7 +99,7 @@ void cc_setForegroundColor(cc_Color color);
  *
  * @since      0.1
  */
-void cc_setBackgroundColor(cc_Color color);
+void cc_setBackgroundColor(cc_Handle cch, cc_Color color);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Set the console output background and foreground color.
@@ -83,7 +109,7 @@ void cc_setBackgroundColor(cc_Color color);
  *
  * @since      0.1
  */
-void cc_setColors(cc_Color backgroundColor, cc_Color foregroundColor);
+void cc_setColors(cc_Handle cch, cc_Color backgroundColor, cc_Color foregroundColor);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Get the console window width.
@@ -92,7 +118,7 @@ void cc_setColors(cc_Color backgroundColor, cc_Color foregroundColor);
  *
  * @since      0.1
  */
-int cc_getWidth();
+int cc_getWidth(cc_Handle cch);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Get the console window height.
@@ -101,7 +127,7 @@ int cc_getWidth();
  *
  * @since      0.1
  */
-int cc_getHeight();
+int cc_getHeight(cc_Handle cch);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Set the cursor position in the console window.
@@ -110,7 +136,7 @@ int cc_getHeight();
  *
  * @since      0.1
  */
-void cc_setCursorPosition(cc_Vector2 position);
+void cc_setCursorPosition(cc_Handle cch, cc_Vector2 position);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Move the cursor @p steps steps up.
@@ -119,7 +145,7 @@ void cc_setCursorPosition(cc_Vector2 position);
  *
  * @since      0.1
  */
-void cc_moveCursorUp(int steps);
+void cc_moveCursorUp(cc_Handle cch, int steps);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Move the cursor @p steps steps down.
@@ -128,7 +154,7 @@ void cc_moveCursorUp(int steps);
  *
  * @since      0.1
  */
-void cc_moveCursorDown(int steps);
+void cc_moveCursorDown(cc_Handle cch, int steps);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Move the cursor @p steps steps left.
@@ -137,7 +163,7 @@ void cc_moveCursorDown(int steps);
  *
  * @since      0.1
  */
-void cc_moveCursorLeft(int steps);
+void cc_moveCursorLeft(cc_Handle cch, int steps);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Move the cursor @p steps steps right.
@@ -146,7 +172,7 @@ void cc_moveCursorLeft(int steps);
  *
  * @since      0.1
  */
-void cc_moveCursorRight(int steps);
+void cc_moveCursorRight(cc_Handle cch, int steps);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Move the cursor @p steps steps horizontally.
@@ -155,7 +181,7 @@ void cc_moveCursorRight(int steps);
  *
  * @since      0.1
  */
-void cc_moveCursorHorizontally(int steps);
+void cc_moveCursorHorizontally(cc_Handle cch, int steps);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Move the cursor @p steps steps vertically.
@@ -164,7 +190,7 @@ void cc_moveCursorHorizontally(int steps);
  *
  * @since      0.1
  */
-void cc_moveCursorVertically(int steps);
+void cc_moveCursorVertically(cc_Handle cch, int steps);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Move the cursor.
@@ -173,21 +199,21 @@ void cc_moveCursorVertically(int steps);
  *
  * @since      0.1
  */
-void cc_moveCursor(cc_Vector2 move);
+void cc_moveCursor(cc_Handle cch, cc_Vector2 move);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Save the cursor position.
  *
  * @since      0.1
  */
-void cc_saveCursorPosition();
+void cc_saveCursorPosition(cc_Handle cch);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Restore the cursor position.
  *
  * @since      0.1
  */
-void cc_restoreCursorPosition();
+void cc_restoreCursorPosition(cc_Handle cch);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Set the cursor visibility.
@@ -196,7 +222,7 @@ void cc_restoreCursorPosition();
  *
  * @since      0.2
  */
-void cc_setCursorVisibility(bool visibility);
+void cc_setCursorVisibility(cc_Handle cch, bool visibility);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Clamp down the position in the console window.
@@ -207,7 +233,7 @@ void cc_setCursorVisibility(bool visibility);
  *
  * @since      0.1
  */
-cc_Vector2 cc_clamp(cc_Vector2 position);
+cc_Vector2 cc_clamp(cc_Handle cch, cc_Vector2 position);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Clamp down the x coordinate in the console window.
@@ -218,7 +244,7 @@ cc_Vector2 cc_clamp(cc_Vector2 position);
  *
  * @since      0.1
  */
-int cc_clampX(int x);
+int cc_clampX(cc_Handle cch, int x);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Clamp down the y coordinate in the console window.
@@ -229,7 +255,7 @@ int cc_clampX(int x);
  *
  * @since      0.1
  */
-int cc_clampY(int y);
+int cc_clampY(cc_Handle cch, int y);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Determine if the console window contains the position
@@ -240,21 +266,21 @@ int cc_clampY(int y);
  *
  * @since      0.1
  */
-bool cc_contains(cc_Vector2 position);
+bool cc_contains(cc_Handle cch, cc_Vector2 position);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Clean the console windows.
  *
  * @since      0.1
  */
-void cc_clean();
+void cc_clean(cc_Handle cch);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Clean the complete console.
  *
  * @since      0.1
  */
-void cc_completeClean();
+void cc_completeClean(cc_Handle cch);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Instantly get an inputed char without waiting a carriage return.
@@ -263,7 +289,7 @@ void cc_completeClean();
  *
  * @since      0.1
  */
-char cc_instantGetChar();
+char cc_instantGetChar(cc_Handle cch);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Check if an input if waiting.
@@ -274,7 +300,7 @@ char cc_instantGetChar();
  *
  * @since      0.1
  */
-bool cc_waitingInput();
+bool cc_waitingInput(cc_Handle cch);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Set if the inputs must be displayed or not.
@@ -283,7 +309,7 @@ bool cc_waitingInput();
  *
  * @since      0.1
  */
-void cc_displayInputs(bool display);
+void cc_displayInputs(cc_Handle cch, bool display);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Get an input. Blocking function.
@@ -292,7 +318,7 @@ void cc_displayInputs(bool display);
  *
  * @since      0.1
  */
-cc_Input cc_getInput();
+cc_Input cc_getInput(cc_Handle cch);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Print a character in place, without moving the cursor.
@@ -301,7 +327,7 @@ cc_Input cc_getInput();
  *
  * @since      0.1
  */
-void cc_printInPlace(char c);
+void cc_printInPlace(cc_Handle cch, char c);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Get the character associated with the key.
@@ -312,7 +338,7 @@ void cc_printInPlace(char c);
  *
  * @since      0.1
  */
-char cc_getAssociatedChar(cc_Key key);
+char cc_getAssociatedChar(cc_Handle cch, cc_Key key);
 
 #ifdef __cplusplus
 }
