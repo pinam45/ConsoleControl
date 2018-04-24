@@ -60,6 +60,8 @@ extern "C" {
  *             the background color mean setting the foreground color. To go
  *             back to normal just re-reverse the colors.
  *
+ * @param[in]  cch   The ConsoleControl handle
+ *
  * @since      0.3
  */
 void cc_permanentReverseColors(cc_Handle cch);

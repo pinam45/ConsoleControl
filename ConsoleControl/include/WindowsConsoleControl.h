@@ -50,6 +50,8 @@ extern "C" {
 /*-------------------------------------------------------------------------*//**
  * @brief      Get the cursor position in the console window.
  *
+ * @param[in]  cch   The ConsoleControl handle
+ *
  * @return     The cursor position
  *
  * @since      0.3
@@ -62,6 +64,8 @@ cc_Vector2 cc_getCursorPosition(cc_Handle cch);
  * @details    Global mean not only the part visible in the window but the
  *             complete buffer.
  *
+ * @param[in]  cch   The ConsoleControl handle
+ *
  * @return     The cursor global position
  *
  * @since      0.3
@@ -73,6 +77,8 @@ cc_Vector2 cc_getCursorGlobalPosition(cc_Handle cch);
  *             background color and current background color as the foreground
  *             color.
  *
+ * @param[in]  cch   The ConsoleControl handle
+ *
  * @since      0.3
  */
 void cc_reverseColors(cc_Handle cch);
@@ -82,6 +88,8 @@ void cc_reverseColors(cc_Handle cch);
  *
  * @details    Global mean not only the part visible in the window but the
  *             complete buffer.
+ *
+ * @param[in]  cch   The ConsoleControl handle
  *
  * @return     The global console width
  *
@@ -95,6 +103,8 @@ int cc_getGlobalWidth(cc_Handle cch);
  * @details    Global mean not only the part visible in the window but the
  *             complete buffer.
  *
+ * @param[in]  cch   The ConsoleControl handle
+ *
  * @return     The global console height
  *
  * @since      0.3
@@ -107,6 +117,7 @@ int cc_getGlobalHeight(cc_Handle cch);
  * @details    Global mean not only the part visible in the window but the
  *             complete buffer.
  *
+ * @param[in]  cch       The ConsoleControl handle
  * @param[in]  position  The position
  *
  * @since      0.3
@@ -119,6 +130,7 @@ void cc_setCursorGlobalPosition(cc_Handle cch, cc_Vector2 position);
  * @details    Global mean not only the part visible in the window but the
  *             complete buffer.
  *
+ * @param[in]  cch       The ConsoleControl handle
  * @param[in]  position  The position
  *
  * @return     The position clamped down in the global console
@@ -133,6 +145,7 @@ cc_Vector2 cc_globalClamp(cc_Handle cch, cc_Vector2 position);
  * @details    Global mean not only the part visible in the window but the
  *             complete buffer.
  *
+ * @param[in]  cch       The ConsoleControl handle
  * @param[in]  position  The position
  *
  * @return     True if the global console contains the position, false otherwise
@@ -150,6 +163,7 @@ bool cc_globalContains(cc_Handle cch, cc_Vector2 position);
  *             showing up as a horizontal line at the bottom of the cell.
  *             (https://msdn.microsoft.com/en-us/library/windows/desktop/ms682068(v=vs.85).aspx)
  *
+ * @param[in]  cch   The ConsoleControl handle
  * @param[in]  size  The size between 1 and 100
  *
  * @since      0.3

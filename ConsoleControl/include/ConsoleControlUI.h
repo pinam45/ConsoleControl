@@ -56,6 +56,7 @@ extern "C" {
  *
  *             Note: turn off the inputs display and the cursor visibility
  *
+ * @param[in]  cch   The ConsoleControl handle
  * @param      menu  The menu description struct
  *
  * @since      0.1
@@ -73,6 +74,7 @@ void cc_displayTableMenu(cc_Handle cch, cc_Menu* menu);
  *
  *             Note: turn off the inputs display and the cursor visibility
  *
+ * @param[in]  cch     The ConsoleControl handle
  * @param      menu    The menu description struct
  * @param[in]  colors  The color style definition
  *
@@ -95,6 +97,7 @@ void cc_displayColorMenu(cc_Handle cch, cc_Menu* menu, const cc_MenuColors* colo
  *
  *             Note: turn off the inputs display and the cursor visibility
  *
+ * @param[in]  cch      The ConsoleControl handle
  * @param      message  The message description struct
  *
  * @since      0.2
@@ -115,6 +118,7 @@ void cc_displayTableMessage(cc_Handle cch, cc_Message* message);
  *
  *             Note: turn off the inputs display and the cursor visibility
  *
+ * @param[in]  cch      The ConsoleControl handle
  * @param      message  The message description struct
  * @param[in]  colors   The color style definition
  *
@@ -134,6 +138,7 @@ void cc_displayColorMessage(cc_Handle cch, cc_Message* message, const cc_Message
  *             exited with the escape key the @c hasEscaped field of the struct
  *             is set to @c true.
  *
+ * @param[in]  cch          The ConsoleControl handle
  * @param      optionsMenu  The options menu description struct
  *
  * @since      0.2
@@ -151,6 +156,7 @@ void cc_displayTableOptionMenu(cc_Handle cch, cc_OptionsMenu* optionsMenu);
  *             exited with the escape key the @c hasEscaped field of the struct
  *             is set to @c true.
  *
+ * @param[in]  cch          The ConsoleControl handle
  * @param      optionsMenu  The options menu description struct
  * @param[in]  colors       The color style definition
  *

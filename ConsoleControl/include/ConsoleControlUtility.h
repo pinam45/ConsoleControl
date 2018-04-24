@@ -46,6 +46,7 @@ extern "C" {
 /*-------------------------------------------------------------------------*//**
  * @brief      Draw the outline of a rectangle.
  *
+ * @param[in]  cch        The ConsoleControl handle
  * @param[in]  topLeft    Position of the top left corner of the rectangle
  * @param[in]  downRight  Position of the down right corner of the rectangle
  * @param[in]  ch         Character used to draw the rectangle
@@ -59,6 +60,7 @@ void cc_drawRectangle(cc_Handle cch, cc_Vector2 topLeft, cc_Vector2 downRight, c
  *             horizontal lines, '|' for vertical lines, '+' for angles and
  *             intersections)
  *
+ * @param[in]  cch        The ConsoleControl handle
  * @param[in]  topLeft    Position of the top left corner of the rectangle
  * @param[in]  downRight  Position of the down right corner of the rectangle
  *
@@ -69,6 +71,7 @@ void cc_drawTableRectangle(cc_Handle cch, cc_Vector2 topLeft, cc_Vector2 downRig
 /*-------------------------------------------------------------------------*//**
  * @brief      Draw a filled rectangle.
  *
+ * @param[in]  cch        The ConsoleControl handle
  * @param[in]  topLeft    Position of the top left corner of the rectangle
  * @param[in]  downRight  Position of the down right corner of the rectangle
  * @param[in]  ch         Character used to draw the rectangle
@@ -80,6 +83,7 @@ void cc_drawFullRectangle(cc_Handle cch, cc_Vector2 topLeft, cc_Vector2 downRigh
 /*-------------------------------------------------------------------------*//**
  * @brief      Draw a line with a character.
  *
+ * @param[in]  cch   The ConsoleControl handle
  * @param[in]  from  Starting point of the line
  * @param[in]  to    Ending point of the line
  * @param[in]  ch    Character used to draw the line
@@ -92,6 +96,7 @@ void cc_drawLine(cc_Handle cch, cc_Vector2 from, cc_Vector2 to, const char ch);
  * @brief      Draw a line with the horizontal table style ('-' for the line,
  *             '+' for the ends)
  *
+ * @param[in]  cch   The ConsoleControl handle
  * @param[in]  from  Starting point of the line
  * @param[in]  to    Ending point of the line
  *
@@ -103,6 +108,7 @@ void cc_drawTableHorizontalLine(cc_Handle cch, cc_Vector2 from, cc_Vector2 to);
  * @brief      Draw a line with the vertical table style ('|' for the line, '+'
  *             for the ends)
  *
+ * @param[in]  cch   The ConsoleControl handle
  * @param[in]  from  Starting point of the line
  * @param[in]  to    Ending point of the line
  *
@@ -113,6 +119,7 @@ void cc_drawTableVerticalLine(cc_Handle cch, cc_Vector2 from, cc_Vector2 to);
 /*-------------------------------------------------------------------------*//**
  * @brief      Draw a line with a pattern of characters.
  *
+ * @param[in]  cch      The ConsoleControl handle
  * @param[in]  from     Starting point of the line
  * @param[in]  to       Ending point of the line
  * @param[in]  pattern  The pattern used to draw the line
@@ -124,6 +131,7 @@ void cc_drawPatternLine(cc_Handle cch, cc_Vector2 from, cc_Vector2 to, const cha
 /*-------------------------------------------------------------------------*//**
  * @brief      Draw a circle.
  *
+ * @param[in]  cch     The ConsoleControl handle
  * @param[in]  center  Position of the center
  * @param[in]  radius  The radius
  * @param[in]  ch      Character used to draw the circle
