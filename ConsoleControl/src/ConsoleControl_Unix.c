@@ -696,7 +696,8 @@ cc_Input cc_getInput(cc_Handle cch) {
 
 // functions from UnixConsoleControl.h
 
-void cc_permanentReverseColors() {
+void cc_permanentReverseColors(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
 	printf(CSI SGR_REVERSE_VALUE SGR_CODE);
 }
 

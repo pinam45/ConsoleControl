@@ -62,7 +62,7 @@ extern "C" {
  *
  * @since      0.3
  */
-void cc_permanentReverseColors();
+void cc_permanentReverseColors(cc_Handle cch);
 
 #endif //_WIN32
 
