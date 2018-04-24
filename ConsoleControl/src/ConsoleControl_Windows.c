@@ -967,7 +967,8 @@ cc_Input cc_getInput(cc_Handle cch) {
 
 // functions from WindowsConsoleControl.h
 
-cc_Vector2 cc_getCursorPosition() {
+cc_Vector2 cc_getCursorPosition(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -989,7 +990,8 @@ cc_Vector2 cc_getCursorPosition() {
 	return position;
 }
 
-cc_Vector2 cc_getCursorGlobalPosition() {
+cc_Vector2 cc_getCursorGlobalPosition(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -1011,7 +1013,8 @@ cc_Vector2 cc_getCursorGlobalPosition() {
 	return position;
 }
 
-void cc_reverseColors() {
+void cc_reverseColors(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -1030,7 +1033,8 @@ void cc_reverseColors() {
 	}
 }
 
-int cc_getGlobalWidth() {
+int cc_getGlobalWidth(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -1046,7 +1050,8 @@ int cc_getGlobalWidth() {
 	return csbi.dwSize.X;
 }
 
-int cc_getGlobalHeight() {
+int cc_getGlobalHeight(cc_Handle cch) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -1062,7 +1067,8 @@ int cc_getGlobalHeight() {
 	return csbi.dwSize.Y;
 }
 
-void cc_setCursorGlobalPosition(const cc_Vector2 position) {
+void cc_setCursorGlobalPosition(cc_Handle cch, const cc_Vector2 position) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -1079,7 +1085,8 @@ void cc_setCursorGlobalPosition(const cc_Vector2 position) {
 	}
 }
 
-cc_Vector2 cc_globalClamp(const cc_Vector2 position) {
+cc_Vector2 cc_globalClamp(cc_Handle cch, const cc_Vector2 position) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -1101,7 +1108,8 @@ cc_Vector2 cc_globalClamp(const cc_Vector2 position) {
 	return result;
 }
 
-bool cc_globalContains(const cc_Vector2 position) {
+bool cc_globalContains(cc_Handle cch, const cc_Vector2 position) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
@@ -1120,7 +1128,8 @@ bool cc_globalContains(const cc_Vector2 position) {
 	       && position.y < csbi.dwSize.Y;
 }
 
-void cc_setCursorSize(unsigned int size) {
+void cc_setCursorSize(cc_Handle cch, unsigned int size) {
+	UNUSED_PARAMETER(cch);
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if(hStdOut == INVALID_HANDLE_VALUE) {
 		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());

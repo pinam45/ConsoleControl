@@ -54,7 +54,7 @@ extern "C" {
  *
  * @since      0.3
  */
-cc_Vector2 cc_getCursorPosition();
+cc_Vector2 cc_getCursorPosition(cc_Handle cch);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Get the cursor global position.
@@ -66,7 +66,7 @@ cc_Vector2 cc_getCursorPosition();
  *
  * @since      0.3
  */
-cc_Vector2 cc_getCursorGlobalPosition();
+cc_Vector2 cc_getCursorGlobalPosition(cc_Handle cch);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Reverse the colors. Current Foreground color will be used as the
@@ -75,7 +75,7 @@ cc_Vector2 cc_getCursorGlobalPosition();
  *
  * @since      0.3
  */
-void cc_reverseColors();
+void cc_reverseColors(cc_Handle cch);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Get the global console width.
@@ -87,7 +87,7 @@ void cc_reverseColors();
  *
  * @since      0.3
  */
-int cc_getGlobalWidth();
+int cc_getGlobalWidth(cc_Handle cch);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Get the global console height.
@@ -99,7 +99,7 @@ int cc_getGlobalWidth();
  *
  * @since      0.3
  */
-int cc_getGlobalHeight();
+int cc_getGlobalHeight(cc_Handle cch);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Set the cursor global position.
@@ -111,7 +111,7 @@ int cc_getGlobalHeight();
  *
  * @since      0.3
  */
-void cc_setCursorGlobalPosition(cc_Vector2 position);
+void cc_setCursorGlobalPosition(cc_Handle cch, cc_Vector2 position);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Clamp down the position in the global console.
@@ -125,7 +125,7 @@ void cc_setCursorGlobalPosition(cc_Vector2 position);
  *
  * @since      0.3
  */
-cc_Vector2 cc_globalClamp(cc_Vector2 position);
+cc_Vector2 cc_globalClamp(cc_Handle cch, cc_Vector2 position);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Determine if the global console contains the position.
@@ -139,7 +139,7 @@ cc_Vector2 cc_globalClamp(cc_Vector2 position);
  *
  * @since      0.3
  */
-bool cc_globalContains(cc_Vector2 position);
+bool cc_globalContains(cc_Handle cch, cc_Vector2 position);
 
 /*-------------------------------------------------------------------------*//**
  * @brief      Set the cursor size.
@@ -154,7 +154,7 @@ bool cc_globalContains(cc_Vector2 position);
  *
  * @since      0.3
  */
-void cc_setCursorSize(unsigned int size);
+void cc_setCursorSize(cc_Handle cch, unsigned int size);
 
 #endif //_WIN32
 
