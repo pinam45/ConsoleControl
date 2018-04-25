@@ -43,6 +43,11 @@
 
 #define UNUSED_PARAMETER(x) (void)(x)
 
+typedef struct {
+	HANDLE hStdIn;
+	HANDLE hStdOut;
+} cc_Context;
+
 // For cc_saveCursorPosition and cc_restoreCursorPosition
 static cc_Vector2 savedPosition = {0, 0};
 
@@ -165,30 +170,40 @@ WORD cc_getBackgroundColorIdentifier(cc_Color color) {
 // functions from ConsoleControl.h
 
 cc_Handle cc_start() {
-	// Not yet implemented
-	return NULL;
+	cc_Context* ccc = (cc_Context*) malloc(sizeof(cc_Context));
+
+	ccc->hStdIn = GetStdHandle(STD_INPUT_HANDLE);
+	if(ccc->hStdIn == INVALID_HANDLE_VALUE) {
+		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
+		free(ccc);
+		return NULL;
+	}
+
+	ccc->hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	if(ccc->hStdOut == INVALID_HANDLE_VALUE) {
+		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
+		free(ccc);
+		return NULL;
+	}
+
+	return ccc;
 }
 
 void cc_end(cc_Handle cch) {
-	UNUSED_PARAMETER(cch);
-	// Not yet implemented
+	if(cch != NULL)
+		free(cch);
 }
 
 void cc_setForegroundColor(cc_Handle cch, const cc_Color color) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return;
 	}
 
-	if(!SetConsoleTextAttribute(hStdOut,
+	if(!SetConsoleTextAttribute(ccc->hStdOut,
 	                            (csbi.wAttributes /* current colors */
 	                             & cc_getBackgroundColorIdentifier(CC_LIGHT_WHITE)) /* only keep background */
 	                            | cc_getForegroundColorIdentifier(color)) /* change foreground */) {
@@ -198,20 +213,15 @@ void cc_setForegroundColor(cc_Handle cch, const cc_Color color) {
 }
 
 void cc_setBackgroundColor(cc_Handle cch, const cc_Color color) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return;
 	}
 
-	if(!SetConsoleTextAttribute(hStdOut,
+	if(!SetConsoleTextAttribute(ccc->hStdOut,
 	                            (csbi.wAttributes /* current colors */
 	                             & cc_getForegroundColorIdentifier(CC_LIGHT_WHITE)) /* only keep foreground */
 	                            | cc_getBackgroundColorIdentifier(color)) /* change background */) {
@@ -221,14 +231,9 @@ void cc_setBackgroundColor(cc_Handle cch, const cc_Color color) {
 }
 
 void cc_setColors(cc_Handle cch, const cc_Color backgroundColor, const cc_Color foregroundColor) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
-	if(!SetConsoleTextAttribute(hStdOut,
+	if(!SetConsoleTextAttribute(ccc->hStdOut,
 	                            cc_getBackgroundColorIdentifier(backgroundColor)
 	                            | cc_getForegroundColorIdentifier(foregroundColor))) {
 		LOG_ERROR("SetConsoleTextAttribute failed (error %lu)", GetLastError());
@@ -237,15 +242,10 @@ void cc_setColors(cc_Handle cch, const cc_Color backgroundColor, const cc_Color 
 }
 
 int cc_getWidth(cc_Handle cch) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return 0;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return 0;
 	}
@@ -254,15 +254,10 @@ int cc_getWidth(cc_Handle cch) {
 }
 
 int cc_getHeight(cc_Handle cch) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return 0;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return 0;
 	}
@@ -271,15 +266,10 @@ int cc_getHeight(cc_Handle cch) {
 }
 
 void cc_setCursorPosition(cc_Handle cch, const cc_Vector2 position) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return;
 	}
@@ -289,22 +279,17 @@ void cc_setCursorPosition(cc_Handle cch, const cc_Vector2 position) {
 		(SHORT) (position.y + csbi.srWindow.Top)
 	};
 
-	if(!SetConsoleCursorPosition(hStdOut, pos)) {
+	if(!SetConsoleCursorPosition(ccc->hStdOut, pos)) {
 		LOG_ERROR("SetConsoleCursorPosition failed (error %lu)", GetLastError());
 		return;
 	}
 }
 
 void cc_moveCursorUp(cc_Handle cch, int steps) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return;
 	}
@@ -314,22 +299,17 @@ void cc_moveCursorUp(cc_Handle cch, int steps) {
 		(SHORT) (csbi.dwCursorPosition.Y - steps)
 	};
 
-	if(!SetConsoleCursorPosition(hStdOut, position)) {
+	if(!SetConsoleCursorPosition(ccc->hStdOut, position)) {
 		LOG_ERROR("SetConsoleCursorPosition failed (error %lu)", GetLastError());
 		return;
 	}
 }
 
 void cc_moveCursorDown(cc_Handle cch, int steps) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return;
 	}
@@ -339,22 +319,17 @@ void cc_moveCursorDown(cc_Handle cch, int steps) {
 		(SHORT) (csbi.dwCursorPosition.Y + steps)
 	};
 
-	if(!SetConsoleCursorPosition(hStdOut, position)) {
+	if(!SetConsoleCursorPosition(ccc->hStdOut, position)) {
 		LOG_ERROR("SetConsoleCursorPosition failed (error %lu)", GetLastError());
 		return;
 	}
 }
 
 void cc_moveCursorLeft(cc_Handle cch, int steps) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return;
 	}
@@ -364,22 +339,17 @@ void cc_moveCursorLeft(cc_Handle cch, int steps) {
 		csbi.dwCursorPosition.Y
 	};
 
-	if(!SetConsoleCursorPosition(hStdOut, position)) {
+	if(!SetConsoleCursorPosition(ccc->hStdOut, position)) {
 		LOG_ERROR("SetConsoleCursorPosition failed (error %lu)", GetLastError());
 		return;
 	}
 }
 
 void cc_moveCursorRight(cc_Handle cch, int steps) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return;
 	}
@@ -389,22 +359,17 @@ void cc_moveCursorRight(cc_Handle cch, int steps) {
 		csbi.dwCursorPosition.Y
 	};
 
-	if(!SetConsoleCursorPosition(hStdOut, position)) {
+	if(!SetConsoleCursorPosition(ccc->hStdOut, position)) {
 		LOG_ERROR("SetConsoleCursorPosition failed (error %lu)", GetLastError());
 		return;
 	}
 }
 
 void cc_moveCursorHorizontally(cc_Handle cch, int steps) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return;
 	}
@@ -414,22 +379,17 @@ void cc_moveCursorHorizontally(cc_Handle cch, int steps) {
 		csbi.dwCursorPosition.Y
 	};
 
-	if(!SetConsoleCursorPosition(hStdOut, position)) {
+	if(!SetConsoleCursorPosition(ccc->hStdOut, position)) {
 		LOG_ERROR("SetConsoleCursorPosition failed (error %lu)", GetLastError());
 		return;
 	}
 }
 
 void cc_moveCursorVertically(cc_Handle cch, int steps) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return;
 	}
@@ -439,22 +399,17 @@ void cc_moveCursorVertically(cc_Handle cch, int steps) {
 		(SHORT) (csbi.dwCursorPosition.Y + steps)
 	};
 
-	if(!SetConsoleCursorPosition(hStdOut, position)) {
+	if(!SetConsoleCursorPosition(ccc->hStdOut, position)) {
 		LOG_ERROR("SetConsoleCursorPosition failed (error %lu)", GetLastError());
 		return;
 	}
 }
 
 void cc_moveCursor(cc_Handle cch, cc_Vector2 move) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return;
 	}
@@ -464,22 +419,17 @@ void cc_moveCursor(cc_Handle cch, cc_Vector2 move) {
 		(SHORT) (csbi.dwCursorPosition.Y + move.y)
 	};
 
-	if(!SetConsoleCursorPosition(hStdOut, position)) {
+	if(!SetConsoleCursorPosition(ccc->hStdOut, position)) {
 		LOG_ERROR("SetConsoleCursorPosition failed (error %lu)", GetLastError());
 		return;
 	}
 }
 
 void cc_saveCursorPosition(cc_Handle cch) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return;
 	}
@@ -489,15 +439,10 @@ void cc_saveCursorPosition(cc_Handle cch) {
 }
 
 void cc_restoreCursorPosition(cc_Handle cch) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return;
 	}
@@ -507,22 +452,17 @@ void cc_restoreCursorPosition(cc_Handle cch) {
 		(SHORT) (savedPosition.y + csbi.srWindow.Top)
 	};
 
-	if(!SetConsoleCursorPosition(hStdOut, position)) {
+	if(!SetConsoleCursorPosition(ccc->hStdOut, position)) {
 		LOG_ERROR("SetConsoleCursorPosition failed (error %lu)", GetLastError());
 		return;
 	}
 }
 
 void cc_setCursorVisibility(cc_Handle cch, bool visibility) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_CURSOR_INFO cci;
-	if(!GetConsoleCursorInfo(hStdOut, &cci)) {
+	if(!GetConsoleCursorInfo(ccc->hStdOut, &cci)) {
 		LOG_ERROR("GetConsoleCursorInfo failed (error %lu)", GetLastError());
 		return;
 	}
@@ -534,22 +474,17 @@ void cc_setCursorVisibility(cc_Handle cch, bool visibility) {
 		cci.bVisible = FALSE;
 	}
 
-	if(!SetConsoleCursorInfo(hStdOut, &cci)) {
+	if(!SetConsoleCursorInfo(ccc->hStdOut, &cci)) {
 		LOG_ERROR("SetConsoleCursorInfo failed (error %lu)", GetLastError());
 		return;
 	}
 }
 
 cc_Vector2 cc_clamp(cc_Handle cch, const cc_Vector2 position) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return position;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return position;
 	}
@@ -564,15 +499,10 @@ cc_Vector2 cc_clamp(cc_Handle cch, const cc_Vector2 position) {
 }
 
 int cc_clampX(cc_Handle cch, int x) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return x;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return x;
 	}
@@ -582,15 +512,10 @@ int cc_clampX(cc_Handle cch, int x) {
 }
 
 int cc_clampY(cc_Handle cch, int y) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return y;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return y;
 	}
@@ -600,15 +525,10 @@ int cc_clampY(cc_Handle cch, int y) {
 }
 
 bool cc_contains(cc_Handle cch, const cc_Vector2 position) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return false;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return false;
 	}
@@ -621,15 +541,10 @@ bool cc_contains(cc_Handle cch, const cc_Vector2 position) {
 
 // credits: http://www.cplusplus.com/articles/4z18T05o/
 void cc_clean(cc_Handle cch) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return;
 	}
@@ -643,34 +558,29 @@ void cc_clean(cc_Handle cch) {
 	DWORD count;
 
 	/* Fill the entire buffer with spaces */
-	if(!FillConsoleOutputCharacter(hStdOut, (TCHAR) ' ', cellCount, homeCoords, &count)) {
+	if(!FillConsoleOutputCharacter(ccc->hStdOut, (TCHAR) ' ', cellCount, homeCoords, &count)) {
 		LOG_ERROR("FillConsoleOutputCharacter failed (error %lu)", GetLastError());
 		return;
 	}
 
 	/* Fill the entire buffer with the current colors and attributes */
-	if(!FillConsoleOutputAttribute(hStdOut, csbi.wAttributes, cellCount, homeCoords, &count)) {
+	if(!FillConsoleOutputAttribute(ccc->hStdOut, csbi.wAttributes, cellCount, homeCoords, &count)) {
 		LOG_ERROR("FillConsoleOutputAttribute failed (error %lu)", GetLastError());
 		return;
 	}
 
 	/* Move the cursor home */
-	if(!SetConsoleCursorPosition(hStdOut, homeCoords)) {
+	if(!SetConsoleCursorPosition(ccc->hStdOut, homeCoords)) {
 		LOG_ERROR("SetConsoleCursorPosition failed (error %lu)", GetLastError());
 	}
 }
 
 // credits: http://www.cplusplus.com/articles/4z18T05o/
 void cc_completeClean(cc_Handle cch) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return;
 	}
@@ -682,46 +592,41 @@ void cc_completeClean(cc_Handle cch) {
 	DWORD count;
 
 	/* Fill the entire buffer with spaces */
-	if(!FillConsoleOutputCharacter(hStdOut, (TCHAR) ' ', cellCount, homeCoords, &count)) {
+	if(!FillConsoleOutputCharacter(ccc->hStdOut, (TCHAR) ' ', cellCount, homeCoords, &count)) {
 		LOG_ERROR("FillConsoleOutputCharacter failed (error %lu)", GetLastError());
 		return;
 	}
 
 	/* Fill the entire buffer with the current colors and attributes */
-	if(!FillConsoleOutputAttribute(hStdOut, csbi.wAttributes, cellCount, homeCoords, &count)) {
+	if(!FillConsoleOutputAttribute(ccc->hStdOut, csbi.wAttributes, cellCount, homeCoords, &count)) {
 		LOG_ERROR("FillConsoleOutputAttribute failed (error %lu)", GetLastError());
 		return;
 	}
 
 	/* Move the cursor home */
-	if(!SetConsoleCursorPosition(hStdOut, homeCoords)) {
+	if(!SetConsoleCursorPosition(ccc->hStdOut, homeCoords)) {
 		LOG_ERROR("SetConsoleCursorPosition failed (error %lu)", GetLastError());
 	}
 }
 
 char cc_instantGetChar(cc_Handle cch) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdIn = GetStdHandle(STD_INPUT_HANDLE);
-	if(hStdIn == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return 0;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	/* Save console mode */
 	DWORD saveMode;
-	if(!GetConsoleMode(hStdIn, &saveMode)) {
+	if(!GetConsoleMode(ccc->hStdIn, &saveMode)) {
 		LOG_ERROR("GetConsoleMode failed (error %lu)", GetLastError());
 		return 0;
 	}
-	if(!SetConsoleMode(hStdIn, ENABLE_PROCESSED_INPUT)) {
+	if(!SetConsoleMode(ccc->hStdIn, ENABLE_PROCESSED_INPUT)) {
 		LOG_ERROR("SetConsoleMode failed (error %lu)", GetLastError());
 		return 0;
 	}
 
 	TCHAR ch = 0;
-	if(WaitForSingleObject(hStdIn, INFINITE) == WAIT_OBJECT_0) {
+	if(WaitForSingleObject(ccc->hStdIn, INFINITE) == WAIT_OBJECT_0) {
 		DWORD num;
-		if(!ReadConsole(hStdIn, &ch, 1, &num, NULL)) {
+		if(!ReadConsole(ccc->hStdIn, &ch, 1, &num, NULL)) {
 			LOG_ERROR("ReadConsole failed (error %lu)", GetLastError());
 		}
 		if(num != 1) {
@@ -733,22 +638,17 @@ char cc_instantGetChar(cc_Handle cch) {
 	}
 
 	/* Restore console mode */
-	if(!SetConsoleMode(hStdIn, saveMode)) {
+	if(!SetConsoleMode(ccc->hStdIn, saveMode)) {
 		LOG_ERROR("SetConsoleMode failed (error %lu)", GetLastError());
 	}
 	return ch;
 }
 
 bool cc_waitingInput(cc_Handle cch) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdIn = GetStdHandle(STD_INPUT_HANDLE);
-	if(hStdIn == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return false;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	DWORD num;
-	if(!GetNumberOfConsoleInputEvents(hStdIn, &num)) {
+	if(!GetNumberOfConsoleInputEvents(ccc->hStdIn, &num)) {
 		LOG_ERROR("GetNumberOfConsoleInputEvents failed (error %lu)", GetLastError());
 		return false;
 	}
@@ -757,30 +657,25 @@ bool cc_waitingInput(cc_Handle cch) {
 }
 
 void cc_displayInputs(cc_Handle cch, bool display) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdIn = GetStdHandle(STD_INPUT_HANDLE);
-	if(hStdIn == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	/* Get console mode */
 	DWORD mode;
-	if(!GetConsoleMode(hStdIn, &mode)) {
+	if(!GetConsoleMode(ccc->hStdIn, &mode)) {
 		LOG_ERROR("GetConsoleMode failed (error %lu)", GetLastError());
 		return;
 	}
 
 	if(display) {
 		/* Add echo input to the mode */
-		if(!SetConsoleMode(hStdIn, mode | ENABLE_ECHO_INPUT)) {
+		if(!SetConsoleMode(ccc->hStdIn, mode | ENABLE_ECHO_INPUT)) {
 			LOG_ERROR("SetConsoleMode failed (error %lu)", GetLastError());
 			return;
 		}
 	}
 	else {
 		/* Remove echo input to the mode */
-		if(!SetConsoleMode(hStdIn, mode & ~((DWORD) ENABLE_ECHO_INPUT))) {
+		if(!SetConsoleMode(ccc->hStdIn, mode & ~((DWORD) ENABLE_ECHO_INPUT))) {
 			LOG_ERROR("SetConsoleMode failed (error %lu)", GetLastError());
 			return;
 		}
@@ -790,24 +685,19 @@ void cc_displayInputs(cc_Handle cch, bool display) {
 static WORD processedInputsNb = 0;
 
 cc_Input cc_getInput(cc_Handle cch) {
+	cc_Context* ccc = (cc_Context*) cch;
 	cc_Input input = {OTHER_KEY, 0};
-
-	HANDLE hStdIn = GetStdHandle(STD_INPUT_HANDLE);
-	if(hStdIn == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return input;
-	}
 	DWORD num;
 
 	/* Get number of input event */
-	if(!GetNumberOfConsoleInputEvents(hStdIn, &num)) {
+	if(!GetNumberOfConsoleInputEvents(ccc->hStdIn, &num)) {
 		LOG_ERROR("GetNumberOfConsoleInputEvents failed (error %lu)", GetLastError());
 		return input;
 	}
 
 	/* If there is no input event wait one */
 	if(num < 1) {
-		if(WaitForSingleObject(hStdIn, INFINITE) != WAIT_OBJECT_0) {
+		if(WaitForSingleObject(ccc->hStdIn, INFINITE) != WAIT_OBJECT_0) {
 			LOG_ERROR("WaitForSingleObject failed (error %lu)", GetLastError());
 			return input;
 		}
@@ -815,7 +705,7 @@ cc_Input cc_getInput(cc_Handle cch) {
 
 	/* Read the first event that is a key pressed event */
 	INPUT_RECORD event;
-	if(!PeekConsoleInput(hStdIn, &event, 1, &num)) {
+	if(!PeekConsoleInput(ccc->hStdIn, &event, 1, &num)) {
 		LOG_ERROR("PeekConsoleInput failed (error %lu)", GetLastError());
 		return input;
 	}
@@ -825,26 +715,26 @@ cc_Input cc_getInput(cc_Handle cch) {
 	}
 	while(event.EventType != KEY_EVENT || !event.Event.KeyEvent.bKeyDown) {
 		/* Not a key pressed event, remove it from the console input buffer */
-		if(!ReadConsoleInput(hStdIn, &event, 1, &num)) {
+		if(!ReadConsoleInput(ccc->hStdIn, &event, 1, &num)) {
 			LOG_ERROR("ReadConsoleInput failed (error %lu)", GetLastError());
 			return input;
 		}
 
 		/* Get number of input event */
-		if(!GetNumberOfConsoleInputEvents(hStdIn, &num)) {
+		if(!GetNumberOfConsoleInputEvents(ccc->hStdIn, &num)) {
 			LOG_ERROR("GetNumberOfConsoleInputEvents failed (error %lu)", GetLastError());
 			return input;
 		}
 
 		/* If there is no input event wait one */
 		if(num < 1) {
-			if(WaitForSingleObject(hStdIn, INFINITE) != WAIT_OBJECT_0) {
+			if(WaitForSingleObject(ccc->hStdIn, INFINITE) != WAIT_OBJECT_0) {
 				LOG_ERROR("WaitForSingleObject failed (error %lu)", GetLastError());
 				return input;
 			}
 		}
 
-		if(!PeekConsoleInput(hStdIn, &event, 1, &num)) {
+		if(!PeekConsoleInput(ccc->hStdIn, &event, 1, &num)) {
 			LOG_ERROR("PeekConsoleInput failed (error %lu)", GetLastError());
 			return input;
 		}
@@ -862,7 +752,7 @@ cc_Input cc_getInput(cc_Handle cch) {
 	else {
 		//All inputs are processed
 		//Remove the event from the console input buffer
-		if(!ReadConsoleInput(hStdIn, &event, 1, &num)) {
+		if(!ReadConsoleInput(ccc->hStdIn, &event, 1, &num)) {
 			LOG_ERROR("ReadConsoleInput failed (error %lu)", GetLastError());
 			return input;
 		}
@@ -968,16 +858,10 @@ cc_Input cc_getInput(cc_Handle cch) {
 // functions from WindowsConsoleControl.h
 
 cc_Vector2 cc_getCursorPosition(cc_Handle cch) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		cc_Vector2 position = {0, 0};
-		return position;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		cc_Vector2 position = {0, 0};
 		return position;
@@ -991,16 +875,10 @@ cc_Vector2 cc_getCursorPosition(cc_Handle cch) {
 }
 
 cc_Vector2 cc_getCursorGlobalPosition(cc_Handle cch) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		cc_Vector2 position = {0, 0};
-		return position;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		cc_Vector2 position = {0, 0};
 		return position;
@@ -1014,35 +892,25 @@ cc_Vector2 cc_getCursorGlobalPosition(cc_Handle cch) {
 }
 
 void cc_reverseColors(cc_Handle cch) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return;
 	}
 
-	if(!SetConsoleTextAttribute(hStdOut, csbi.wAttributes | (WORD) COMMON_LVB_REVERSE_VIDEO)) {
+	if(!SetConsoleTextAttribute(ccc->hStdOut, csbi.wAttributes | (WORD) COMMON_LVB_REVERSE_VIDEO)) {
 		LOG_ERROR("SetConsoleTextAttribute failed (error %lu)", GetLastError());
 		return;
 	}
 }
 
 int cc_getGlobalWidth(cc_Handle cch) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return 0;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return 0;
 	}
@@ -1051,15 +919,10 @@ int cc_getGlobalWidth(cc_Handle cch) {
 }
 
 int cc_getGlobalHeight(cc_Handle cch) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return 0;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return 0;
 	}
@@ -1068,33 +931,23 @@ int cc_getGlobalHeight(cc_Handle cch) {
 }
 
 void cc_setCursorGlobalPosition(cc_Handle cch, const cc_Vector2 position) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	COORD pos = {
 		(SHORT) position.x,
 		(SHORT) position.y
 	};
-	if(!SetConsoleCursorPosition(hStdOut, pos)) {
+	if(!SetConsoleCursorPosition(ccc->hStdOut, pos)) {
 		LOG_ERROR("SetConsoleCursorPosition failed (error %lu)", GetLastError());
 		return;
 	}
 }
 
 cc_Vector2 cc_globalClamp(cc_Handle cch, const cc_Vector2 position) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return position;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return position;
 	}
@@ -1109,15 +962,10 @@ cc_Vector2 cc_globalClamp(cc_Handle cch, const cc_Vector2 position) {
 }
 
 bool cc_globalContains(cc_Handle cch, const cc_Vector2 position) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return false;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	if(!GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+	if(!GetConsoleScreenBufferInfo(ccc->hStdOut, &csbi)) {
 		LOG_ERROR("GetConsoleScreenBufferInfo failed (error %lu)", GetLastError());
 		return false;
 	}
@@ -1129,15 +977,10 @@ bool cc_globalContains(cc_Handle cch, const cc_Vector2 position) {
 }
 
 void cc_setCursorSize(cc_Handle cch, unsigned int size) {
-	UNUSED_PARAMETER(cch);
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if(hStdOut == INVALID_HANDLE_VALUE) {
-		LOG_ERROR("GetStdHandle failed (error %lu)", GetLastError());
-		return;
-	}
+	cc_Context* ccc = (cc_Context*) cch;
 
 	CONSOLE_CURSOR_INFO cci;
-	if(!GetConsoleCursorInfo(hStdOut, &cci)) {
+	if(!GetConsoleCursorInfo(ccc->hStdOut, &cci)) {
 		LOG_ERROR("GetConsoleCursorInfo failed (error %lu)", GetLastError());
 		return;
 	}
@@ -1149,7 +992,7 @@ void cc_setCursorSize(cc_Handle cch, unsigned int size) {
 		cci.dwSize = 100;
 	}
 
-	if(!SetConsoleCursorInfo(hStdOut, &cci)) {
+	if(!SetConsoleCursorInfo(ccc->hStdOut, &cci)) {
 		LOG_ERROR("SetConsoleCursorInfo failed (error %lu)", GetLastError());
 		return;
 	}
