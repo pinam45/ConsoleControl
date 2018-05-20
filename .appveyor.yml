@@ -1,9 +1,19 @@
 version: '{build}'
+
+platform:
+  - x86
+  - x64
+
 image:
-- Visual Studio 2017
-before_build:
-  - cmd: cd ide
-  - cmd: configure_VS2017_x64.cmd
-  - cmd: cd VS2017_v141_x64
+  - Visual Studio 2015
+  - Visual Studio 2017
+
 build_script:
-- cmd: cmake --build .
+  - if "%PLATFORM%" == "x64" (set ARCH=_x64) else (set ARCH= )
+  - if "%APPVEYOR_BUILD_WORKER_IMAGE%" == "Visual Studio 2017" (set VSY=2017) else (set VSY=2015)
+  - if "%APPVEYOR_BUILD_WORKER_IMAGE%" == "Visual Studio 2017" (set VSTS=v141) else (set VSTS=v140)
+  - pushd ide
+  - configure_VS%VSY%%ARCH%.cmd
+  - echo VS%VSY%_%VSTS%%ARCH%
+  - pushd VS%VSY%_%VSTS%%ARCH%
+  - cmake --build . --config Release -- /M
