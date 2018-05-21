@@ -394,7 +394,7 @@ function(target_set_output_directory target directory)
 	target_set_archive_output_directory(${target} "${directory}")
 endfunction()
 
-## target_set_output_directory(target directory)
+## target_set_runtime_output_directory(target directory)
 # Set the target runtime output directory to the input directory.
 #   {value} [in] target:      Target to configure
 #   {value} [in] directory:   Output directory
@@ -407,7 +407,7 @@ function(target_set_runtime_output_directory target directory)
 		)
 endfunction()
 
-## target_set_output_directory(target directory)
+## target_set_library_output_directory(target directory)
 # Set the target library output directory to the input directory.
 #   {value} [in] target:      Target to configure
 #   {value} [in] directory:   Output directory
@@ -420,7 +420,7 @@ function(target_set_library_output_directory target directory)
 		)
 endfunction()
 
-## target_set_output_directory(target directory)
+## target_set_archive_output_directory(target directory)
 # Set the target archive output directory to the input directory.
 #   {value} [in] target:      Target to configure
 #   {value} [in] directory:   Output directory
@@ -501,7 +501,7 @@ function(setup_msvc target)
 endfunction()
 
 ## setup_gcc(target [OPTIONS [static_runtime] [c] [cxx] [no_warnings] [low_warnings]])
-# Set up msvc-specific options of the target.
+# Set up gcc-specific options of the target.
 # Without options: maximum warnings are enabled.
 #   {value}  [in] target:           Target to configure
 #   {option} [in] static_runtime:   If present, C runtime library is statically linked
@@ -654,6 +654,128 @@ function(setup_gcc target)
 	endforeach()
 endfunction()
 
+## setup_clang(target [OPTIONS [static_runtime] [no_warnings] [low_warnings]])
+# Set up clang-specific options of the target.
+# Without options: maximum warnings are enabled.
+#   {value}  [in] target:           Target to configure
+#   {option} [in] static_runtime:   If present, C runtime library is statically linked
+#   {option} [in] no_warnings:      If present, warnings are disabled (useful for external projects)
+#   {option} [in] low_warnings:     If present, low/normal warnings are enabled
+function(setup_clang target)
+	split_args(ignore "OPTIONS" options ${ARGN})
+	has_item(option_static_runtime "static_runtime" ${options})
+	has_item(option_no_warnings "no_warnings" ${options})
+	has_item(option_low_warnings "low_warnings" ${options})
+
+	# statically link C runtime library to static_runtime targets
+	if(option_static_runtime)
+		target_add_flag(${target} "-static-libgcc")
+		target_add_flag(${target} "-static-libstdc++")
+	endif()
+
+	# manage warnings
+	set(flags)
+	if(option_no_warnings)
+		set(flags "-Wno-everything")
+	elseif(option_low_warnings)
+		set(flags "-pedantic" "-Wall")
+	else()
+		set(flags
+			## Base flags:
+			"-pedantic"
+			"-Wall"
+			"-Wextra"
+
+			## Extra flags:
+			"-Wbad-function-cast"
+			"-Wcomplex-component-init"
+			"-Wconditional-uninitialized"
+			"-Wcovered-switch-default"
+			"-Wcstring-format-directive"
+			"-Wdelete-non-virtual-dtor"
+			"-Wdeprecated"
+			"-Wdollar-in-identifier-extension"
+			"-Wdouble-promotion"
+			"-Wduplicate-enum"
+			"-Wduplicate-method-arg"
+			"-Wembedded-directive"
+			"-Wexpansion-to-defined"
+			"-Wextended-offsetof"
+			"-Wfloat-conversion"
+			"-Wfloat-equal"
+			"-Wfor-loop-analysis"
+			"-Wformat-pedantic"
+			"-Wgnu"
+			"-Wimplicit-fallthrough"
+			"-Winfinite-recursion"
+			"-Winvalid-or-nonexistent-directory"
+			"-Wkeyword-macro"
+			"-Wmain"
+			"-Wmethod-signatures"
+			"-Wmicrosoft"
+			"-Wmismatched-tags"
+			"-Wmissing-field-initializers"
+			"-Wmissing-method-return-type"
+			"-Wmissing-prototypes"
+			"-Wmissing-variable-declarations"
+			"-Wnested-anon-types"
+			"-Wnon-virtual-dtor"
+			"-Wnonportable-system-include-path"
+			"-Wnull-pointer-arithmetic"
+			"-Wnullability-extension"
+			"-Wold-style-cast"
+			"-Woverriding-method-mismatch"
+			"-Wpacked"
+			"-Wpedantic"
+			"-Wpessimizing-move"
+			"-Wredundant-move"
+			"-Wreserved-id-macro"
+			"-Wself-assign"
+			"-Wself-move"
+			"-Wsemicolon-before-method-body"
+			"-Wshadow"
+			"-Wshadow-field"
+			"-Wshadow-field-in-constructor"
+			"-Wshadow-uncaptured-local"
+			"-Wshift-sign-overflow"
+			"-Wshorten-64-to-32"
+			#"-Wsign-compare"
+			#"-Wsign-conversion"
+			"-Wsigned-enum-bitfield"
+			"-Wstatic-in-inline"
+			#"-Wstrict-prototypes"
+			#"-Wstring-conversion"
+			#"-Wswitch-enum"
+			"-Wtautological-compare"
+			"-Wtautological-overlap-compare"
+			"-Wthread-safety"
+			"-Wundefined-reinterpret-cast"
+			"-Wuninitialized"
+			#"-Wunknown-pragmas"
+			"-Wunreachable-code"
+			"-Wunreachable-code-aggressive"
+			#"-Wunused"
+			"-Wunused-const-variable"
+			"-Wunused-lambda-capture"
+			"-Wunused-local-typedef"
+			"-Wunused-parameter"
+			"-Wunused-private-field"
+			"-Wunused-template"
+			"-Wunused-variable"
+			"-Wused-but-marked-unused"
+			"-Wzero-as-null-pointer-constant"
+			"-Wzero-length-array"
+
+			## Info flags
+			"-Wcomma"
+			"-Wcomment"
+			)
+	endif()
+	foreach(flag ${flags})
+		target_add_flag(${target} ${flag})
+	endforeach()
+endfunction()
+
 ## setup_target(target [OPTIONS [options...]])
 # Set up options of the target depending of the compiler.
 # To know possible option, see the setup_<COMPILER> functions documentation.
@@ -665,8 +787,10 @@ function(setup_target target)
 		setup_msvc(${target} OPTIONS ${ARGN})
 	elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
 		setup_gcc(${target} OPTIONS ${ARGN})
+	elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
+		setup_clang(${target} OPTIONS ${ARGN})
 	else()
-		#message(FATAL_ERROR "unsupported compiler ${CMAKE_CXX_COMPILER_ID}")
+		message(WARNING "Unsupported compiler (${CMAKE_CXX_COMPILER_ID}) setup")
 	endif()
 endfunction()
 
