@@ -65,7 +65,7 @@ typedef struct {
 } cc_Vector2;
 
 /*-------------------------------------------------------------------------*//**
- * @brief      Strart ConsoleControl, initialise the handle.
+ * @brief      Start ConsoleControl, initialise the handle.
  *
  * @return     The ConsoleControl handle
  *

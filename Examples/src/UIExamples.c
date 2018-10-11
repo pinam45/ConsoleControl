@@ -182,7 +182,7 @@ void optionMenuExamples(cc_Handle cch) {
 			cc_displayTableOptionMenu(cch, &optionsMenu);
 		}
 		sprintf(messageText,
-		        "Integer option value:\n%d\n\nCharacter option value:\n%c\n\nChoices option, selected option:\n%d\n(%s)",
+		        "Integer option value:\n%d\n\nCharacter option value:\n%c\n\nChoices option, selected option:\n%ud\n(%s)",
 		        integerOption.value,
 		        characterOption.value,
 		        choicesOption.currentChoice,
